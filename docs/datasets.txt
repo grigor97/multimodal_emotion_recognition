@@ -1,0 +1,96 @@
+﻿1. The Japanese Female Facial Expression (JAFFE) Dataset
+https://zenodo.org/record/3451524#.YEeUby1Q1QI
+
+
+Jaffedbase
+
+
+Specifications:
+* 10 Japanese female expressers
+* 7 Posed Facial Expressions (6 basic facial expressions + 1 neutral)
+* Several images of each expression for each expresser 
+* 213 images total
+* Each image has averaged semantic ratings on 6 facial expressions by 60 Japanese viewers
+* Resolution 256x256 pixels
+* 8-bit grayscale
+* Tiff format, no compression
+* Documentation: README_FIRST.txt and the articles linked below
+The image dataset was planned and assembled by Michael Lyons, Miyuki Kamachi, and Jiro Gyoba, at Kyushu University, Japan.
+
+
+
+
+2. Emo-DB Database
+https://www.kaggle.com/piyushagni5/berlin-database-of-emotional-speech-emodb
+Emo_db
+
+
+Emo-DB Database
+The EMODB database is the freely available German emotional database. The database is created by the Institute of Communication Science, Technical University, Berlin, Germany. Ten professional speakers (five males and five females) participated in data recording. The database contains a total of 535 utterances. The EMODB database comprises of seven emotions: 1) anger; 2) boredom; 3) anxiety; 4) happiness; 5) sadness; 6) disgust; and 7) neutral. The data was recorded at a 48-kHz sampling rate and then down-sampled to 16-kHz.
+Additional Information
+Every utterance is named according to the same scheme:
+* Positions 1-2: number of speaker
+* Positions 3-5: code for text
+* Position 6: emotion (sorry, letter stands for german emotion word)
+* Position 7: if there are more than two versions these are numbered a, b, c ....
+Example: 03a01Fa.wav is the audio file from Speaker 03 speaking text a01 with the emotion "Freude" (Happiness).
+Information about the speakers
+* 03 - male, 31 years old
+* 08 - female, 34 years
+* 09 - female, 21 years
+* 10 - male, 32 years
+* 11 - male, 26 years
+* 12 - male, 30 years
+* 13 - female, 32 years
+* 14 - female, 35 years
+* 15 - male, 25 years
+* 16 - female, 31 years
+
+
+3. CREMA-D
+
+
+https://www.kaggle.com/ejlok1/cremad
+
+
+CREMA-D is a data set of 7,442 original clips from 91 actors. These clips were from 48 male and 43 female actors between the ages of 20 and 74 coming from a variety of races and ethnicities (African America, Asian, Caucasian, Hispanic, and Unspecified). Actors spoke from a selection of 12 sentences. The sentences were presented using one of six different emotions (Anger, Disgust, Fear, Happy, Neutral, and Sad) and four different emotion levels (Low, Medium, High, and Unspecified).
+
+
+
+
+4. The enterface’05 audiovisual emotion database
+http://www.enterface.net/results/
+
+
+Enterface’05 [7] database for emotion recognition from audio and video signals. The database has a total of 44 speakers, and each speaker spoke approximately 30 sentences. Three hundred best video clips from the database are selected, and 225 (75%) video clips are taken for training, and 75(25%) video clips are taken for testing.
+
+
+5. SAVEE
+https://www.kaggle.com/barelydedicated/savee-database
+savee
+
+
+Context
+The SAVEE database was recorded from four native English male speakers (identified as DC, JE, JK, KL), postgraduate students and researchers at the University of Surrey aged from 27 to 31 years. Emotion has been described psychologically in discrete categories: anger, disgust, fear, happiness, sadness and surprise. This is supported by the cross-cultural studies of Ekman [6] and studies of automatic emotion recognition tended to focus on recognizing these [12]. We added neutral to provide recordings of 7 emotion categories. The text material consisted of 15 TIMIT sentences per emotion: 3 common, 2 emotion-specific and 10 generic sentences that were different for each emotion and phonetically-balanced. The 3 common and 2 × 6 = 12 emotion-specific sentences were recorded as neutral to give 30 neutral sentences.
+Content
+This results in a total of 120 utterances per speaker, for example:
+Common: She had your dark suit in greasy wash water all year.
+Anger: Who authorized the unlimited expense account?
+Disgust: Please take this dirty table cloth to the cleaners for me.
+Fear: Call an ambulance for medical assistance.
+Happiness: Those musicians harmonize marvelously.
+Sadness: The prospect of cutting back spending is an unpleasant one for any governor.
+Surprise: The carpet cleaners shampooed our oriental rug.
+Neutral: The best way to learn is to solve extra problems.
+
+
+
+
+
+
+
+
+
+
+Exploring Emotion Features and Fusion Strategies for Audio-Video Emotion Recognition
+In this work we use four emotion datasets to train our models, i.e. AffectNet[20], RAF-DB[16], FER+[2], AFEW[5, 6].
