@@ -1,8 +1,8 @@
 import re
 from glob import glob
 from moviepy.editor import *
-import cv2
-import math
+# import cv2
+# import math
 import pandas as pd
 
 
@@ -18,7 +18,7 @@ class IemocapData:
         info_line = re.compile(r'\[.+\]\n', re.IGNORECASE)
         start_times, end_times, file_paths, emotions = [], [], [], []
         # for x in range(1):
-        for x in range(6):
+        for x in range(5):
             sess_name = "Session" + str(x + 1)
             path_video = self.data_path + sess_name + "/dialog/avi/DivX/"
             path_label = self.data_path + sess_name + "/dialog/EmoEvaluation/"
@@ -90,7 +90,7 @@ class IemocapData:
     #                     os.makedirs(image_path_clip)
     #
     #                 cap = cv2.VideoCapture(folder + video_clip)
-    #                 length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    #                 length = int(cap.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT))
     #                 print(length)
     #                 interval = length // num_images
     #                 frameRate = cap.get(5)  # frame rate
