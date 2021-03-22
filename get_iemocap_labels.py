@@ -21,10 +21,10 @@ import librosa.display
 ms.use('seaborn-muted')
 # %matplotlib inline
 
-iemocap_full_release_path = "/Users/grigorkeropyan/Desktop/YSU_thesis/small_data/IEMOCAP_full_release/"
-iemocap_pre_processed_data_path = "/Users/grigorkeropyan/Desktop/YSU_thesis/small_data/pre_processed_data/iemocap/"
-# iemocap_full_release_path = "/home/student/keropyan/data/IEMOCAP_full_release/"
-# iemocap_pre_processed_data_path = "/home/student/keropyan/data/pre_processed_data/iemocap/"
+# iemocap_full_release_path = "/Users/grigorkeropyan/Desktop/YSU_thesis/small_data/IEMOCAP_full_release/"
+# iemocap_pre_processed_data_path = "/Users/grigorkeropyan/Desktop/YSU_thesis/small_data/pre_processed_data/iemocap/"
+iemocap_full_release_path = "/home/student/keropyan/data/IEMOCAP_full_release/"
+iemocap_pre_processed_data_path = "/home/student/keropyan/data/pre_processed_data/iemocap/"
 
 
 info_line = re.compile(r'\[.+\]\n', re.IGNORECASE)
