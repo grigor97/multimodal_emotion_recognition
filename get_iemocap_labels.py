@@ -1,24 +1,7 @@
 import os
-# import sys
-import csv
 import re
-# import math
 import pandas as pd
 # import pdb
-
-# import librosa
-# import soundfile as sf
-# import numpy as np
-# import matplotlib.pyplot as plt
-# from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-# import matplotlib.style as ms
-# from tqdm import tqdm
-# import pickle
-#
-# import IPython.display
-# import librosa.display
-# ms.use('seaborn-muted')
-# %matplotlib inline
 
 # iemocap_full_release_path = "/Users/grigorkeropyan/Desktop/YSU_thesis/small_data/IEMOCAP_full_release/"
 # iemocap_pre_processed_data_path = "/Users/grigorkeropyan/Desktop/YSU_thesis/small_data/pre_processed_data/iemocap/"
@@ -30,7 +13,7 @@ info_line = re.compile(r'\[.+\]\n', re.IGNORECASE)
 
 start_times, end_times, wav_file_names, emotions, vals, acts, doms = [], [], [], [], [], [], []
 
-for sess in range(1, 2):
+for sess in range(1, 6):
     emo_evaluation_dir = iemocap_full_release_path + '/Session{}/dialog/EmoEvaluation/'.format(sess)
     evaluation_files = [l for l in os.listdir(emo_evaluation_dir) if 'Ses' in l]
     for file in evaluation_files:
