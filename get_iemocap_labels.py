@@ -1,24 +1,23 @@
 import os
-import sys
+# import sys
 import csv
 import re
-import math
+# import math
 import pandas as pd
 # import pdb
 
-import librosa
-import os
-import soundfile as sf
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-import matplotlib.style as ms
-from tqdm import tqdm
-import pickle
-
-import IPython.display
-import librosa.display
-ms.use('seaborn-muted')
+# import librosa
+# import soundfile as sf
+# import numpy as np
+# import matplotlib.pyplot as plt
+# from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+# import matplotlib.style as ms
+# from tqdm import tqdm
+# import pickle
+#
+# import IPython.display
+# import librosa.display
+# ms.use('seaborn-muted')
 # %matplotlib inline
 
 # iemocap_full_release_path = "/Users/grigorkeropyan/Desktop/YSU_thesis/small_data/IEMOCAP_full_release/"
