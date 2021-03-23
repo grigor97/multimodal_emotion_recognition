@@ -1,9 +1,49 @@
+# import os
 import re
 from glob import glob
 from moviepy.editor import *
-# import cv2
-# import math
 import pandas as pd
+
+
+enterface_emo_conv_dict = {
+    'fear': 'fea',
+    'surprise': 'sur',
+    'sadness': 'sad',
+    'happiness': 'hap',
+    'anger': 'ang',
+    'disgust': 'dis',
+}
+
+
+def get_enterface_paths(enterfece_data_path, enterface_pre_processed_data_path):
+    video_paths = []
+    emotions = []
+    for subject in os.listdir(enterfece_data_path):
+        if subject == '.DS_Store':
+            continue
+    #     print(subject)
+        sub_path = enterfece_data_path + '/' + subject
+        for emotion in os.listdir(sub_path):
+            if emotion == '.DS_Store':
+                continue
+            emo_path = sub_path + '/' + emotion
+
+            for sent in os.listdir(emo_path):
+                if sent == '.DS_Store':
+                    continue
+
+                sent_path = emo_path + '/' + sent
+                paths = glob(sent_path + '/' + '*.avi')
+                for p in paths:
+                    video_paths.append(p)
+                    emotions.append(enterface_emo_conv_dict[emotion])
+
+    df_enterface = pd.DataFrame(columns=['file_path', 'emotion'])
+
+    df_enterface['file_path'] = video_paths
+    df_enterface['emotion'] = emotions
+
+    df_enterface.to_csv(enterface_pre_processed_data_path + '/df_enterface.csv', index=False)
 
 
 # here I have mostly used Mandeep Singh and Yuan Fang's codes
