@@ -5,6 +5,39 @@ from moviepy.editor import *
 import pandas as pd
 
 
+def get_ravdess_paths(ravdess_data_path, pre_processed_data_path):
+    emotions = []
+    actors = []
+    video_paths = []
+    for actor in os.listdir(ravdess_data_path):
+        if actor == '.DS_Store':
+            continue
+        act_path = ravdess_data_path + '/' + actor
+
+        ps = glob(act_path + '/' + '*.mp4')
+        for p in ps:
+            vals = p.split('/')[-1].split('.')[0].split('-')
+
+            # filtering only videos with audio
+            if vals[0] != '01':
+                continue
+            actors.append(vals[-1])
+            video_paths.append(p)
+            emotions.append(vals[2])
+
+    df_ravdess = pd.DataFrame(columns=['file_path', 'emotion', 'actor'])
+
+    df_ravdess['file_path'] = video_paths
+    df_ravdess['emotion'] = emotions
+    df_ravdess['actor'] = actors
+
+    df_ravdess.to_csv(pre_processed_data_path + '/df_ravdess.csv', index=False)
+
+
+
+
+
+
 enterface_emo_conv_dict = {
     'fear': 'fea',
     'surprise': 'sur',
