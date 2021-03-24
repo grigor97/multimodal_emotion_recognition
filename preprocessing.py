@@ -19,6 +19,18 @@ def get_complete_info_iemocap(df_iemocap):
     return df_iemocap
 
 
+ravdess_emo_conv_dict = {
+    '06': 'fea',
+    '08': 'sur',
+    '04': 'sad',
+    '03': 'hap',
+    '05': 'ang',
+    '07': 'dis',
+    '01': 'neu',
+    '02': 'calm'
+}
+
+
 def get_ravdess_paths(ravdess_data_path, pre_processed_data_path):
     emotions = []
     actors = []
@@ -37,7 +49,7 @@ def get_ravdess_paths(ravdess_data_path, pre_processed_data_path):
                 continue
             actors.append(vals[-1])
             video_paths.append(p)
-            emotions.append(vals[2])
+            emotions.append(ravdess_emo_conv_dict[vals[2]])
 
     df_ravdess = pd.DataFrame(columns=['file_path', 'emotion', 'actor'])
 
