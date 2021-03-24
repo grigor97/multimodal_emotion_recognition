@@ -1,22 +1,7 @@
-# import os
 import re
 from glob import glob
 from moviepy.editor import *
 import pandas as pd
-
-
-def get_complete_info_iemocap(df_iemocap):
-    sexes = []
-    sessions = []
-    for ind, row in df_iemocap.iterrows():
-        file_name = row['file_path'].split('/')[-1].split('.')[0]
-        sex = file_name.split('_')[-1][0]
-        sessions.append(int(row['file_path'].split('/')[-4][-1]))
-        sexes.append(sex)
-
-    df_iemocap['sex'] = sexes
-    df_iemocap['session'] = sessions
-    return df_iemocap
 
 
 ravdess_emo_conv_dict = {
@@ -32,9 +17,7 @@ ravdess_emo_conv_dict = {
 
 
 def get_ravdess_paths(ravdess_data_path, pre_processed_data_path):
-    emotions = []
-    actors = []
-    video_paths = []
+    emotions, actors, video_paths, sexes = [], [], [], []
     for actor in os.listdir(ravdess_data_path):
         if actor == '.DS_Store':
             continue
@@ -43,19 +26,26 @@ def get_ravdess_paths(ravdess_data_path, pre_processed_data_path):
         ps = glob(act_path + '/' + '*.mp4')
         for p in ps:
             vals = p.split('/')[-1].split('.')[0].split('-')
-
             # filtering only videos with audio
             if vals[0] != '01':
                 continue
-            actors.append(vals[-1])
+
+            ac = int(vals[-1])
+            actors.append(ac)
+            if ac % 2 == 0:
+                sexes.append('F')
+            else:
+                sexes.append('M')
+
             video_paths.append(p)
             emotions.append(ravdess_emo_conv_dict[vals[2]])
 
-    df_ravdess = pd.DataFrame(columns=['file_path', 'emotion', 'actor'])
+    df_ravdess = pd.DataFrame(columns=['file_path', 'emotion', 'actor', 'sex'])
 
     df_ravdess['file_path'] = video_paths
     df_ravdess['emotion'] = emotions
     df_ravdess['actor'] = actors
+    df_ravdess['sex'] = sexes
 
     df_ravdess.to_csv(pre_processed_data_path + '/df_ravdess.csv', index=False)
 
@@ -70,13 +60,11 @@ enterface_emo_conv_dict = {
 }
 
 
-def get_enterface_paths(enterfece_data_path, enterface_pre_processed_data_path):
-    video_paths = []
-    emotions = []
+def get_enterface_paths(enterfece_data_path, pre_processed_data_path):
+    video_paths, emotions, subjects = [], [], []
     for subject in os.listdir(enterfece_data_path):
         if subject == '.DS_Store':
             continue
-    #     print(subject)
         sub_path = enterfece_data_path + '/' + subject
         for emotion in os.listdir(sub_path):
             if emotion == '.DS_Store':
@@ -92,77 +80,76 @@ def get_enterface_paths(enterfece_data_path, enterface_pre_processed_data_path):
                 for p in paths:
                     video_paths.append(p)
                     emotions.append(enterface_emo_conv_dict[emotion])
+                    subjects.append(int(subject.split(' ')[1]))
 
-    df_enterface = pd.DataFrame(columns=['file_path', 'emotion'])
-
+    df_enterface = pd.DataFrame(columns=['file_path', 'emotion', 'subject'])
     df_enterface['file_path'] = video_paths
     df_enterface['emotion'] = emotions
+    df_enterface['subject'] = subjects
+    df_enterface.to_csv(pre_processed_data_path + '/df_enterface.csv', index=False)
 
-    df_enterface.to_csv(enterface_pre_processed_data_path + '/df_enterface.csv', index=False)
 
+def iemocap_divide_videos_to_clips(data_path, pre_processed_data_path):
+    info_line = re.compile(r'\[.+\]\n', re.IGNORECASE)
+    start_times, end_times, file_paths, emotions, sessions, sexes = [], [], [], [], [], []
+    # for x in range(1):
+    for x in range(5):
+        sess_name = "Session" + str(x + 1)
+        print('processing in session ', sess_name)
+        path_video = data_path + sess_name + "/dialog/avi/DivX/"
+        path_label = data_path + sess_name + "/dialog/EmoEvaluation/"
+        video_clip_path = data_path + sess_name + "/sentences_video_audio/"
+        if not os.path.exists(video_clip_path):
+            os.makedirs(video_clip_path)
+        videos = glob(path_video + '*.avi')
 
-# here I have mostly used Mandeep Singh and Yuan Fang's codes
-class IemocapData:
-    def __init__(self):
-        # self.data_path = "/Users/grigorkeropyan/Desktop/YSU_thesis/small_data/IEMOCAP_full_release/"
-        # self.pre_processed_data_path = "/Users/grigorkeropyan/Desktop/YSU_thesis/small_data/pre_processed_data/iemocap/"
-        self.data_path = "/home/student/keropyan/data/IEMOCAP_full_release/"
-        self.pre_processed_data_path = "/home/student/keropyan/data/pre_processed_data/iemocap/"
+        for video_name in videos:
+            video_name = video_name.split("/")[-1]
+            video_name_folder = video_clip_path + video_name.split(".")[0] + '/'
+            if not os.path.exists(video_name_folder):
+                os.makedirs(video_name_folder)
+            with open(path_label + video_name.split(".")[0] + '.txt') as f:
+                content = f.read()
+            info_lines = re.findall(info_line, content)
+            for line in info_lines[1:]:  # the first line is a header
+                # print(path_label + video_name.split(".")[0] + '.txt')
+                start_end_time, file_name, emotion, val_act_dom = line.strip().split('\t')
+                start_time, end_time = start_end_time[1:-1].split('-')
+                start_time, end_time = float(start_time), float(end_time)
+                start_times.append(start_time)
+                end_times.append(end_time)
+                file_paths.append(video_name_folder + file_name + ".mp4")
+                emotions.append(emotion)
+                sessions.append(x + 1)
 
-    def divide_videos_to_clips(self):
-        info_line = re.compile(r'\[.+\]\n', re.IGNORECASE)
-        start_times, end_times, file_paths, emotions = [], [], [], []
-        # for x in range(1):
-        for x in range(5):
-            sess_name = "Session" + str(x + 1)
-            path_video = self.data_path + sess_name + "/dialog/avi/DivX/"
-            path_label = self.data_path + sess_name + "/dialog/EmoEvaluation/"
-            video_clip_path = self.pre_processed_data_path + sess_name + "/sentences_video_audio/"
-            if not os.path.exists(video_clip_path):
-                os.makedirs(video_clip_path)
-            videos = glob(path_video + '*.avi')
+                sex = file_name.split('_')[-1][0]
+                sexes.append(sex)
 
-            for video_name in videos:
-                video_name = video_name.split("/")[-1]
-                video_name_folder = video_clip_path + video_name.split(".")[0] + '/'
-                if not os.path.exists(video_name_folder):
-                    os.makedirs(video_name_folder)
-                with open(path_label + video_name.split(".")[0] + '.txt') as f:
-                    content = f.read()
-                info_lines = re.findall(info_line, content)
-                for line in info_lines[1:]:  # the first line is a header
-                    print(path_label + video_name.split(".")[0] + '.txt')
-                    start_end_time, file_name, emotion, val_act_dom = line.strip().split('\t')
-                    start_time, end_time = start_end_time[1:-1].split('-')
-                    start_time, end_time = float(start_time), float(end_time)
-                    start_times.append(start_time)
-                    end_times.append(end_time)
-                    file_paths.append(video_name_folder + file_name + ".mp4")
-                    emotions.append(emotion)
-                    video = VideoFileClip(
-                        path_video + video_name)
-                    if end_time > video.duration:
-                        end_time = video.duration
-                    print("wav_file_name {},start time {},end time {}".
-                          format(file_name, start_time, end_time))
+                video = VideoFileClip(
+                    path_video + video_name)
+                if end_time > video.duration:
+                    end_time = video.duration
+                # print("wav_file_name {},start time {},end time {}".
+                #       format(file_name, start_time, end_time))
 
-                    video = video.subclip(
-                        start_time, end_time)
-                    video.write_videofile(
-                        video_name_folder + file_name + ".mp4",
-                        codec='libx264',
-                        audio_codec='aac',
-                        temp_audiofile='temp-audio.m4a',
-                        remove_temp=True)
+                video = video.subclip(
+                    start_time, end_time)
+                video.write_videofile(
+                    video_name_folder + file_name + ".mp4",
+                    codec='libx264',
+                    audio_codec='aac',
+                    temp_audiofile='temp-audio.m4a',
+                    remove_temp=True)
 
-        df_iemocap = pd.DataFrame(columns=['start_time', 'end_time', 'file_path', 'emotion'])
+    df_iemocap = pd.DataFrame(columns=['start_time', 'end_time', 'file_path', 'emotion', 'session', 'sex'])
 
-        df_iemocap['start_time'] = start_times
-        df_iemocap['end_time'] = end_times
-        df_iemocap['file_path'] = file_paths
-        df_iemocap['emotion'] = emotions
-
-        df_iemocap.to_csv(self.pre_processed_data_path + '/df_iemocap.csv', index=False)
+    df_iemocap['start_time'] = start_times
+    df_iemocap['end_time'] = end_times
+    df_iemocap['file_path'] = list(map(str, file_paths))
+    df_iemocap['emotion'] = list(map(str, emotions))
+    df_iemocap['session'] = list(map(int, sessions))
+    df_iemocap['sex'] = list(map(str, sexes))
+    df_iemocap.to_csv(pre_processed_data_path + '/df_iemocap.csv', index=False)
 
     # def extract_video_frames(self, num_images):
     #     # for x in range(1):
