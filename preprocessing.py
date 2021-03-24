@@ -5,6 +5,20 @@ from moviepy.editor import *
 import pandas as pd
 
 
+def get_complete_info_iemocap(df_iemocap):
+    sexes = []
+    sessions = []
+    for ind, row in df_iemocap.iterrows():
+        file_name = row['file_path'].split('/')[-1].split('.')[0]
+        sex = file_name.split('_')[-1][0]
+        sessions.append(int(row['file_path'].split('/')[-4][-1]))
+        sexes.append(sex)
+
+    df_iemocap['sex'] = sexes
+    df_iemocap['session'] = sessions
+    return df_iemocap
+
+
 def get_ravdess_paths(ravdess_data_path, pre_processed_data_path):
     emotions = []
     actors = []
@@ -32,10 +46,6 @@ def get_ravdess_paths(ravdess_data_path, pre_processed_data_path):
     df_ravdess['actor'] = actors
 
     df_ravdess.to_csv(pre_processed_data_path + '/df_ravdess.csv', index=False)
-
-
-
-
 
 
 enterface_emo_conv_dict = {

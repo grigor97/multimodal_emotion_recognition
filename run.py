@@ -16,5 +16,4 @@ pre_processed_data_path = "/home/student/keropyan/data/pre_processed_data/"
 
 get_enterface_paths(enterfece_data_path, pre_processed_data_path)
 
-# get_ravdess_paths(ravdess_data_path, pre_processed_data_path)
-
+get_ravdess_paths(ravdess_data_path, pre_processed_data_path)
