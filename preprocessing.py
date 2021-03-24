@@ -89,7 +89,7 @@ def get_enterface_paths(enterfece_data_path, pre_processed_data_path):
     df_enterface.to_csv(pre_processed_data_path + '/df_enterface.csv', index=False)
 
 
-def iemocap_divide_videos_to_clips(data_path, pre_processed_data_path):
+def iemocap_divide_videos_to_clips(data_path, pre_processed_data_path, video_save_path ):
     info_line = re.compile(r'\[.+\]\n', re.IGNORECASE)
     start_times, end_times, file_paths, emotions, sessions, sexes = [], [], [], [], [], []
     # for x in range(1):
@@ -98,7 +98,7 @@ def iemocap_divide_videos_to_clips(data_path, pre_processed_data_path):
         print('processing in session ', sess_name)
         path_video = data_path + sess_name + "/dialog/avi/DivX/"
         path_label = data_path + sess_name + "/dialog/EmoEvaluation/"
-        video_clip_path = data_path + sess_name + "/sentences_video_audio/"
+        video_clip_path = video_save_path + sess_name + "/sentences_video_audio/"
         if not os.path.exists(video_clip_path):
             os.makedirs(video_clip_path)
         videos = glob(path_video + '*.avi')
