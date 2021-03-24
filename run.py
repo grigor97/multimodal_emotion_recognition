@@ -4,7 +4,7 @@ preprocessed_data_path = "/home/student/keropyan/data/preprocessed_data/"
 iemocap_data_path = "/home/student/keropyan/data/IEMOCAP_full_release/"
 enterfece_data_path = "/home/student/keropyan/data/enterface_database/"
 ravdess_data_path = '/home/student/keropyan/data/RAVDESS'
-iemocap_cliped_video_path = '/home/student/keropyan/data/iemocap'
+iemocap_cliped_video_path = '/home/student/keropyan/data/iemocap/'
 
 
 # preprocessed_data_path = '/Users/grigorkeropyan/Desktop/YSU_thesis/small_data/preprocessed_data/'
