@@ -113,7 +113,8 @@ def extract_video_images(vid_path, st, et, all_data_path):
     audio_clip.write_audiofile(audio_path)
 
     audio_features = get_features(audio_path)
-    np.save(save_folder + vid_name + '_features.npy', audio_features)
+    audio_features_path = save_folder + vid_name + '_features.npy'
+    np.save(audio_features_path, audio_features)
 
     cap = cv2.VideoCapture(path_to_clip)
     length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -121,7 +122,9 @@ def extract_video_images(vid_path, st, et, all_data_path):
     interval = length // num_images
     frame_rate = cap.get(5)  # frame rate
     print(frame_rate)
+
     x = 1
+    pic_path = all_data_path + vid_name + '/pics/'
     while cap.isOpened():
         frame_id = cap.get(1)  # current frame number
         ret, frame = cap.read()
@@ -130,7 +133,7 @@ def extract_video_images(vid_path, st, et, all_data_path):
         if length % num_images == 0:
             length -= 1
         if (frame_id <= (length - length % num_images)) and (frame_id % math.floor(interval) == 0):
-            pic_path = all_data_path + vid_name + '/pics/'
+
             filename = pic_path + str(vid_name) + "_" + str(int(x)) + ".jpg"
             x += 1
             print("Frame shape Before resize", frame.shape)
@@ -155,3 +158,4 @@ def extract_video_images(vid_path, st, et, all_data_path):
 
     cap.release()
     print("Done!")
+    return pic_path, audio_features_path
