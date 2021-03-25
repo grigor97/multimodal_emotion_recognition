@@ -29,5 +29,5 @@ test_paths = "/home/student/keropyan/data/preprocessed_data/filtered_emotions_pa
 train_df_paths = pd.read_csv(train_paths)
 test_df_paths = pd.read_csv(test_paths)
 
-prepare_whole_data(train_paths, save_train_data_path, 'final_train_paths.csv')
-prepare_whole_data(test_paths, save_test_data_path, 'final_test_paths.csv')
+prepare_whole_data(train_df_paths, save_train_data_path, 'final_train_paths.csv')
+prepare_whole_data(test_df_paths, save_test_data_path, 'final_test_paths.csv')
