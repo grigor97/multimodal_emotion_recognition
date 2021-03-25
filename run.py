@@ -1,4 +1,4 @@
-from preprocessing import *
+from extracting_video_paths import *
 
 preprocessed_data_path = "/home/student/keropyan/data/preprocessed_data/"
 iemocap_data_path = "/home/student/keropyan/data/IEMOCAP_full_release/"
