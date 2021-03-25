@@ -170,7 +170,7 @@ def extract_video_images_and_audio_features(vid_path, st, et, all_data_path, nth
     except:
         print('cannot extract audio')
 
-
+    return None, None
 
 
 def prepare_one_video(video_path, save_data_path):
