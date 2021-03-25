@@ -112,59 +112,65 @@ def extract_video_images_and_audio_features(vid_path, st, et, all_data_path, nth
     if not os.path.exists(save_folder):
         os.makedirs(save_folder)
 
-    path_to_clip = clip_video(vid_path, st, et, save_folder + vid_name + '_' + str(nth_sub_video) + '.mp4')
+    try:
+        path_to_clip = clip_video(vid_path, st, et, save_folder + vid_name + '_' + str(nth_sub_video) + '.mp4')
 
-    audio_clip = AudioFileClip(path_to_clip)
-    audio_path = save_folder + vid_name + '_' + str(nth_sub_video) + '.wav'
-    audio_clip.write_audiofile(audio_path)
+        audio_clip = AudioFileClip(path_to_clip)
+        audio_path = save_folder + vid_name + '_' + str(nth_sub_video) + '.wav'
+        audio_clip.write_audiofile(audio_path)
 
-    audio_features = get_features(audio_path)
-    audio_features_path = save_folder + vid_name + '_' + str(nth_sub_video) + '_features.npy'
-    np.save(audio_features_path, audio_features)
+        audio_features = get_features(audio_path)
+        audio_features_path = save_folder + vid_name + '_' + str(nth_sub_video) + '_features.npy'
+        np.save(audio_features_path, audio_features)
 
-    cap = cv2.VideoCapture(path_to_clip)
-    length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    print(length)
-    interval = length // num_images
-    frame_rate = cap.get(5)  # frame rate
-    print(frame_rate)
+        cap = cv2.VideoCapture(path_to_clip)
+        length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        print(length)
+        interval = length // num_images
+        frame_rate = cap.get(5)  # frame rate
+        print(frame_rate)
 
-    x = 1
-    pic_path = save_folder + 'pics/'
-    while cap.isOpened():
-        frame_id = cap.get(1)  # current frame number
-        ret, frame = cap.read()
-        if not ret:
-            break
-        if length % num_images == 0:
-            length -= 1
-        if (frame_id <= (length - length % num_images)) and (frame_id % math.floor(interval) == 0):
+        x = 1
+        pic_path = save_folder + 'pics/'
+        while cap.isOpened():
+            frame_id = cap.get(1)  # current frame number
+            ret, frame = cap.read()
+            if not ret:
+                break
+            if length % num_images == 0:
+                length -= 1
+            if (frame_id <= (length - length % num_images)) and (frame_id % math.floor(interval) == 0):
 
-            filename = pic_path + str(vid_name) + '_' + str(nth_sub_video) + "_" + str(int(x)) + ".jpg"
-            x += 1
-            print("Frame shape Before resize", frame.shape)
-            m_f_i = vid_name.split("_")
-            m_f_l = m_f_i[0][-1]
-            m_f_r = m_f_i[2][0]
-            y1 = frame.shape[0]
-            w1 = frame.shape[1]
-            new_x = np.int(w1/2)
-            yy = np.int(y1/4)
-            if m_f_r == m_f_l:
-                # Get left part of image
-                frame = frame[yy: 3*yy, 0:new_x, :]
-            else:
-                frame = frame[yy: 3*yy, new_x:w1, :]
-                # Get right part of image
-            print("After", frame.shape)
+                filename = pic_path + str(vid_name) + '_' + str(nth_sub_video) + "_" + str(int(x)) + ".jpg"
+                x += 1
+                print("Frame shape Before resize", frame.shape)
+                m_f_i = vid_name.split("_")
+                m_f_l = m_f_i[0][-1]
+                m_f_r = m_f_i[2][0]
+                y1 = frame.shape[0]
+                w1 = frame.shape[1]
+                new_x = np.int(w1/2)
+                yy = np.int(y1/4)
+                if m_f_r == m_f_l:
+                    # Get left part of image
+                    frame = frame[yy: 3*yy, 0:new_x, :]
+                else:
+                    frame = frame[yy: 3*yy, new_x:w1, :]
+                    # Get right part of image
+                print("After", frame.shape)
 
-            if not os.path.exists(pic_path):
-                os.makedirs(pic_path)
-            cv2.imwrite(filename, frame)
+                if not os.path.exists(pic_path):
+                    os.makedirs(pic_path)
+                cv2.imwrite(filename, frame)
 
-    cap.release()
-    print("Done!")
-    return pic_path, audio_features_path
+        cap.release()
+        print("Done!")
+        return pic_path, audio_features_path
+
+    except:
+        print('cannot extract audio')
+
+
 
 
 def prepare_one_video(video_path, save_data_path):
