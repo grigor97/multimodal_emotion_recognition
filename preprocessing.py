@@ -116,7 +116,7 @@ def extract_video_images_and_audio_features(vid_path, st, et, all_data_path, nth
 
     audio_clip = AudioFileClip(path_to_clip)
     audio_path = save_folder + vid_name + '_' + str(nth_sub_video) + '.wav'
-    audio_clip.write_audiofile(audio_path)
+    audio_clip.write_audiofile(audio_path, codec='pcm_s16le')
 
     audio_features = get_features(audio_path)
     audio_features_path = save_folder + vid_name + '_' + str(nth_sub_video) + '_features.npy'
