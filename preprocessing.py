@@ -1,8 +1,14 @@
 import cv2
 import math
 import numpy as np
+import pandas as pd
 import librosa
 from moviepy.editor import *
+
+ONE_CLIP_LENGTH = 3  # each video length is 3 seconds
+OVERLAP = 1  # when we have a long video which  corresponds to one
+# emotion we divide it into parts where overlap is 1 seconds (4 seconds video --> 0-3 and 2-4)
+DISREGARD_LENGTH = 0.5  # if video length is less than DISREGARD_LENGTH then we do not consider this video
 
 
 def noise(data):
@@ -97,23 +103,23 @@ def clip_video(video_path, start_time, end_time, save_path):
     return save_path
 
 
-def extract_video_images(vid_path, st, et, all_data_path):
+def extract_video_images_and_audio_features(vid_path, st, et, all_data_path, nth_sub_video):
     vid_n = os.path.basename(vid_path)
     vid_name = vid_n.split(".")[0]
     num_images = 19
 
-    save_folder = all_data_path + vid_name + '/'
+    save_folder = all_data_path + vid_name + '_' + str(nth_sub_video) + '/'
     if not os.path.exists(save_folder):
         os.makedirs(save_folder)
 
-    path_to_clip = clip_video(vid_path, st, et, save_folder + vid_n)
+    path_to_clip = clip_video(vid_path, st, et, save_folder + vid_name + '_' + str(nth_sub_video) + '.mp4')
 
     audio_clip = AudioFileClip(path_to_clip)
-    audio_path = save_folder + vid_name + '.wav'
+    audio_path = save_folder + vid_name + '_' + str(nth_sub_video) + '.wav'
     audio_clip.write_audiofile(audio_path)
 
     audio_features = get_features(audio_path)
-    audio_features_path = save_folder + vid_name + '_features.npy'
+    audio_features_path = save_folder + vid_name + '_' + str(nth_sub_video) + '_features.npy'
     np.save(audio_features_path, audio_features)
 
     cap = cv2.VideoCapture(path_to_clip)
@@ -124,7 +130,7 @@ def extract_video_images(vid_path, st, et, all_data_path):
     print(frame_rate)
 
     x = 1
-    pic_path = all_data_path + vid_name + '/pics/'
+    pic_path = save_folder + 'pics/'
     while cap.isOpened():
         frame_id = cap.get(1)  # current frame number
         ret, frame = cap.read()
@@ -134,7 +140,7 @@ def extract_video_images(vid_path, st, et, all_data_path):
             length -= 1
         if (frame_id <= (length - length % num_images)) and (frame_id % math.floor(interval) == 0):
 
-            filename = pic_path + str(vid_name) + "_" + str(int(x)) + ".jpg"
+            filename = pic_path + str(vid_name) + '_' + str(nth_sub_video) + "_" + str(int(x)) + ".jpg"
             x += 1
             print("Frame shape Before resize", frame.shape)
             m_f_i = vid_name.split("_")
@@ -159,3 +165,45 @@ def extract_video_images(vid_path, st, et, all_data_path):
     cap.release()
     print("Done!")
     return pic_path, audio_features_path
+
+
+def prepare_one_video(video_path, save_data_path):
+    video = VideoFileClip(video_path)
+    video_length = video.duration
+
+    paths = []
+    cnt = 0
+    start = 0
+    while start < video_length:
+        end = start + 3
+        if end > video_length:
+            end = video_length
+        if start > 0 and end - start < 2 * OVERLAP:
+            break
+
+        pth = extract_video_images_and_audio_features(video_path, start, end, save_data_path, cnt)
+        paths.append(pth)
+
+        start = start + ONE_CLIP_LENGTH - OVERLAP
+        cnt += 1
+
+    return paths  # pictures paths and npy file paths which is audio features
+
+
+def prepare_whole_data(data_paths, save_data_path, save_name):
+    pic_paths, npy_paths, emotions = [], [], []
+
+    for i, row in data_paths.iterrows():
+        paths = prepare_one_video(row[0], save_data_path)
+        for path in paths:
+            pic_paths.append(path[0])
+            npy_paths.append(path[1])
+            emotions.append(row[1])
+
+    df = pd.DataFrame(columns=['pic_paths', 'npy_paths', 'emotion'])
+
+    df['pic_paths'] = pic_paths
+    df['npy_paths'] = npy_paths
+    df['emotion'] = emotions
+    df.to_csv(save_data_path + save_name, index=False)
+    return df
