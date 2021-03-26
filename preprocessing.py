@@ -9,6 +9,7 @@ ONE_CLIP_LENGTH = 3  # each video length is 3 seconds
 OVERLAP = 1  # when we have a long video which  corresponds to one
 # emotion we divide it into parts where overlap is 1 seconds (4 seconds video --> 0-3 and 2-4)
 DISREGARD_LENGTH = 0.5  # if video length is less than DISREGARD_LENGTH then we do not consider this video
+dim = (360, 600)
 
 
 def noise(data):
@@ -117,7 +118,6 @@ def clip_audio(audio_path, start_time, end_time, save_path):
 
 
 def iemocap_extract_video_images_and_audio_features(vid_path, st, et, all_data_path, nth_sub_video):
-    dim = (360, 600)
     path_to_audio = vid_path.split('.')[0] + '.wav'
     vid_n = os.path.basename(vid_path)
     vid_name = vid_n.split(".")[0]
@@ -168,7 +168,7 @@ def iemocap_extract_video_images_and_audio_features(vid_path, st, et, all_data_p
                 frame = frame[yy: 3 * yy, 0:new_x, :]
             else:
                 frame = frame[yy: 3 * yy, new_x:w1, :]
-                frame = cv2.resize(frame, dim)
+                frame = cv2.resize(frame, dim, interpolation=cv2.INTER_LINEAR)
                 # Get right part of image
             print("After", frame.shape)
 
@@ -182,7 +182,6 @@ def iemocap_extract_video_images_and_audio_features(vid_path, st, et, all_data_p
 
 
 def other_extract_video_images_and_audio_features(vid_path, st, et, all_data_path, nth_sub_video):
-    dim = (240, 360)
     vid_n = os.path.basename(vid_path)
     vid_name = vid_n.split(".")[0]
     num_images = 19
@@ -223,7 +222,7 @@ def other_extract_video_images_and_audio_features(vid_path, st, et, all_data_pat
             x += 1
             print("Frame shape Before resize", frame.shape)
 
-            frame = cv2.resize(frame, dim)
+            frame = cv2.resize(frame, dim, interpolation=cv2.INTER_LINEAR)
 
             print("Frame shape Before resize", frame.shape)
 
