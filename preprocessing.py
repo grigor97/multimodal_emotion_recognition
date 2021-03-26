@@ -117,6 +117,7 @@ def clip_audio(audio_path, start_time, end_time, save_path):
 
 
 def iemocap_extract_video_images_and_audio_features(vid_path, st, et, all_data_path, nth_sub_video):
+    dim = (360, 600)
     path_to_audio = vid_path.split('.')[0] + '.wav'
     vid_n = os.path.basename(vid_path)
     vid_name = vid_n.split(".")[0]
@@ -167,6 +168,7 @@ def iemocap_extract_video_images_and_audio_features(vid_path, st, et, all_data_p
                 frame = frame[yy: 3 * yy, 0:new_x, :]
             else:
                 frame = frame[yy: 3 * yy, new_x:w1, :]
+                frame = cv2.resize(frame, dim)
                 # Get right part of image
             print("After", frame.shape)
 
@@ -221,7 +223,7 @@ def other_extract_video_images_and_audio_features(vid_path, st, et, all_data_pat
             x += 1
             print("Frame shape Before resize", frame.shape)
 
-            frame = cv2.resize(frame, dim, interpolation=cv2.INTER_AREA)
+            frame = cv2.resize(frame, dim)
 
             print("Frame shape Before resize", frame.shape)
 
