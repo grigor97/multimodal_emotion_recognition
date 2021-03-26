@@ -141,6 +141,9 @@ def iemocap_divide_videos_to_clips(data_path, pre_processed_data_path, video_sav
                     temp_audiofile='temp-audio.m4a',
                     remove_temp=True)
 
+                video.audio.write_audiofile(
+                    video_name_folder + file_name + ".wav")
+
     df_iemocap = pd.DataFrame(columns=['start_time', 'end_time', 'file_path', 'emotion', 'session', 'sex'])
 
     df_iemocap['start_time'] = start_times
