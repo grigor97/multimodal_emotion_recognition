@@ -9,7 +9,8 @@ ONE_CLIP_LENGTH = 3  # each video length is 3 seconds
 OVERLAP = 1  # when we have a long video which  corresponds to one
 # emotion we divide it into parts where overlap is 1 seconds (4 seconds video --> 0-3 and 2-4)
 DISREGARD_LENGTH = 0.5  # if video length is less than DISREGARD_LENGTH then we do not consider this video
-dim = (360, 600)
+# PIC_DIMS = (600, 360)
+PIC_DIMS = (360, 240)
 
 
 def noise(data):
@@ -168,7 +169,8 @@ def iemocap_extract_video_images_and_audio_features(vid_path, st, et, all_data_p
                 frame = frame[yy: 3 * yy, 0:new_x, :]
             else:
                 frame = frame[yy: 3 * yy, new_x:w1, :]
-                frame = cv2.resize(frame, dim, interpolation=cv2.INTER_LINEAR)
+
+                # frame = cv2.resize(frame, PIC_DIMS, interpolation=cv2.INTER_LINEAR)
                 # Get right part of image
             print("After", frame.shape)
 
@@ -222,7 +224,7 @@ def other_extract_video_images_and_audio_features(vid_path, st, et, all_data_pat
             x += 1
             print("Frame shape Before resize", frame.shape)
 
-            frame = cv2.resize(frame, dim, interpolation=cv2.INTER_LINEAR)
+            frame = cv2.resize(frame, PIC_DIMS, interpolation=cv2.INTER_LINEAR)
 
             print("Frame shape Before resize", frame.shape)
 
