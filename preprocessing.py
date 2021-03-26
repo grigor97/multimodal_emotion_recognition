@@ -180,6 +180,7 @@ def iemocap_extract_video_images_and_audio_features(vid_path, st, et, all_data_p
 
 
 def other_extract_video_images_and_audio_features(vid_path, st, et, all_data_path, nth_sub_video):
+    dim = (240, 360)
     vid_n = os.path.basename(vid_path)
     vid_name = vid_n.split(".")[0]
     num_images = 19
@@ -219,20 +220,10 @@ def other_extract_video_images_and_audio_features(vid_path, st, et, all_data_pat
             filename = pic_path + str(vid_name) + '_' + str(nth_sub_video) + "_" + str(int(x)) + ".jpg"
             x += 1
             print("Frame shape Before resize", frame.shape)
-            m_f_i = vid_name.split("_")
-            m_f_l = m_f_i[0][-1]
-            m_f_r = m_f_i[2][0]
-            y1 = frame.shape[0]
-            w1 = frame.shape[1]
-            new_x = np.int(w1 / 2)
-            yy = np.int(y1 / 4)
-            if m_f_r == m_f_l:
-                # Get left part of image
-                frame = frame[yy: 3 * yy, 0:new_x, :]
-            else:
-                frame = frame[yy: 3 * yy, new_x:w1, :]
-                # Get right part of image
-            print("After", frame.shape)
+
+            frame = cv2.resize(frame, dim, interpolation=cv2.INTER_AREA)
+
+            print("Frame shape Before resize", frame.shape)
 
             if not os.path.exists(pic_path):
                 os.makedirs(pic_path)
