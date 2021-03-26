@@ -154,46 +154,41 @@ def iemocap_divide_videos_to_clips(data_path, pre_processed_data_path, video_sav
     df_iemocap['sex'] = list(map(str, sexes))
     df_iemocap.to_csv(pre_processed_data_path + '/df_iemocap.csv', index=False)
 
-    # def extract_video_frames(self, num_images):
-    #     # for x in range(1):
-    #     for x in range(6):
-    #         sess_name = "Session" + str(x + 1)
-    #         video_clip_path = self.pre_processed_data_path + sess_name + "/sentences_video_audio/"
-    #         images_path = self.pre_processed_data_path + sess_name + "/images_clip/"
-    #         if not os.path.exists(images_path):
-    #             os.makedirs(images_path)
-    #         folders = os.listdir(video_clip_path)
-    #         for folder in folders:
-    #             image_path_each = images_path + folder + "/"
-    #             if not os.path.exists(image_path_each):
-    #                 os.makedirs(image_path_each)
-    #             folder = video_clip_path + folder + "/"
-    #             video_clips = os.listdir(folder)
-    #             for video_clip in video_clips:
-    #                 image_path_clip = image_path_each + video_clip + "/"
-    #                 if not os.path.exists(image_path_clip):
-    #                     os.makedirs(image_path_clip)
-    #
-    #                 cap = cv2.VideoCapture(folder + video_clip)
-    #                 length = int(cap.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT))
-    #                 print(length)
-    #                 interval = length // num_images
-    #                 frameRate = cap.get(5)  # frame rate
-    #                 print(frameRate)
-    #                 x = 1
-    #                 while (cap.isOpened()):
-    #                     frameId = cap.get(1)  # current frame number
-    #                     ret, frame = cap.read()
-    #                     if (ret != True):
-    #                         break
-    #                     if length % num_images == 0:
-    #                         length -= 1
-    #                     if (frameId <= (length - length % num_images)) and (frameId % math.floor(interval) == 0):
-    #                         # if (frameId % math.floor(interval) == 0):
-    #                         filename = image_path_clip + video_clip + str(int(x)) + ".jpg"
-    #                         x += 1
-    #                         cv2.imwrite(filename, frame)
-    #
-    #                 cap.release()
-    #                 print("Done!")
-    #
+
+def get_final_paths(df_paths, save_path):
+    # reading paths
+    df_iemocap = pd.read_csv(df_paths + 'df_iemocap.csv')
+    df_enterface = pd.read_csv(df_paths + 'df_enterface.csv')
+    df_ravdess = pd.read_csv(df_paths + 'df_ravdess.csv')
+
+    # filtering and combining some emotions!
+    current_emos = ['sad', 'neu', 'hap', 'ang',
+                    'fru', 'exc', 'oth', 'dis', 'fea', 'sur']
+
+    final_emos = ['sad', 'neu', 'hap', 'ang', 'fru', 'exc', 'oth']
+    df_iemocap = df_iemocap.loc[df_iemocap.emotion.isin(current_emos)]
+    df_enterface = df_enterface.loc[df_enterface.emotion.isin(current_emos)]
+    df_ravdess = df_ravdess.loc[df_ravdess.emotion.isin(current_emos)]
+
+    df_iemocap['emotion'] = df_iemocap['emotion'].replace({'sur': 'oth', 'fea': 'oth', 'dis': 'oth'})
+    df_enterface['emotion'] = df_enterface['emotion'].replace({'sur': 'oth', 'fea': 'oth', 'dis': 'oth'})
+    df_ravdess['emotion'] = df_ravdess['emotion'].replace({'sur': 'oth', 'fea': 'oth', 'dis': 'oth'})
+
+    df_iemocap.to_csv(save_path + 'df_iemocap.csv', index=False)
+    df_ravdess.to_csv(save_path + 'df_ravdess.csv', index=False)
+    df_enterface.to_csv(save_path + 'df_enterface.csv', index=False)
+
+    iemocap_train = df_iemocap[df_iemocap['session'] != 4][['file_path', 'emotion']]
+    iemocap_test = df_iemocap[df_iemocap['session'] == 4][['file_path', 'emotion']]
+
+    enterface_train = df_enterface[df_enterface['subject'] <= 36][['file_path', 'emotion']]
+    enterface_test = df_enterface[df_enterface['subject'] > 36][['file_path', 'emotion']]
+
+    ravdess_train = df_ravdess[df_ravdess['actor'] <= 20][['file_path', 'emotion']]
+    ravdess_test = df_ravdess[df_ravdess['actor'] > 20][['file_path', 'emotion']]
+
+    train_paths = pd.concat([iemocap_train, enterface_train, ravdess_train])
+    test_paths = pd.concat([iemocap_test, enterface_test, ravdess_test])
+
+    train_paths.to_csv(save_path + 'train_paths.csv', index=False)
+    test_paths.to_csv(save_path + 'test_paths.csv', index=False)
