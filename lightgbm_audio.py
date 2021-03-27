@@ -12,11 +12,13 @@ test_paths = "/home/student/keropyan/data/preprocessed_data/test_data/final_test
 
 train_ps = pd.read_csv(train_paths)
 test_ps = pd.read_csv(test_paths)
+train_ps.dropna(inplace=True)
+test_ps.dropna(inplace=True)
 
 train_x = np.array([]).reshape((0, 162))
 train_y = []
 for i, row in train_ps.iterrows():
-    print(row[1])
+    # print(row[1])
     npy_path = row[1]
     lb = final_emos[row[2]]
     label = [lb, lb, lb, lb]
