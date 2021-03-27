@@ -7,4 +7,4 @@ train_paths = "/home/student/keropyan/data/preprocessed_data/filtered_emotions_p
 
 train_df_paths = pd.read_csv(train_paths)
 
-prepare_whole_data(train_df_paths.iloc[:5000], save_train_data_path, save_name1)
+prepare_whole_data(train_df_paths.iloc[:3000], save_train_data_path, save_name1)
