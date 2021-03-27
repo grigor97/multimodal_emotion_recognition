@@ -73,10 +73,10 @@ def gb_mse_cv(params, random_state=random_state, cv=kf, X=train_x, y=train_y):
     return score
 
 
-n_iter = 10
+n_iter = 100
 # possible values of parameters
-space = {'n_estimators': hp.quniform('n_estimators', 20, 200, 40),
-       'max_depth' : hp.quniform('max_depth', 10, 100, 10),
+space = {'n_estimators': hp.quniform('n_estimators', 20, 1020, 40),
+        'max_depth' : hp.quniform('max_depth', 10, 110, 10),
        'learning_rate': hp.loguniform('learning_rate', -5, 0),
        'boosting_type': 'gbdt', #GradientBoostingDecisionTree
         'objective': 'multiclass', #Multi-class target feature
