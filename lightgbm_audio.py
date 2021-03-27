@@ -15,19 +15,44 @@ test_ps = pd.read_csv(test_paths)
 train_ps.dropna(inplace=True)
 test_ps.dropna(inplace=True)
 
-train_x = np.array([]).reshape((0, 162))
-train_y = []
-for i, row in train_ps.iterrows():
-    # print(row[1])
-    npy_path = row[1]
-    lb = final_emos[row[2]]
-    label = [lb, lb, lb, lb]
-    features = np.load(npy_path)
 
-    train_x = np.vstack([train_x, features])
-    train_y.extend(label)
+def get_audio_features(df_paths):
+    x = np.array([]).reshape((0, 162))
+    y = []
+    for i, row in df_paths.iterrows():
+        # print(row[1])
+        npy_path = row[1]
+        lb = final_emos[row[2]]
+        label = [lb, lb, lb, lb]
+        features = np.load(npy_path)
 
-train_y = np.array(train_y)
+        x = np.vstack([x, features])
+        y.extend(label)
+
+    y = np.array(y)
+    return x, y
+
+
+train_x, train_y = get_audio_features(train_ps)
+test_x, test_y = get_audio_features(test_ps)
+
 
 print("shape of train_x is {} and shape of train_y is {}".format(train_x.shape, train_y.shape))
+print("shape of test_x is {} and shape of test_y is {}".format(test_x.shape, test_y.shape))
+
+# This is my DL course project params:)
+clf = LGBMClassifier(boosting_type='gbdt', objective='multiclass',
+                     learning_rate=0.42352561266844885,
+                     max_depth=70,
+                     n_estimators=80)
+
+clf.fit(train_x, train_y)
+preds = clf.predict(train_y)
+acc = (train_y == preds).sum()/preds.size
+print("train accuracy is   ", acc)
+
+preds = clf.predict(test_x)
+acc = (test_y == preds).sum()/preds.size
+print("test accuracy is   ", acc)
+
 
