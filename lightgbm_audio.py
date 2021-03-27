@@ -16,6 +16,7 @@ test_ps = pd.read_csv(test_paths)
 train_x = np.array([]).reshape((0, 162))
 train_y = []
 for i, row in train_ps.iterrows():
+    print(row[1])
     npy_path = row[1]
     lb = final_emos[row[2]]
     label = [lb, lb, lb, lb]
