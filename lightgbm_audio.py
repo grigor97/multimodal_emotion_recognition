@@ -46,9 +46,9 @@ test_yp = "/home/student/keropyan/data/preprocessed_data/train_data/test_y.npy"
 # np.save(test_xp, test_y)
 
 train_x = np.load(train_xp)
-train_y = np.save(train_yp)
-test_x = np.save(test_xp)
-test_y = np.save(test_xp)
+train_y = np.load(train_yp)
+test_x = np.load(test_xp)
+test_y = np.load(test_xp)
 
 print("shape of train_x is {} and shape of train_y is {}".format(train_x.shape, train_y.shape))
 print("shape of test_x is {} and shape of test_y is {}".format(test_x.shape, test_y.shape))
