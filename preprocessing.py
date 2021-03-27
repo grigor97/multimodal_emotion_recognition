@@ -139,7 +139,9 @@ def iemocap_extract_video_images_and_audio_features(vid_path, st, et, all_data_p
     cap = cv2.VideoCapture(path_to_clip)
     length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     print(length)
-    interval = length // num_images
+    interval = math.floor(length // num_images)
+    if interval < 1:
+        return None, None
     frame_rate = cap.get(5)  # frame rate
     print(frame_rate)
 
@@ -152,7 +154,7 @@ def iemocap_extract_video_images_and_audio_features(vid_path, st, et, all_data_p
             break
         if length % num_images == 0:
             length -= 1
-        if (frame_id <= (length - length % num_images)) and (frame_id % math.floor(interval) == 0):
+        if (frame_id <= (length - length % num_images)) and (frame_id % interval == 0):
 
             filename = pic_path + str(vid_name) + '_' + str(nth_sub_video) + "_" + str(int(x)) + ".jpg"
             x += 1
@@ -205,7 +207,9 @@ def other_extract_video_images_and_audio_features(vid_path, st, et, all_data_pat
     cap = cv2.VideoCapture(path_to_clip)
     length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     print(length)
-    interval = length // num_images
+    interval = math.floor(length // num_images)
+    if interval < 1:
+        return None, None
     frame_rate = cap.get(5)  # frame rate
     print(frame_rate)
 
@@ -218,7 +222,7 @@ def other_extract_video_images_and_audio_features(vid_path, st, et, all_data_pat
             break
         if length % num_images == 0:
             length -= 1
-        if (frame_id <= (length - length % num_images)) and (frame_id % math.floor(interval) == 0):
+        if (frame_id <= (length - length % num_images)) and (frame_id % interval == 0):
 
             filename = pic_path + str(vid_name) + '_' + str(nth_sub_video) + "_" + str(int(x)) + ".jpg"
             x += 1
