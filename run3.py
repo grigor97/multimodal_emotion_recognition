@@ -14,5 +14,4 @@ prepare_whole_data(train_df_paths.iloc[5000:], save_train_data_path, save_name2)
 train1 = pd.read_csv(save_train_data_path + save_name1)
 train2 = pd.read_csv(save_train_data_path + save_name2)
 train = pd.concat([train1, train2])
-train.to_csv(save_train_data_path + save_name)
-
+train.to_csv(save_train_data_path + save_name, index=False)
