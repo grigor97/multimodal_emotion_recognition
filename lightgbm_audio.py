@@ -59,11 +59,11 @@ clf = LGBMClassifier(boosting_type='gbdt', objective='multiclass',
                      max_depth=70,
                      n_estimators=80)
 
-clf.fit(train_x, train_y)
+clf.fit(train_x, train_y.reshape(-1, 1))
 preds = clf.predict(train_x)
 acc = (train_y.reshape(1, -1) == preds.reshape(1, -1)).sum()/preds.size
 print("train accuracy is   ", acc)
 
-preds = clf.predict(test_x)
+preds = clf.predict(test_x.reshape(-1, 1))
 acc = (test_y.reshape(1, -1) == preds.reshape(1, -1)).sum()/preds.size
 print("test accuracy is   ", acc)
