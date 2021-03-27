@@ -48,7 +48,7 @@ test_yp = "/home/student/keropyan/data/preprocessed_data/train_data/test_y.npy"
 train_x = np.load(train_xp)
 train_y = np.load(train_yp)
 test_x = np.load(test_xp)
-test_y = np.load(test_xp)
+test_y = np.load(test_yp)
 
 print("shape of train_x is {} and shape of train_y is {}".format(train_x.shape, train_y.shape))
 print("shape of test_x is {} and shape of test_y is {}".format(test_x.shape, test_y.shape))
@@ -64,6 +64,6 @@ preds = clf.predict(train_x)
 acc = (train_y.reshape(1, -1) == preds.reshape(1, -1)).sum()/preds.size
 print("train accuracy is   ", acc)
 
-preds = clf.predict(test_x.reshape(-1, 1))
+preds = clf.predict(test_x)
 acc = (test_y.reshape(1, -1) == preds.reshape(1, -1)).sum()/preds.size
 print("test accuracy is   ", acc)
