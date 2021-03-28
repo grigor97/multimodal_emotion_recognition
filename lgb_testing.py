@@ -95,6 +95,8 @@ print("test accuracy is   ", test_acc)
 
 print("best params are {}".format(best))
 
+clf.booster_.save_model('logs/audio_lgb_random_split.txt')
+
 with open('logs/lightgbm_res_for_random_split.txt', 'w') as f:
     f.write("train accuracy is ")
     f.write(train_acc)
