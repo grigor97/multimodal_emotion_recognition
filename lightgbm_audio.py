@@ -75,23 +75,23 @@ def gb_mse_cv(params, random_state=random_state, cv=kf, X=train_x, y=train_y):
 
 n_iter = 100
 # possible values of parameters
-space = {'n_estimators': hp.quniform('n_estimators', 20, 1020, 40),
-        'max_depth' : hp.quniform('max_depth', 10, 110, 10),
-       'learning_rate': hp.loguniform('learning_rate', -5, 0),
-       'boosting_type': 'gbdt', #GradientBoostingDecisionTree
-        'objective': 'multiclass', #Multi-class target feature
-      }
+space = {'n_estimators': hp.quniform('n_estimators', 20, 5000, 40),
+         'max_depth' : hp.quniform('max_depth', 10, 310, 20),
+         'learning_rate': hp.loguniform('learning_rate', -5, 0),
+         'boosting_type': 'gbdt', # GradientBoostingDecisionTree
+         'objective': 'multiclass', # Multi-class target feature
+         }
 
 # trials will contain logging information
 trials = Trials()
 
-best = fmin(fn=gb_mse_cv, # function to optimize
-          space=space,
-          algo=tpe.suggest, # optimization algorithm, hyperotp will select its parameters automatically
-          max_evals=n_iter, # maximum number of iterations
-          trials=trials, # logging
-          rstate=np.random.RandomState(random_state) # fixing random state for the reproducibility
-         )
+best = fmin(fn=gb_mse_cv,  # function to optimize
+            space=space,
+            algo=tpe.suggest,  # optimization algorithm, hyperopt will select its parameters automatically
+            max_evals=n_iter,  # maximum number of iterations
+            trials=trials,  # logging
+            rstate=np.random.RandomState(random_state) # fixing random state for the reproducibility
+            )
 
 
 clf = LGBMClassifier(boosting_type='gbdt', objective='multiclass',
@@ -102,27 +102,22 @@ clf = LGBMClassifier(boosting_type='gbdt', objective='multiclass',
 
 clf.fit(train_x, train_y)
 preds = clf.predict(train_x)
-acc = (train_y.reshape(1, -1) == preds.reshape(1, -1)).sum()/preds.size
-print("train accuracy is   ", acc)
+train_acc = (train_y.reshape(1, -1) == preds.reshape(1, -1)).sum()/preds.size
+print("train accuracy is   ", train_acc)
 
 preds = clf.predict(test_x)
-acc = (test_y.reshape(1, -1) == preds.reshape(1, -1)).sum()/preds.size
-print("test accuracy is   ", acc)
+test_acc = (test_y.reshape(1, -1) == preds.reshape(1, -1)).sum()/preds.size
+print("test accuracy is   ", test_acc)
 
 print("best params are {}".format(best))
 
-
-# # This is my DL course project params:)
-# clf = LGBMClassifier(boosting_type='gbdt', objective='multiclass',
-#                      learning_rate=0.42352561266844885,
-#                      max_depth=70,
-#                      n_estimators=80)
-#
-# clf.fit(train_x, train_y)
-# preds = clf.predict(train_x)
-# acc = (train_y.reshape(1, -1) == preds.reshape(1, -1)).sum()/preds.size
-# print("train accuracy is   ", acc)
-#
-# preds = clf.predict(test_x)
-# acc = (test_y.reshape(1, -1) == preds.reshape(1, -1)).sum()/preds.size
-# print("test accuracy is   ", acc)
+with open('logs/lightgbm_res_for_random_split.txt', 'w') as f:
+    f.write("train accuracy is ")
+    f.write(train_acc)
+    f.write('\n')
+    f.write("test accuracy is ")
+    f.write(test_acc)
+    f.write('\n')
+    f.write("best params are ")
+    f.write(best)
+    f.write('\n')

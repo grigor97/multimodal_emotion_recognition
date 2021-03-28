@@ -86,27 +86,22 @@ clf = LGBMClassifier(boosting_type='gbdt', objective='multiclass',
 
 clf.fit(train_x, train_y)
 preds = clf.predict(train_x)
-acc = (train_y.reshape(1, -1) == preds.reshape(1, -1)).sum()/preds.size
-print("train accuracy is   ", acc)
+train_acc = (train_y.reshape(1, -1) == preds.reshape(1, -1)).sum()/preds.size
+print("train accuracy is   ", train_acc)
 
 preds = clf.predict(test_x)
-acc = (test_y.reshape(1, -1) == preds.reshape(1, -1)).sum()/preds.size
-print("test accuracy is   ", acc)
+test_acc = (test_y.reshape(1, -1) == preds.reshape(1, -1)).sum()/preds.size
+print("test accuracy is   ", test_acc)
 
 print("best params are {}".format(best))
 
-
-# # This is my DL course project params:)
-# clf = LGBMClassifier(boosting_type='gbdt', objective='multiclass',
-#                      learning_rate=0.42352561266844885,
-#                      max_depth=70,
-#                      n_estimators=80)
-#
-# clf.fit(train_x, train_y)
-# preds = clf.predict(train_x)
-# acc = (train_y.reshape(1, -1) == preds.reshape(1, -1)).sum()/preds.size
-# print("train accuracy is   ", acc)
-#
-# preds = clf.predict(test_x)
-# acc = (test_y.reshape(1, -1) == preds.reshape(1, -1)).sum()/preds.size
-# print("test accuracy is   ", acc)
+with open('logs/lightgbm_res_for_random_split.txt', 'w') as f:
+    f.write("train accuracy is ")
+    f.write(train_acc)
+    f.write('\n')
+    f.write("test accuracy is ")
+    f.write(test_acc)
+    f.write('\n')
+    f.write("best params are ")
+    f.write(best)
+    f.write('\n')
