@@ -5,6 +5,18 @@ from lightgbm import LGBMClassifier
 from hyperopt import fmin, tpe, hp, anneal, Trials
 from sklearn.model_selection import KFold, cross_val_score
 
+import matplotlib.pyplot as plt
+from sklearn.metrics import plot_confusion_matrix
+
+
+def save_cm(cm, path):
+    fig = plt.figure()
+    plt.matshow(cm)
+    plt.colorbar()
+    plt.ylabel('True Label')
+    plt.xlabel('Predicated Label')
+    plt.savefig(path)
+
 # final_emos = {'sad': 0, 'neu': 1, 'hap': 2, 'ang': 3, 'fru': 4, 'exc': 5, 'oth': 6}
 #
 # train_paths = "/home/student/keropyan/data/preprocessed_data/train_data/final_train_paths.csv"
@@ -45,10 +57,19 @@ test_yp = "/home/student/keropyan/data/preprocessed_data/train_data/test_y.npy"
 # np.save(test_xp, test_x)
 # np.save(test_yp, test_y)
 
+
+# loading datasets
 train_x = np.load(train_xp)
 train_y = np.load(train_yp)
 test_x = np.load(test_xp)
 test_y = np.load(test_yp)
+
+# normalizing datasets
+train_mean = train_x.mean(axis=0)
+train_x -= train_mean
+test_x -= train_mean
+train_x/train_x.sum(axis=1).reshape((train_x.shape[0], 1))
+test_x/test_x.sum(axis=1).reshape((test_x.shape[0], 1))
 
 print("shape of train_x is {} and shape of train_y is {}".format(train_x.shape, train_y.shape))
 print("shape of test_x is {} and shape of test_y is {}".format(test_x.shape, test_y.shape))
@@ -112,6 +133,9 @@ print("test accuracy is   ", test_acc)
 print("best params are {}".format(best))
 
 clf.booster_.save_model('logs/audio_lgb.txt')
+
+conf_matrix = plot_confusion_matrix(clf, test_x, test_y)
+save_cm(conf_matrix.confusion_matrix, 'logs/audio_lgb_confusion_matrix.jpg')
 
 with open('logs/lightgbm_res_for_random_split.txt', 'w') as f:
     f.write("train accuracy is ")
