@@ -120,12 +120,14 @@ clf = LGBMClassifier(boosting_type='gbdt', objective='multiclass',
 
 
 clf.fit(train_x, train_y)
-preds = clf.predict(train_x)
-train_acc = (train_y.reshape(1, -1) == preds.reshape(1, -1)).sum()/preds.size
+# preds = clf.predict(train_x)
+# train_acc = (train_y.reshape(1, -1) == preds.reshape(1, -1)).sum()/preds.size
+train_acc = clf.score(train_x, train_y)
 print("train accuracy is   ", train_acc)
 
-preds = clf.predict(test_x)
-test_acc = (test_y.reshape(1, -1) == preds.reshape(1, -1)).sum()/preds.size
+# preds = clf.predict(test_x)
+# test_acc = (test_y.reshape(1, -1) == preds.reshape(1, -1)).sum()/preds.size
+test_acc = clf.score(test_x, test_y)
 print("test accuracy is   ", test_acc)
 
 print("best params are {}".format(best))
