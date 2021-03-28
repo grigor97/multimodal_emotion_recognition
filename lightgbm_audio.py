@@ -46,6 +46,7 @@ def save_cm(cm, path):
 # train_x, train_y = get_audio_features(train_ps)
 # test_x, test_y = get_audio_features(test_ps)
 
+
 train_xp = "/home/student/keropyan/data/preprocessed_data/train_data/train_x.npy"
 train_yp = "/home/student/keropyan/data/preprocessed_data/train_data/train_y.npy"
 test_xp = "/home/student/keropyan/data/preprocessed_data/train_data/test_x.npy"
@@ -139,11 +140,11 @@ save_cm(conf_matrix.confusion_matrix, 'logs/audio_lgb_confusion_matrix.jpg')
 
 with open('logs/lightgbm_res_for_random_split.txt', 'w') as f:
     f.write("train accuracy is ")
-    f.write(train_acc)
+    f.write(str(train_acc))
     f.write('\n')
     f.write("test accuracy is ")
-    f.write(test_acc)
+    f.write(str(test_acc))
     f.write('\n')
     f.write("best params are ")
-    f.write(best)
+    f.write(str(best))
     f.write('\n')
