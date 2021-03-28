@@ -1,8 +1,6 @@
 import numpy as np
-import pandas as pd
-import lightgbm as lgb
 from lightgbm import LGBMClassifier
-from hyperopt import fmin, tpe, hp, anneal, Trials
+from hyperopt import fmin, tpe, hp, Trials
 from sklearn.model_selection import KFold, cross_val_score
 
 import matplotlib.pyplot as plt
