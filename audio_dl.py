@@ -61,7 +61,7 @@ def create_audio_cnn_model():
     model.add(Conv1D(64, 8, padding='same'))
     model.add(Activation('relu'))
     model.add(Flatten())
-    model.add(Dense(8))  # Target class number
+    model.add(Dense(7))  # Target class number
     model.add(Activation('softmax'))
     # opt = keras.optimizers.SGD(lr=0.0001, momentum=0.0, decay=0.0, nesterov=False)
     # opt = keras.optimizers.Adam(lr=0.0001)
