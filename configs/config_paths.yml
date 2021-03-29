@@ -1,0 +1,8 @@
+logs:
+  logs_path: 'logs/'
+
+data:
+  train_xp: '/home/student/keropyan/data/preprocessed_data/train_data/train_x.npy'
+  train_yp: '/home/student/keropyan/data/preprocessed_data/train_data/train_y.npy'
+  test_xp: '/home/student/keropyan/data/preprocessed_data/train_data/test_x.npy'
+  test_yp: '/home/student/keropyan/data/preprocessed_data/train_data/test_y.npy'
