@@ -18,7 +18,7 @@ logs_path = cfg['logs']['logs_path']
 train_x = np.load(cfg['data']['train_xp'])
 train_y = np.load(cfg['data']['train_yp'])
 test_x = np.load(cfg['data']['test_xp'])
-test_y = np.load(cfg['data']['test_xp'])
+test_y = np.load(cfg['data']['test_yp'])
 
 # normalizing datasets
 train_mean = train_x.mean(axis=0)
