@@ -84,7 +84,7 @@ cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
 model_history = model.fit(np.expand_dims(train_x, -1),
                           labels_train_y,
                           batch_size=16,
-                          epochs=2,
+                          epochs=150,
                           validation_split=0.2,
                           callbacks=[cp_callback])
 
@@ -100,6 +100,3 @@ with open(checkpoint_dir + '/cnn_audio_res.txt', 'w') as f:
     f.write("train accuracy and loss are ")
     f.write(str(acc) + ' ' + str(loss))
     f.write('\n')
-
-
-
