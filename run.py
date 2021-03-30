@@ -6,6 +6,7 @@ from extracting_video_paths import *
 # ravdess_data_path = '/Users/grigorkeropyan/Desktop/YSU_thesis/small_data/RAVDESS'
 # iemocap_cliped_video_path = '/Users/grigorkeropyan/Desktop/YSU_thesis/small_data/iemocap/'
 
+# TODO create folders if do not exist
 
 preprocessed_data_path = "/home/student/keropyan/data/preprocessed_data/"
 iemocap_data_path = "/home/student/keropyan/data/IEMOCAP_full_release/"

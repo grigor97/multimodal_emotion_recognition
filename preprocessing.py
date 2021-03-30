@@ -93,15 +93,19 @@ def clip_video(video_path, start_time, end_time, save_path):
     if end_time > video.duration:
         end_time = video.duration
 
-    video = video.subclip(start_time, end_time)
-    video.write_videofile(
+    sub_video = video.subclip(start_time, end_time)
+    sub_video.write_videofile(
         save_path,
         codec='libx264',
         audio_codec='aac',
         temp_audiofile='temp-audio.m4a',
         remove_temp=True)
 
+    del video.reader
+    del sub_video.reader
     del video
+    del sub_video
+
     return save_path
 
 
@@ -110,11 +114,14 @@ def clip_audio(audio_path, start_time, end_time, save_path):
     if end_time > audio.duration:
         end_time = audio.duration
 
-    audio = audio.subclip(start_time, end_time)
-    audio.write_audiofile(
+    sub_audio = audio.subclip(start_time, end_time)
+    sub_audio.write_audiofile(
         save_path)
 
+    del audio.reader
+    del sub_audio.reader
     del audio
+    del sub_audio
     return save_path
 
 
@@ -200,6 +207,9 @@ def other_extract_video_images_and_audio_features(vid_path, st, et, all_data_pat
     audio_path = save_folder + vid_name + '_' + str(nth_sub_video) + '.wav'
     audio_clip.write_audiofile(audio_path)
 
+    del audio_clip.reader
+    del audio_clip
+
     audio_features = get_features(audio_path)
     audio_features_path = save_folder + vid_name + '_' + str(nth_sub_video) + '_features.npy'
     np.save(audio_features_path, audio_features)
@@ -275,6 +285,9 @@ def prepare_one_video(video_path, save_data_path):
 
         start = start + ONE_CLIP_LENGTH - OVERLAP
         cnt += 1
+
+    del video.reader
+    del video
 
     return paths  # pictures paths and npy file paths which is audio features
 

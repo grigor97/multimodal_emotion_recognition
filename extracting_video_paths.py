@@ -125,16 +125,14 @@ def iemocap_divide_videos_to_clips(data_path, pre_processed_data_path, video_sav
                 sex = file_name.split('_')[-1][0]
                 sexes.append(sex)
 
-                video = VideoFileClip(
-                    path_video + video_name)
+                video = VideoFileClip(path_video + video_name)
                 if end_time > video.duration:
                     end_time = video.duration
                 # print("wav_file_name {},start time {},end time {}".
                 #       format(file_name, start_time, end_time))
 
-                video = video.subclip(
-                    start_time, end_time)
-                video.write_videofile(
+                sub_video = video.subclip(start_time, end_time)
+                sub_video.write_videofile(
                     video_name_folder + file_name + ".mp4",
                     codec='libx264',
                     audio_codec='aac',
@@ -143,6 +141,11 @@ def iemocap_divide_videos_to_clips(data_path, pre_processed_data_path, video_sav
 
                 video.audio.write_audiofile(
                     video_name_folder + file_name + ".wav")
+
+                del video.reader
+                del sub_video.reader
+                del video
+                del sub_video
 
     df_iemocap = pd.DataFrame(columns=['start_time', 'end_time', 'file_path', 'emotion', 'session', 'sex'])
 
