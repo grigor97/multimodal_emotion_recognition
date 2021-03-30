@@ -8,12 +8,12 @@ from extracting_video_paths import *
 
 # TODO create folders if do not exist
 
-preprocessed_data_path = "/home/student/keropyan/data/preprocessed_data/"
-iemocap_data_path = "/home/student/keropyan/data/IEMOCAP_full_release/"
-enterfece_data_path = "/home/student/keropyan/data/enterface_database/"
-ravdess_data_path = '/home/student/keropyan/data/RAVDESS'
-iemocap_cliped_video_path = '/home/student/keropyan/data/iemocap/'
-filtered_save_path = '/home/student/keropyan/data/preprocessed_data/filtered_emotions_paths/'
+preprocessed_data_path = "../data/preprocessed_data/"
+iemocap_data_path = "../data/IEMOCAP_full_release/"
+enterfece_data_path = "../data/enterface_database/"
+ravdess_data_path = '../data/RAVDESS'
+iemocap_cliped_video_path = '../data/iemocap/'
+filtered_save_path = '../data/preprocessed_data/filtered_emotions_paths/'
 
 get_enterface_paths(enterfece_data_path, preprocessed_data_path)
 

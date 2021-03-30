@@ -17,8 +17,8 @@ def save_cm(cm, path):
 
 # final_emos = {'sad': 0, 'neu': 1, 'hap': 2, 'ang': 3, 'fru': 4, 'exc': 5, 'oth': 6}
 #
-# train_paths = "/home/student/keropyan/data/preprocessed_data/train_data/final_train_paths.csv"
-# test_paths = "/home/student/keropyan/data/preprocessed_data/test_data/final_test_paths.csv"
+# train_paths = "../data/preprocessed_data/train_data/final_train_paths.csv"
+# test_paths = "../data/preprocessed_data/test_data/final_test_paths.csv"
 #
 # train_ps = pd.read_csv(train_paths)
 # test_ps = pd.read_csv(test_paths)
@@ -47,10 +47,10 @@ def save_cm(cm, path):
 # test_x, test_y = get_audio_features(test_ps)
 
 
-train_xp = "/home/student/keropyan/data/preprocessed_data/train_data/train_x.npy"
-train_yp = "/home/student/keropyan/data/preprocessed_data/train_data/train_y.npy"
-test_xp = "/home/student/keropyan/data/preprocessed_data/train_data/test_x.npy"
-test_yp = "/home/student/keropyan/data/preprocessed_data/train_data/test_y.npy"
+train_xp = "../data/preprocessed_data/train_data/train_x.npy"
+train_yp = "../data/preprocessed_data/train_data/train_y.npy"
+test_xp = "../data/preprocessed_data/train_data/test_x.npy"
+test_yp = "../data/preprocessed_data/train_data/test_y.npy"
 # np.save(train_xp, train_x)
 # np.save(train_yp, train_y)
 # np.save(test_xp, test_x)

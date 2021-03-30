@@ -5,10 +5,10 @@ from hyperopt import fmin, tpe, hp, Trials
 from sklearn.model_selection import KFold, cross_val_score
 
 
-train_xp = "/home/student/keropyan/data/preprocessed_data/train_data/train_x.npy"
-train_yp = "/home/student/keropyan/data/preprocessed_data/train_data/train_y.npy"
-test_xp = "/home/student/keropyan/data/preprocessed_data/train_data/test_x.npy"
-test_yp = "/home/student/keropyan/data/preprocessed_data/train_data/test_y.npy"
+train_xp = "../data/preprocessed_data/train_data/train_x.npy"
+train_yp = "../data/preprocessed_data/train_data/train_y.npy"
+test_xp = "../data/preprocessed_data/train_data/test_x.npy"
+test_yp = "../data/preprocessed_data/train_data/test_y.npy"
 
 train_x = np.load(train_xp)
 train_y = np.load(train_yp)
