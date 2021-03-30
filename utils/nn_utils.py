@@ -1,12 +1,12 @@
-import matplotlib.pyplot as plt
+import os
+import numpy as np
+
 import tensorflow as tf
+from tensorflow.keras.layers import *
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.utils import to_categorical
-from tensorflow.keras.layers import *
 
-import numpy as np
-import os
-from utils.utils import *
+import matplotlib.pyplot as plt
 
 
 def nn_save_model_plots(model_history, save_path):
@@ -150,9 +150,7 @@ def create_audio_stacked_lstm_model(train_dim, output_dim):
     return model
 
 
-def run_model(model_name):
-    path_cfg = 'configs/config_paths.yml'
-    cfg = load_cfg(path_cfg)
+def run_model(model_name, cfg):
     logs_path = cfg['logs']['logs_path']
 
     # loading datasets
@@ -177,12 +175,12 @@ def run_model(model_name):
     print("train and test shapes are {} {}".format(train_x.shape, test_x.shape))
     if model_name == 'audio_cnn':
         model = create_audio_cnn_model(train_x.shape[1], 7)
-    elif model_name == 'audio_lst':
+    elif model_name == 'audio_lstm':
         model = create_audio_lstm_model(train_x.shape[1], 7)
     elif model_name == 'audio_blstm':
-        model = create_audio_cnn_model(train_x.shape[1], 7)
+        model = create_audio_blstm_model(train_x.shape[1], 7)
     elif model_name == 'audio_stacked_lstm':
-        model = create_audio_cnn_model(train_x.shape[1], 7)
+        model = create_audio_stacked_lstm_model(train_x.shape[1], 7)
     else:
         print("sorry you do not have such a {} model".format(model_name))
         return
@@ -201,7 +199,7 @@ def run_model(model_name):
                               labels_train_y,
                               batch_size=16,
                               epochs=150,
-                              validation_split=0.2,
+                              validation_split=0.15,
                               callbacks=[cp_callback])
 
     # Evaluate the model
