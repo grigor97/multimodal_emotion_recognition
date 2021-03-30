@@ -1,5 +1,5 @@
 from utils.nn_utils import *
-
+from utils.utils import *
 
 path_cfg = 'configs/config_paths.yml'
 cfg = load_cfg(path_cfg)
