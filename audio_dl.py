@@ -10,9 +10,7 @@ from tensorflow.keras.layers import *
 
 path_cfg = 'configs/config_paths.yml'
 cfg = load_cfg(path_cfg)
-
 logs_path = cfg['logs']['logs_path']
-
 
 # loading datasets
 train_x = np.load(cfg['data']['train_xp'])

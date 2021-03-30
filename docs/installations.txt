@@ -15,3 +15,7 @@ https://developer.nvidia.com/cuda-downloads
 sudo apt-get purge nvidia*
 sudo apt-get autoremove
 sudo sh cuda-*.run
+
+# checking if you have a gpu
+import tensorflow as tf
+print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
