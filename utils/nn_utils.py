@@ -68,3 +68,78 @@ def create_audio_cnn_model(train_dim, output_dim):
     model.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
 
     return model
+
+
+# Define the LSTM model
+def create_audio_lstm_model(train_dim, output_dim):
+    model = Sequential()
+    model.add(LSTM(550, return_sequences=False, input_shape=(train_dim, 1)))
+    # model.add(LSTM(1280, return_sequences=False, input_shape=(128, 1)))
+
+    model.add(Dense(64))
+    # model.add(Dropout(0.2))
+    model.add(BatchNormalization())
+    model.add(Activation('relu'))
+
+    model.add(Dense(32))
+    model.add(BatchNormalization())
+    model.add(Activation('relu'))
+
+    model.add(Dense(output_dim))
+    model.add(Activation('softmax'))
+
+    # print(model.summary())
+
+    # Configures the model for training
+    model.compile(loss='categorical_crossentropy', optimizer='Adam', metrics=['accuracy'])
+    return model
+
+
+# Define the BLSTM model
+def create_audio_blstm_model(train_dim, output_dim):
+    model = Sequential()
+    model.add(Bidirectional(LSTM(390, return_sequences=False), input_shape=(train_dim, 1)))
+    # model.add(LSTM(1280, return_sequences=False, input_shape=(128, 1)))
+
+    model.add(Dense(64))
+    # model.add(Dropout(0.2))
+    model.add(BatchNormalization())
+    model.add(Activation('relu'))
+
+    model.add(Dense(32))
+    model.add(BatchNormalization())
+    model.add(Activation('relu'))
+
+    model.add(Dense(output_dim))
+    model.add(Activation('softmax'))
+
+    # print(model.summary())
+
+    # Configures the model for training
+    model.compile(loss='categorical_crossentropy', optimizer='Adam', metrics=['accuracy'])
+    return model
+
+
+# Define the BLSTM model
+def create_audio_stacked_lstm_model(train_dim, output_dim):
+    model = Sequential()
+    model.add(LSTM(300, return_sequences=True, input_shape=(train_dim, 1)))
+    model.add(LSTM(300, return_sequences=False, input_shape=(300, 1)))
+
+    model.add(Dense(64))
+    # model.add(Dropout(0.2))
+    model.add(BatchNormalization())
+    model.add(Activation('relu'))
+
+    model.add(Dense(32))
+    model.add(BatchNormalization())
+    model.add(Activation('relu'))
+
+    model.add(Dense(output_dim))
+    model.add(Activation('softmax'))
+
+    # print(model.summary())
+
+    # Configures the model for training
+    model.compile(loss='categorical_crossentropy', optimizer='Adam', metrics=['accuracy'])
+    return model
