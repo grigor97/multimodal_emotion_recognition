@@ -1,0 +1,17 @@
+checking GPU:
+
+nvcc --version
+nvidia-smi
+
+reinstalling drivers:
+
+sudo apt-get purge nvidia-*
+sudo apt-get install nvidia-375
+
+
+cat /proc/driver/nvidia/version
+
+https://developer.nvidia.com/cuda-downloads
+sudo apt-get purge nvidia*
+sudo apt-get autoremove
+sudo sh cuda-*.run
