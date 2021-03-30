@@ -1,10 +1,4 @@
-import numpy as np
-import os
-from utils.utils import *
 from utils.nn_utils import *
-
-import tensorflow as tf
-from tensorflow.keras.utils import to_categorical
 
 
 path_cfg = 'configs/config_paths.yml'
