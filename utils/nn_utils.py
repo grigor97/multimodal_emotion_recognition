@@ -1,4 +1,7 @@
 import matplotlib.pyplot as plt
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import *
 
 
 def nn_save_model_plots(model_history, save_path):
@@ -29,3 +32,39 @@ def nn_save_model_plots(model_history, save_path):
     plt.legend()
 
     plt.savefig(save_path + "/accuracy.png")
+
+
+def create_audio_cnn_model(train_dim, output_dim):
+    model = Sequential()
+    model.add(Conv1D(256, 8, padding='same', input_shape=(train_dim, 1)))  # X_train.shape[1] = No. of Columns
+    model.add(Activation('relu'))
+    model.add(Conv1D(256, 8, padding='same'))
+    model.add(BatchNormalization())
+    model.add(Activation('relu'))
+    model.add(Dropout(0.25))
+    model.add(MaxPooling1D(pool_size=(8)))
+    model.add(Conv1D(128, 8, padding='same'))
+    model.add(Activation('relu'))
+    model.add(Conv1D(128, 8, padding='same'))
+    model.add(Activation('relu'))
+    model.add(Conv1D(128, 8, padding='same'))
+    model.add(Activation('relu'))
+    model.add(Conv1D(128, 8, padding='same'))
+    model.add(BatchNormalization())
+    model.add(Activation('relu'))
+    model.add(Dropout(0.25))
+    model.add(MaxPooling1D(pool_size=(8)))
+    model.add(Conv1D(64, 8, padding='same'))
+    model.add(Activation('relu'))
+    model.add(Conv1D(64, 8, padding='same'))
+    model.add(Activation('relu'))
+    model.add(Flatten())
+    model.add(Dense(output_dim))  # Target class number
+    model.add(Activation('softmax'))
+    # opt = keras.optimizers.SGD(lr=0.0001, momentum=0.0, decay=0.0, nesterov=False)
+    # opt = keras.optimizers.Adam(lr=0.0001)
+    opt = tf.keras.optimizers.RMSprop(lr=0.00001, decay=1e-6)
+
+    model.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
+
+    return model

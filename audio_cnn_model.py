@@ -5,8 +5,7 @@ from utils.nn_utils import *
 
 import tensorflow as tf
 from tensorflow.keras.utils import to_categorical
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import *
+
 
 path_cfg = 'configs/config_paths.yml'
 cfg = load_cfg(path_cfg)
@@ -34,43 +33,7 @@ labels_test_y = to_categorical(test_y)
 print("train and test shapes are {} {}".format(train_x.shape, test_x.shape))
 
 
-def create_audio_cnn_model():
-    model = Sequential()
-    model.add(Conv1D(256, 8, padding='same', input_shape=(train_x.shape[1], 1)))  # X_train.shape[1] = No. of Columns
-    model.add(Activation('relu'))
-    model.add(Conv1D(256, 8, padding='same'))
-    model.add(BatchNormalization())
-    model.add(Activation('relu'))
-    model.add(Dropout(0.25))
-    model.add(MaxPooling1D(pool_size=(8)))
-    model.add(Conv1D(128, 8, padding='same'))
-    model.add(Activation('relu'))
-    model.add(Conv1D(128, 8, padding='same'))
-    model.add(Activation('relu'))
-    model.add(Conv1D(128, 8, padding='same'))
-    model.add(Activation('relu'))
-    model.add(Conv1D(128, 8, padding='same'))
-    model.add(BatchNormalization())
-    model.add(Activation('relu'))
-    model.add(Dropout(0.25))
-    model.add(MaxPooling1D(pool_size=(8)))
-    model.add(Conv1D(64, 8, padding='same'))
-    model.add(Activation('relu'))
-    model.add(Conv1D(64, 8, padding='same'))
-    model.add(Activation('relu'))
-    model.add(Flatten())
-    model.add(Dense(7))  # Target class number
-    model.add(Activation('softmax'))
-    # opt = keras.optimizers.SGD(lr=0.0001, momentum=0.0, decay=0.0, nesterov=False)
-    # opt = keras.optimizers.Adam(lr=0.0001)
-    opt = tf.keras.optimizers.RMSprop(lr=0.00001, decay=1e-6)
-
-    model.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
-
-    return model
-
-
-model = create_audio_cnn_model()
+model = create_audio_cnn_model(train_x.shape[1], 7)
 print("audio cnn model summary is \n".format(model.summary()))
 
 checkpoint_path = logs_path + "training_audio_cnn/cp.ckpt"
