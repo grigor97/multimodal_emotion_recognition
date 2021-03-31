@@ -5,7 +5,7 @@ from tensorflow.keras.layers import *
 from tensorflow.keras.layers import Dense, Dropout, Activation
 from tensorflow.keras.optimizers import *
 from sklearn.model_selection import GridSearchCV
-from keras.wrappers.scikit_learn import KerasClassifier
+from tensorflow.keras.wrappers.scikit_learn import KerasClassifier
 
 
 # Define the LSTM model
