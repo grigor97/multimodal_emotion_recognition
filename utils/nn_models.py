@@ -14,10 +14,9 @@ def run_model(model_name,
               optimizer='Adam',
               lr=1e-3,
               batch_size=64,
-              num_epochs=100,
-              random_seed=23):
+              num_epochs=100):
 
-    tf.random.set_seed(random_seed)
+    # tf.random.set_seed(random_seed)
     logs_path = cfg['logs']['logs_path']
 
     # loading datasets
@@ -89,7 +88,7 @@ def run_model(model_name,
     # Evaluate the model
     loss, acc = model.evaluate(np.expand_dims(test_x, -1), labels_test_y)
     print("{} model test accuracy: {:5.2f}%".format(model_name, 100 * acc))
-    print("{} model test loss: {:5.2f}%".format(model_name, loss))
+    print("{} model test loss: {:5.2f}".format(model_name, loss))
 
     model.save(checkpoint_dir + '/model.h5')
     nn_save_model_plots(model_history, checkpoint_dir)
@@ -107,6 +106,8 @@ def run_model(model_name,
         f.write("train accuracy and loss are ")
         f.write(str(train_acc))
         f.write('\n')
+
+    return acc
 
 
 def create_audio_cnn_model(optimizer, train_dim, output_dim=7):
