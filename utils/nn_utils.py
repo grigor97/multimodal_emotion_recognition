@@ -54,6 +54,7 @@ def get_pickle_file_from_all_pics(cfg):
     train_labels = []
     train_pictures = []
     for i, row in train.iterrows():
+        print(row)
         imgs = load_images_for_one_video(row[0])
         train_pictures.append(imgs)
         train_labels.append(row[2])
