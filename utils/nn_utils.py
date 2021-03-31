@@ -45,12 +45,16 @@ def get_pickle_file_from_all_pics(cfg):
         test_pictures.append(imgs)
         test_labels.append(final_emos[row[2]])
 
+        del imgs
+
     train_labels = []
     train_pictures = []
     for i, row in train.iterrows():
         imgs = load_images_for_one_video(row[0].replace('/home/student/keropyan', '..'))
         train_pictures.append(imgs)
         train_labels.append(row[2])
+
+        del imgs
 
     test_pictures = np.asarray(test_pictures)
     train_pictures = np.asarray(train_pictures)
