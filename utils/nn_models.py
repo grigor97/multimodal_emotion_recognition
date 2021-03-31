@@ -118,18 +118,7 @@ def create_audio_cnn_model(optimizer, train_dim, output_dim=7):
     :return: created model
     """
     model = Sequential()
-    model.add(Conv1D(256, 8, padding='same', input_shape=(train_dim, 1)))  # X_train.shape[1] = No. of Columns
-    model.add(Activation('relu'))
-    model.add(Conv1D(256, 8, padding='same'))
-    model.add(BatchNormalization())
-    model.add(Activation('relu'))
-    model.add(Dropout(0.25))
-    model.add(MaxPooling1D(pool_size=(8)))
-    model.add(Conv1D(128, 8, padding='same'))
-    model.add(Activation('relu'))
-    model.add(Conv1D(128, 8, padding='same'))
-    model.add(Activation('relu'))
-    model.add(Conv1D(128, 8, padding='same'))
+    model.add(Conv1D(128, 8, padding='same', input_shape=(train_dim, 1)))
     model.add(Activation('relu'))
     model.add(Conv1D(128, 8, padding='same'))
     model.add(BatchNormalization())
@@ -139,6 +128,17 @@ def create_audio_cnn_model(optimizer, train_dim, output_dim=7):
     model.add(Conv1D(64, 8, padding='same'))
     model.add(Activation('relu'))
     model.add(Conv1D(64, 8, padding='same'))
+    model.add(Activation('relu'))
+    model.add(Conv1D(64, 8, padding='same'))
+    model.add(Activation('relu'))
+    model.add(Conv1D(64, 8, padding='same'))
+    model.add(BatchNormalization())
+    model.add(Activation('relu'))
+    model.add(Dropout(0.25))
+    model.add(MaxPooling1D(pool_size=(8)))
+    model.add(Conv1D(32, 8, padding='same'))
+    model.add(Activation('relu'))
+    model.add(Conv1D(32, 8, padding='same'))
     model.add(Activation('relu'))
     model.add(Flatten())
     model.add(Dense(output_dim))  # Target class number
@@ -147,6 +147,46 @@ def create_audio_cnn_model(optimizer, train_dim, output_dim=7):
     model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 
     return model
+
+
+# def create_audio_cnn_model(optimizer, train_dim, output_dim=7):
+#     """
+#     Creates cnn model for audio data
+#     :param optimizer: nn optimizer
+#     :param train_dim: data dimension
+#     :param output_dim: output classes dimension
+#     :return: created model
+#     """
+#     model = Sequential()
+#     model.add(Conv1D(256, 8, padding='same', input_shape=(train_dim, 1)))  # X_train.shape[1] = No. of Columns
+#     model.add(Activation('relu'))
+#     model.add(Conv1D(256, 8, padding='same'))
+#     model.add(BatchNormalization())
+#     model.add(Activation('relu'))
+#     model.add(Dropout(0.25))
+#     model.add(MaxPooling1D(pool_size=(8)))
+#     model.add(Conv1D(128, 8, padding='same'))
+#     model.add(Activation('relu'))
+#     model.add(Conv1D(128, 8, padding='same'))
+#     model.add(Activation('relu'))
+#     model.add(Conv1D(128, 8, padding='same'))
+#     model.add(Activation('relu'))
+#     model.add(Conv1D(128, 8, padding='same'))
+#     model.add(BatchNormalization())
+#     model.add(Activation('relu'))
+#     model.add(Dropout(0.25))
+#     model.add(MaxPooling1D(pool_size=(8)))
+#     model.add(Conv1D(64, 8, padding='same'))
+#     model.add(Activation('relu'))
+#     model.add(Conv1D(64, 8, padding='same'))
+#     model.add(Activation('relu'))
+#     model.add(Flatten())
+#     model.add(Dense(output_dim))  # Target class number
+#     model.add(Activation('softmax'))
+#
+#     model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
+#
+#     return model
 
 
 # Define the LSTM model
