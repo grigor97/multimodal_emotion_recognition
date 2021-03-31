@@ -1,4 +1,4 @@
-from utils.nn_utils import *
+from utils.nn_models import *
 from utils.utils import *
 
 path_cfg = 'configs/config_paths.yml'

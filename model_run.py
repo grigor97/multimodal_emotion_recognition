@@ -1,6 +1,5 @@
 import argparse
-from utils.utils import load_cfg
-from utils.nn_utils import *
+from utils.nn_models import *
 
 
 def parse_args():
@@ -29,5 +28,3 @@ if __name__ == '__main__':
         main(parse_args())
     except KeyboardInterrupt:
         print('sth is wrong')
-
-

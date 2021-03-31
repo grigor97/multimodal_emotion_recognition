@@ -21,5 +21,3 @@ if __name__ == '__main__':
         main(parse_args())
     except KeyboardInterrupt:
         print('sth is wrong')
-
-
