@@ -45,7 +45,7 @@ def nn_save_model_plots(model_history, save_path):
     plt.savefig(save_path + "/accuracy.png")
 
 
-def create_audio_cnn_model(train_dim, output_dim):
+def create_audio_cnn_model(train_dim, output_dim=7):
     """
     Creates cnn model for audio data
     :param train_dim: data simension
@@ -88,7 +88,7 @@ def create_audio_cnn_model(train_dim, output_dim):
 
 
 # Define the LSTM model
-def create_audio_lstm_model(train_dim, output_dim, lstm_length=250):
+def create_audio_lstm_model(train_dim, output_dim=7, lstm_length=250):
     """
     Creates lstm model for audio data
     :param train_dim: data simension
@@ -120,7 +120,7 @@ def create_audio_lstm_model(train_dim, output_dim, lstm_length=250):
 
 
 # Define the BLSTM model
-def create_audio_blstm_model(train_dim, output_dim, blstm_length=180):
+def create_audio_blstm_model(train_dim, output_dim=7, blstm_length=180):
     """
     Creates blstm model for audio data
     :param train_dim: data simension
@@ -152,7 +152,7 @@ def create_audio_blstm_model(train_dim, output_dim, blstm_length=180):
 
 
 # Define the BLSTM model
-def create_audio_stacked_lstm_model(train_dim, output_dim, stacked_lstm_length=150):
+def create_audio_stacked_lstm_model(train_dim, output_dim=7, stacked_lstm_length=150):
     """
     Creates stacked lstm model for audio data
     :param train_dim: data simension
