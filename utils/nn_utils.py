@@ -150,7 +150,7 @@ def create_audio_stacked_lstm_model(train_dim, output_dim):
     return model
 
 
-def run_model(model_name, cfg):
+def run_model(model_name, cfg, num_epochs=150, batch_size=16):
     tf.random.set_seed(23)
     logs_path = cfg['logs']['logs_path']
 
@@ -198,8 +198,8 @@ def run_model(model_name, cfg):
 
     model_history = model.fit(np.expand_dims(train_x, -1),
                               labels_train_y,
-                              batch_size=16,
-                              epochs=150,
+                              batch_size=batch_size,
+                              epochs=num_epochs,
                               validation_split=0.15,
                               callbacks=[cp_callback])
 
@@ -211,13 +211,22 @@ def run_model(model_name, cfg):
     model.save(checkpoint_dir + '/model.h5')
     nn_save_model_plots(model_history, checkpoint_dir)
 
+    train_acc = model_history.history['accuracy'][-1]
+    val_acc = model_history.history['val_accuracy'][-1]
+
     with open(checkpoint_dir + '/' + model_name + '_res.txt', 'w') as f:
         f.write("test accuracy and loss are ")
         f.write(str(acc) + ' ' + str(loss))
         f.write('\n')
+        f.write("val accuracy and loss are ")
+        f.write(str(val_acc))
+        f.write('\n')
+        f.write("train accuracy and loss are ")
+        f.write(str(train_acc))
+        f.write('\n')
 
 
-def cont_run_model(model_name, cfg, stopped):
+def cont_run_model(model_name, cfg, stopped, num_epochs=150, batch_size=16):
     tf.random.set_seed(23)
     logs_path = cfg['logs']['logs_path']
 
@@ -267,8 +276,8 @@ def cont_run_model(model_name, cfg, stopped):
 
     model_history = model.fit(np.expand_dims(train_x, -1),
                               labels_train_y,
-                              batch_size=16,
-                              epochs=150 - stopped,
+                              batch_size=batch_size,
+                              epochs=num_epochs - stopped + 1,
                               validation_split=0.15,
                               callbacks=[cp_callback])
 
@@ -280,7 +289,16 @@ def cont_run_model(model_name, cfg, stopped):
     model.save(checkpoint_dir + '/model.h5')
     nn_save_model_plots(model_history, checkpoint_dir)
 
+    train_acc = model_history.history['accuracy'][-1]
+    val_acc = model_history.history['val_accuracy'][-1]
+
     with open(checkpoint_dir + '/' + model_name + '_res.txt', 'w') as f:
         f.write("test accuracy and loss are ")
         f.write(str(acc) + ' ' + str(loss))
+        f.write('\n')
+        f.write("val accuracy and loss are ")
+        f.write(str(val_acc))
+        f.write('\n')
+        f.write("train accuracy and loss are ")
+        f.write(str(train_acc))
         f.write('\n')
