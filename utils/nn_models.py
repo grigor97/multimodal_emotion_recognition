@@ -14,7 +14,7 @@ def run_model(model_name,
               optimizer='Adam',
               lr=1e-3,
               batch_size=64,
-              num_epochs=150,
+              num_epochs=100,
               random_seed=23):
 
     tf.random.set_seed(random_seed)
