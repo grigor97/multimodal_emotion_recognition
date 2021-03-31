@@ -183,7 +183,7 @@ def create_audio_stacked_lstm_model(train_dim, output_dim=7, stacked_lstm_length
     return model
 
 
-def run_model(model_name, cfg, num_epochs=150, batch_size=16, random_seed=23):
+def run_model(model_name, cfg, num_epochs=150, batch_size=64, random_seed=23):
     tf.random.set_seed(random_seed)
     logs_path = cfg['logs']['logs_path']
 
@@ -259,7 +259,7 @@ def run_model(model_name, cfg, num_epochs=150, batch_size=16, random_seed=23):
         f.write('\n')
 
 
-def cont_run_model(model_name, cfg, stopped, num_epochs=150, batch_size=16, random_seed=23):
+def cont_run_model(model_name, cfg, stopped, num_epochs=150, batch_size=64, random_seed=23):
     tf.random.set_seed(random_seed)
     logs_path = cfg['logs']['logs_path']
 
