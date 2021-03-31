@@ -88,7 +88,7 @@ def create_audio_cnn_model(train_dim, output_dim):
 
 
 # Define the LSTM model
-def create_audio_lstm_model(train_dim, output_dim, lstm_length=550):
+def create_audio_lstm_model(train_dim, output_dim, lstm_length=250):
     """
     Creates lstm model for audio data
     :param train_dim: data simension
@@ -120,12 +120,12 @@ def create_audio_lstm_model(train_dim, output_dim, lstm_length=550):
 
 
 # Define the BLSTM model
-def create_audio_blstm_model(train_dim, output_dim, blstm_length=390):
+def create_audio_blstm_model(train_dim, output_dim, blstm_length=180):
     """
     Creates blstm model for audio data
     :param train_dim: data simension
     :param output_dim: output classes dimension
-    :param blstm_length: blstm length. For 390 params count is 1.2M and for the ...
+    :param blstm_length: blstm length. For 390 params count is 1.2M and for the 180 is 0.28M
     :return: returns created model
     """
     model = Sequential()
@@ -152,17 +152,17 @@ def create_audio_blstm_model(train_dim, output_dim, blstm_length=390):
 
 
 # Define the BLSTM model
-def create_audio_stacked_lstm_model(train_dim, output_dim, stacked_lstm_length=300):
+def create_audio_stacked_lstm_model(train_dim, output_dim, stacked_lstm_length=150):
     """
     Creates stacked lstm model for audio data
     :param train_dim: data simension
     :param output_dim: output classes dimension
-    :param stacked_lstm_length: stacked lstm length. For 3=0 params count is 1.2M and for the ...
+    :param stacked_lstm_length: stacked lstm length. For 300 params count is 1.2M and for the 150 is 0.28M
     :return: returns created model
     """
     model = Sequential()
     model.add(LSTM(stacked_lstm_length, return_sequences=True, input_shape=(train_dim, 1)))
-    model.add(LSTM(stacked_lstm_length, return_sequences=False, input_shape=(300, 1)))
+    model.add(LSTM(stacked_lstm_length, return_sequences=False, input_shape=(stacked_lstm_length, 1)))
 
     model.add(Dense(64))
     # model.add(Dropout(0.2))
