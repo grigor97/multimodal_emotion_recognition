@@ -67,7 +67,7 @@ def run_model(model_name,
 
     print("{} model summary is \n {}".format(model_name, model.summary()))
 
-    checkpoint_path = logs_path + model_name + optimizer + str(lr) + "/cp.ckpt"
+    checkpoint_path = logs_path + model_name + str(num_epochs) + optimizer + str(lr) + "/cp.ckpt"
     checkpoint_dir = os.path.dirname(checkpoint_path)
 
     # Create a callback that saves the model's weights
