@@ -35,6 +35,7 @@ def load_images_for_one_video(pics_path):
 final_emos = {'sad': 0, 'neu': 1, 'hap': 2, 'ang': 3, 'fru': 4, 'exc': 5, 'oth': 6}
 
 
+# TODO fix paths
 def get_pickle_file_from_all_pics(cfg):
     test_path = cfg['data']['save_test_data_path'] + cfg['data']['save_test_name']
     train_path = cfg['data']['save_train_data_path'] + cfg['data']['save_train_name']
@@ -47,14 +48,14 @@ def get_pickle_file_from_all_pics(cfg):
     test_pictures = []
     test_labels = []
     for i, row in test.iterrows():
-        imgs = load_images_for_one_video(row[0])
+        imgs = load_images_for_one_video(row[0].replace('/home/student/keropyan', '..'))
         test_pictures.append(imgs)
         test_labels.append(final_emos[row[2]])
 
     train_labels = []
     train_pictures = []
     for i, row in train.iterrows():
-        imgs = load_images_for_one_video(row[0])
+        imgs = load_images_for_one_video(row[0].replace('/home/student/keropyan', '..'))
         train_pictures.append(imgs)
         train_labels.append(row[2])
 
