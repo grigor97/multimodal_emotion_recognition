@@ -41,6 +41,8 @@ def get_pickle_file_from_all_pics(cfg):
 
     test = pd.read_csv(test_path)
     train = pd.read_csv(train_path)
+    print(test.columns)
+    print(train.columns)
 
     test_pictures = []
     test_labels = []
