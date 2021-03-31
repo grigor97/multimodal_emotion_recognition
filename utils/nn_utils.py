@@ -1,4 +1,3 @@
-import os
 import numpy as np
 
 import tensorflow as tf
@@ -7,7 +6,6 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.utils import to_categorical
 from PIL import Image
 import pandas as pd
-import pickle
 import os
 import glob
 from utils.utils import *
@@ -34,6 +32,9 @@ def load_images_for_one_video(pics_path):
     return pcs
 
 
+final_emos = {'sad': 0, 'neu': 1, 'hap': 2, 'ang': 3, 'fru': 4, 'exc': 5, 'oth': 6}
+
+
 def get_pickle_file_from_all_pics(cfg):
     test_path = cfg['data']['save_test_data_path'] + cfg['data']['save_test_name']
     train_path = cfg['data']['save_train_data_path'] + cfg['data']['save_train_name']
@@ -44,9 +45,9 @@ def get_pickle_file_from_all_pics(cfg):
     test_pictures = []
     test_labels = []
     for i, row in test.iterrows():
-        imgs = load_images_for_one_video(row[1])
+        imgs = load_images_for_one_video(row[0])
         test_pictures.append(imgs)
-        test_labels.append(row[2])
+        test_labels.append(final_emos[row[2]])
 
     train_labels = []
     train_pictures = []
