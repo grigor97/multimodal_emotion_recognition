@@ -9,6 +9,9 @@ def parse_args():
     parser.add_argument('-m', '--model', type=str)
     parser.add_argument('-r', '--restore', type=bool)
     parser.add_argument('-cont', '--continue_at', type=int)
+    parser.add_argument('-opt', '--optimizer', type=str, default='Adam')
+    parser.add_argument('-lr', '--learning_rate', type=float, default=1e-3)
+    parser.add_argument('-bs', '--batch_size', type=int, default=64)
 
     return parser.parse_args()
 
@@ -17,10 +20,13 @@ def main(args):
     config = load_cfg(args.config)
     model_name = args.model
 
-    if not args.restore:
-        run_model(model_name, config)
-    else:
-        cont_run_model(model_name, config, args.continue_at)
+    run_model(model_name,
+              config,
+              restore=args.restore,
+              continue_at=args.continue_at,
+              optimizer=args.opimizer,
+              lr=args.learning_rate,
+              batch_size=args.batch_size)
 
 
 if __name__ == '__main__':
