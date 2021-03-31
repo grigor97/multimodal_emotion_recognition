@@ -24,7 +24,7 @@ def main(args):
               config,
               restore=args.restore,
               continue_at=args.continue_at,
-              optimizer=args.opimizer,
+              optimizer=args.optimizer,
               lr=args.learning_rate,
               batch_size=args.batch_size)
 
