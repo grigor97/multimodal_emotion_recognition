@@ -9,7 +9,7 @@ from tensorflow.keras.wrappers.scikit_learn import KerasClassifier
 
 
 # Define the LSTM model
-def create_audio_lstm_model(optimizer, train_dim, output_dim=7, lstm_length=250):
+def create_audio_lstm_model(optimizer, train_dim=162, output_dim=7, lstm_length=250):
     """
     Creates lstm model for audio data
     :param optimizer: optimizer algorithm
