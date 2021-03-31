@@ -8,7 +8,7 @@ def parse_args():
                                      "audio_blstm, audio_stacked_lstm")
     parser.add_argument('-c', '--config', type=str, default='configs/config_paths.yml')
     parser.add_argument('-m', '--model', type=str)
-    parser.add_argument('-r', '--restore', type=str)
+    parser.add_argument('-r', '--restore', type=bool)
     parser.add_argument('-cont', '--continue_at', type=int)
 
     return parser.parse_args()
