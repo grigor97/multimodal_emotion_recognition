@@ -10,6 +10,12 @@ import matplotlib.pyplot as plt
 
 
 def nn_save_model_plots(model_history, save_path):
+    """
+    Saves neural network loss and accuracy plots
+    :param model_history: trained model history
+    :param save_path: path to save plots
+    :return: None
+    """
     loss = model_history.history['loss']
     val_loss = model_history.history['val_loss']
 
@@ -40,6 +46,12 @@ def nn_save_model_plots(model_history, save_path):
 
 
 def create_audio_cnn_model(train_dim, output_dim):
+    """
+    Creates cnn model for audio data
+    :param train_dim: data simension
+    :param output_dim: output classes dimension
+    :return: created model
+    """
     model = Sequential()
     model.add(Conv1D(256, 8, padding='same', input_shape=(train_dim, 1)))  # X_train.shape[1] = No. of Columns
     model.add(Activation('relu'))
@@ -76,9 +88,16 @@ def create_audio_cnn_model(train_dim, output_dim):
 
 
 # Define the LSTM model
-def create_audio_lstm_model(train_dim, output_dim):
+def create_audio_lstm_model(train_dim, output_dim, lstm_length=550):
+    """
+    Creates lstm model for audio data
+    :param train_dim: data simension
+    :param output_dim: output classes dimension
+    :param lstm_length: lstm length. For 550 params count is 1.2M and for the 250 is 0.27M
+    :return: returns created model
+    """
     model = Sequential()
-    model.add(LSTM(550, return_sequences=False, input_shape=(train_dim, 1)))
+    model.add(LSTM(lstm_length, return_sequences=False, input_shape=(train_dim, 1)))
     # model.add(LSTM(1280, return_sequences=False, input_shape=(128, 1)))
 
     model.add(Dense(64))
@@ -101,9 +120,16 @@ def create_audio_lstm_model(train_dim, output_dim):
 
 
 # Define the BLSTM model
-def create_audio_blstm_model(train_dim, output_dim):
+def create_audio_blstm_model(train_dim, output_dim, blstm_length=390):
+    """
+    Creates blstm model for audio data
+    :param train_dim: data simension
+    :param output_dim: output classes dimension
+    :param blstm_length: blstm length. For 390 params count is 1.2M and for the ...
+    :return: returns created model
+    """
     model = Sequential()
-    model.add(Bidirectional(LSTM(390, return_sequences=False), input_shape=(train_dim, 1)))
+    model.add(Bidirectional(LSTM(blstm_length, return_sequences=False), input_shape=(train_dim, 1)))
     # model.add(LSTM(1280, return_sequences=False, input_shape=(128, 1)))
 
     model.add(Dense(64))
@@ -126,10 +152,17 @@ def create_audio_blstm_model(train_dim, output_dim):
 
 
 # Define the BLSTM model
-def create_audio_stacked_lstm_model(train_dim, output_dim):
+def create_audio_stacked_lstm_model(train_dim, output_dim, stacked_lstm_length=300):
+    """
+    Creates stacked lstm model for audio data
+    :param train_dim: data simension
+    :param output_dim: output classes dimension
+    :param stacked_lstm_length: stacked lstm length. For 3=0 params count is 1.2M and for the ...
+    :return: returns created model
+    """
     model = Sequential()
-    model.add(LSTM(300, return_sequences=True, input_shape=(train_dim, 1)))
-    model.add(LSTM(300, return_sequences=False, input_shape=(300, 1)))
+    model.add(LSTM(stacked_lstm_length, return_sequences=True, input_shape=(train_dim, 1)))
+    model.add(LSTM(stacked_lstm_length, return_sequences=False, input_shape=(300, 1)))
 
     model.add(Dense(64))
     # model.add(Dropout(0.2))
@@ -150,8 +183,8 @@ def create_audio_stacked_lstm_model(train_dim, output_dim):
     return model
 
 
-def run_model(model_name, cfg, num_epochs=150, batch_size=16):
-    tf.random.set_seed(23)
+def run_model(model_name, cfg, num_epochs=150, batch_size=16, random_seed=23):
+    tf.random.set_seed(random_seed)
     logs_path = cfg['logs']['logs_path']
 
     # loading datasets
@@ -226,8 +259,8 @@ def run_model(model_name, cfg, num_epochs=150, batch_size=16):
         f.write('\n')
 
 
-def cont_run_model(model_name, cfg, stopped, num_epochs=150, batch_size=16):
-    tf.random.set_seed(23)
+def cont_run_model(model_name, cfg, stopped, num_epochs=150, batch_size=16, random_seed=23):
+    tf.random.set_seed(random_seed)
     logs_path = cfg['logs']['logs_path']
 
     # loading datasets
