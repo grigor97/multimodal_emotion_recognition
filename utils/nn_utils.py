@@ -5,8 +5,65 @@ import tensorflow as tf
 from tensorflow.keras.layers import *
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.utils import to_categorical
+from PIL import Image
+import pandas as pd
+import pickle
+import os
+import glob
+from utils.utils import *
 
 import matplotlib.pyplot as plt
+
+
+def load_images_for_one_video(pics_path):
+    pcs = []
+
+    for pic in glob.glob(pics_path + '*.jpg'):
+        img = Image.open(pic)
+        img = img.convert('RGB')
+
+        tr_img = img.resize((300, 200))
+        tr_img = np.array(tr_img)
+        pcs.append(tr_img)
+
+        del img
+        del tr_img
+
+    pcs = np.asarray(pcs)
+
+    return pcs
+
+
+def get_pickle_file_from_all_pics(cfg):
+    test_path = cfg['data']['save_test_data_path'] + cfg['data']['save_test_name']
+    train_path = cfg['data']['save_train_data_path'] + cfg['data']['save_train_name']
+
+    test = pd.read_csv(test_path)
+    train = pd.read_csv(train_path)
+
+    test_pictures = []
+    test_labels = []
+    for i, row in test.iterrows():
+        imgs = load_images_for_one_video(row[1])
+        test_pictures.append(imgs)
+        test_labels.append(row[2])
+
+    train_labels = []
+    train_pictures = []
+    for i, row in train.iterrows():
+        imgs = load_images_for_one_video(row[1])
+        train_pictures.append(imgs)
+        train_labels.append(row[2])
+
+    test_pictures = np.asarray(test_pictures)
+    train_pictures = np.asarray(train_pictures)
+    test_labels = np.asarray(test_labels)
+    train_labels = np.asarray(train_labels)
+
+    data = {"train_pics": train_pictures, "train_emotion": train_labels,
+            "test_pics": test_pictures, "test_emotion": test_labels}
+    pictures_with_emotions_pickle = cfg['data']['pictures_with_emotions_pickle']
+    save_pickle(pictures_with_emotions_pickle, data)
 
 
 def nn_save_model_plots(model_history, save_path):

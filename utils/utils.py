@@ -24,3 +24,15 @@ def load_pickle(path):
         data = pickle.load(f)
 
     return data
+
+
+def save_pickle(path, data):
+    """
+    Save data in pickle file
+    :param path: path to save
+    :param data: dat that to be saved
+    :return: None
+    """
+    with open(path, 'wb') as f:
+        pickle.dump(data, f)
+        f.close()
