@@ -1,4 +1,4 @@
-from src.preproc import *
+from src.preprocessing import *
 import argparse
 from utils.utils import load_cfg
 

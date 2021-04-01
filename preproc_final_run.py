@@ -1,5 +1,5 @@
-from src.preproc import *
-from extracting_video_paths import *
+from src.preprocessing import *
+from src.extracting_video_paths import *
 
 
 # TODO create folders if do not exist

@@ -1,4 +1,4 @@
-from preprocessing import *
+from src.preprocessing import *
 
 save_train_data_path = "../data/preprocessed_data/train_data/"
 save_test_data_path = "../data/preprocessed_data/test_data/"

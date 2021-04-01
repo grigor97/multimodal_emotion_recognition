@@ -1,4 +1,4 @@
-from preprocessing import *
+from src.preprocessing import *
 
 save_train_data_path = "../data/preprocessed_data/train_data/"
 save_name1 = 'final_train_paths1.csv'

@@ -1,11 +1,4 @@
-from extracting_video_paths import *
-
-# preprocessed_data_path = '/Users/grigorkeropyan/Desktop/YSU_thesis/small_data/preprocessed_data/'
-# iemocap_data_path = "/Users/grigorkeropyan/Desktop/YSU_thesis/small_data/IEMOCAP_full_release/"
-# enterfece_data_path = "/Users/grigorkeropyan/Desktop/YSU_thesis/small_data/enterface_database"
-# ravdess_data_path = '/Users/grigorkeropyan/Desktop/YSU_thesis/small_data/RAVDESS'
-# iemocap_cliped_video_path = '/Users/grigorkeropyan/Desktop/YSU_thesis/small_data/iemocap/'
-
+from src.extracting_video_paths import *
 
 preprocessed_data_path = "../data/preprocessed_data/"
 iemocap_data_path = "../data/IEMOCAP_full_release/"
