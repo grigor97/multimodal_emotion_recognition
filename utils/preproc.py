@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 
+import librosa
+
 import glob
 from PIL import Image
 import face_recognition
@@ -10,10 +12,9 @@ from utils.utils import *
 final_emos = {'sad': 0, 'neu': 1, 'hap': 2, 'ang': 3, 'fru': 4, 'exc': 5, 'oth': 6}
 
 
-# TODO fix paths
 def get_pickle_file_from_all_pics(cfg):
     """
-    Creates pickle file for all the dataset images and labels
+    Creates pickle file for all the train and test data
     :param cfg: config file for paths
     :return: Nothing, just saves data in pickle file
     """
@@ -25,33 +26,120 @@ def get_pickle_file_from_all_pics(cfg):
     train.dropna(inplace=True)
     test.dropna(inplace=True)
 
-    test_pictures = []
-    test_labels = []
-    for i, row in test.iterrows():
-        imgs = load_images_for_one_video(row[0].replace('/home/student/keropyan', '..'))
-        test_pictures.append(imgs)
-        test_labels.append(final_emos[row[2]])
+    test_audio_data, test_pic_data, test_label_data = get_features_for_df(test)
+    train_audio_data, train_pic_data, train_label_data = get_features_for_df(test)
 
-        del imgs
+    data = {'train_audio_data': train_audio_data,
+            'train_pic_data': train_pic_data,
+            'train_label_data': train_label_data,
+            'test_audio_data': test_audio_data,
+            'test_pic_data': test_pic_data,
+            'test_label_data': test_label_data
+            }
 
-    train_labels = []
-    train_pictures = []
-    for i, row in train.iterrows():
-        imgs = load_images_for_one_video(row[0].replace('/home/student/keropyan', '..'))
-        train_pictures.append(imgs)
-        train_labels.append(row[2])
+    data_pickle = cfg['data']['train_test_data.pkl']
+    save_pickle(data_pickle, data)
 
-        del imgs
 
-    test_pictures = np.asarray(test_pictures)
-    train_pictures = np.asarray(train_pictures)
-    test_labels = np.asarray(test_labels)
-    train_labels = np.asarray(train_labels)
+# TODO fix paths
+def get_features_for_df(df):
+    audio_data, pic_data, label_data = [], [], []
+    for i, row in df.iterrows():
+        pics_path = row[0].replace('/home/student/keropyan', '..')
+        audio_path = row[1].replace('/home/student/keropyan', '..').replace('.npy', '.wav')
+        label = final_emos[row[2]]
+        audio_fs, pics_fs, labels = get_features_for_one_video(pics_path, audio_path, label)
+        audio_data.extend(audio_fs)
+        pic_data.extend(pics_fs)
+        label_data.extend(labels)
 
-    data = {"train_pics": train_pictures, "train_emotion": train_labels,
-            "test_pics": test_pictures, "test_emotion": test_labels}
-    pictures_with_emotions_pickle = cfg['data']['pictures_with_emotions_pickle']
-    save_pickle(pictures_with_emotions_pickle, data)
+    return np.asarray(audio_data), np.asarray(pic_data), np.asarray(label_data)
+
+
+def noise(data):
+    noise_amp = 0.035*np.random.uniform()*np.amax(data)
+    data = data + noise_amp*np.random.normal(size=data.shape[0])
+    return data
+
+
+def stretch(data, rate=0.8):
+    return librosa.effects.time_stretch(data, rate)
+
+
+def shift(data):
+    shift_range = int(np.random.uniform(low=-5, high=5)*1000)
+    return np.roll(data, shift_range)
+
+
+def pitch(data, sampling_rate, pitch_factor=0.7):
+    return librosa.effects.pitch_shift(data, sampling_rate, pitch_factor)
+
+
+def extract_features(data, sample_rate):
+    # ZCR
+    result = np.array([])
+    zcr = np.mean(librosa.feature.zero_crossing_rate(y=data).T, axis=0)
+    result = np.hstack((result, zcr))  # stacking horizontally
+
+    # Chroma_stft
+    stft = np.abs(librosa.stft(data))
+    chroma_stft = np.mean(librosa.feature.chroma_stft(S=stft, sr=sample_rate).T, axis=0)
+    result = np.hstack((result, chroma_stft))  # stacking horizontally
+
+    # MFCC
+    mfcc = np.mean(librosa.feature.mfcc(y=data, sr=sample_rate).T, axis=0)
+    result = np.hstack((result, mfcc))  # stacking horizontally
+
+    # Root Mean Square Value
+    rms = np.mean(librosa.feature.rms(y=data).T, axis=0)
+    result = np.hstack((result, rms))  # stacking horizontally
+
+    # MelSpectrogram
+    mel = np.mean(librosa.feature.melspectrogram(y=data, sr=sample_rate).T, axis=0)
+    result = np.hstack((result, mel))  # stacking horizontally
+
+    return result
+
+
+def get_audio_features(path):
+    # duration and offset are used to take care of the no
+    # audio in start and the ending of each audio files as seen above.
+    # TODO fix this part of duration and offset
+    # data, sample_rate = librosa.load(path, duration=2.5, offset=0.6)
+    data, sample_rate = librosa.load(path)
+
+    # without augmentation
+    res1 = extract_features(data, sample_rate)
+    result = np.array(res1)
+
+    # data with noise
+    noise_data = noise(data)
+    res2 = extract_features(noise_data, sample_rate)
+    result = np.vstack((result, res2))  # stacking vertically
+
+    # data with stretching and pitching
+    new_data = stretch(data)
+    data_stretch_pitch = pitch(new_data, sample_rate)
+    res3 = extract_features(data_stretch_pitch, sample_rate)
+    result = np.vstack((result, res3))  # stacking vertically
+
+    # data with shift
+    shft_data = shift(data)
+    res4 = extract_features(shft_data, sample_rate)
+    result = np.vstack((result, res4))
+
+    return result
+
+
+def get_features_for_one_video(pics_path, wav_path, label):
+    faces = load_faces_for_one_video(pics_path)
+    audio_features = get_audio_features(wav_path)
+
+    audio_fs = [audio_features[0], audio_features[1], audio_features[2], audio_features[3]]
+    pics_fs = [faces, faces, faces, faces]
+    labels = [label, label, label, label]
+
+    return audio_fs, pics_fs, labels
 
 
 def face_extraction(pic_path, face_size=(50, 50)):
@@ -77,11 +165,11 @@ def face_extraction(pic_path, face_size=(50, 50)):
     return np.array(pil_image)
 
 
-def load_images_for_one_video(pics_path):
+def load_faces_for_one_video(pics_path):
     """
-    Loads all the images for one video
+    Loads all the faces for one video
     :param pics_path: path to the pictures corresponding to one video
-    :return: numpy array for images for one video (20 images)
+    :return: numpy array for faces for one video (20 images)
     """
     pcs = []
 
