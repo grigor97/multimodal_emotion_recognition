@@ -1,6 +1,6 @@
 import argparse
 from utils.utils import load_cfg
-from utils.hyperparameter_optimizition import *
+from src.hyperparameter_optimizition import *
 
 
 def parse_args():

@@ -1,10 +1,10 @@
-from utils.preproc import *
+from src.preproc import *
 import argparse
 from utils.utils import load_cfg
 
 
 def parse_args():
-    parser = argparse.ArgumentParser("opt lstm model")
+    parser = argparse.ArgumentParser("prepearing data")
     parser.add_argument('-c', '--config', type=str, default='configs/config_paths.yml')
 
     return parser.parse_args()

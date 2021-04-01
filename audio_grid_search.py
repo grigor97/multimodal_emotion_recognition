@@ -1,5 +1,5 @@
 import argparse
-from utils.nn_models import *
+from src.nn_models import *
 
 
 def parse_args():

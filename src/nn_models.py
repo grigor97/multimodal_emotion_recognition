@@ -1,4 +1,5 @@
 import os
+import numpy as np
 from utils.nn_utils import *
 
 import tensorflow as tf
