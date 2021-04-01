@@ -1,4 +1,4 @@
-from utils.nn_utils import *
+from utils.preproc import *
 import argparse
 from utils.utils import load_cfg
 
