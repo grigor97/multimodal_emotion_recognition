@@ -1,7 +1,7 @@
 from utils.nn_models import *
 from utils.utils import *
 
-path_cfg = 'configs/config_paths.yml'
+path_cfg = '../configs/config_paths.yml'
 cfg = load_cfg(path_cfg)
 logs_path = cfg['logs']['logs_path']
 
