@@ -1,5 +1,4 @@
-from utils.utils import *
-from preprocessing import *
+from src.preproc import *
 from extracting_video_paths import *
 
 

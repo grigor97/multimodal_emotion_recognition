@@ -257,7 +257,7 @@ def create_audio_blstm_model(optimizer, train_dim, output_dim=7, blstm_length=18
     return model
 
 
-# Define the BLSTM model
+# Define the stacked lstm model
 def create_audio_stacked_lstm_model(optimizer, train_dim, output_dim=7, stacked_lstm_length=150):
     """
     Creates stacked lstm model for audio data
