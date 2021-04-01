@@ -168,6 +168,7 @@ def face_extraction(pic_path, face_size=(50, 50)):
     return np.array(pil_image)
 
 
+# TODO make a face grayscale
 def load_faces_for_one_video(pics_path):
     """
     Loads all the faces for one video

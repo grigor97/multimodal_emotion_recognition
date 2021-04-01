@@ -1,6 +1,6 @@
 import argparse
 from utils.utils import *
-from src.nn_models import *
+from src.nn_audio_models import *
 
 
 def parse_args():
