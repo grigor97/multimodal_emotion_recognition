@@ -30,18 +30,24 @@ def get_pickle_file_from_all_pics(cfg):
     test.dropna(inplace=True)
 
     test_audio_data, test_pic_data, test_label_data = get_features_for_df(test)
-    train_audio_data, train_pic_data, train_label_data = get_features_for_df(test)
 
-    data = {'train_audio_data': train_audio_data,
-            'train_pic_data': train_pic_data,
-            'train_label_data': train_label_data,
+    test_data = {
             'test_audio_data': test_audio_data,
             'test_pic_data': test_pic_data,
             'test_label_data': test_label_data
             }
 
-    data_pickle = cfg['data']['train_test_data.pkl']
-    save_pickle(data_pickle, data)
+    test_pickle = cfg['data']['test_pkl']
+    save_pickle(test_pickle, test_data)
+
+    train_audio_data, train_pic_data, train_label_data = get_features_for_df(test)
+    train_data = {'train_audio_data': train_audio_data,
+                  'train_pic_data': train_pic_data,
+                  'train_label_data': train_label_data,
+                  }
+
+    train_pickle = cfg['data']['train_pkl']
+    save_pickle(train_pickle, train_data)
 
 
 # TODO fix paths

@@ -25,4 +25,5 @@ data:
   test_paths: "../data/preprocessed_data/filtered_emotions_paths/test_paths.csv"
   train_paths: "../data/preprocessed_data/filtered_emotions_paths/train_paths.csv"
 
-  pictures_with_emotions_pickle: '../data/preprocessed_data/pictures_with_emotions_pickle.pkl'
+  train_pkl: '../data/preprocessed_data/train_pkl.pkl'
+  test_pkl: '../data/preprocessed_data/train_pkl.pkl'
