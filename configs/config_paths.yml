@@ -7,11 +7,13 @@ data:
   test_xp: '../data/preprocessed_data/train_data/test_x.npy'
   test_yp: '../data/preprocessed_data/train_data/test_y.npy'
 
-  preprocessed_data_path: "../data/preprocessed_data/"
   iemocap_data_path: "../data/IEMOCAP_full_release/"
+
+  preprocessed_data_path: "../data/preprocessed_data/"
   enterfece_data_path: "../data/enterface_database/"
   ravdess_data_path: '../data/RAVDESS'
   iemocap_cliped_video_path: '../data/iemocap/'
+
   filtered_save_path: '../data/preprocessed_data/filtered_emotions_paths/'
 
   save_test_name: 'final_test_paths.csv'
