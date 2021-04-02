@@ -374,7 +374,8 @@ def prepare_one_video(video_path, save_data_path):
             break
 
         pth = extract_video_images_and_audio_features(video_path, start, end, save_data_path, cnt)
-        paths.append(pth)
+        if pth[0] is not None:
+            paths.append(pth)
 
         start = start + ONE_CLIP_LENGTH - OVERLAP
         cnt += 1

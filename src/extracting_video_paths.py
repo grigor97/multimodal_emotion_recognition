@@ -128,8 +128,6 @@ def iemocap_divide_videos_to_clips(data_path, pre_processed_data_path, video_sav
                 video = VideoFileClip(path_video + video_name)
                 if end_time > video.duration:
                     end_time = video.duration
-                # print("wav_file_name {},start time {},end time {}".
-                #       format(file_name, start_time, end_time))
 
                 sub_video = video.subclip(start_time, end_time)
                 sub_video.write_videofile(
