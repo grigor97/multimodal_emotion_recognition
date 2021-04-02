@@ -15,7 +15,7 @@ from utils.utils import *
 FINALl_EMOTIONS = {'sad': 0, 'neu': 1, 'hap': 2, 'ang': 3, 'fru': 4, 'exc': 5, 'oth': 6}
 
 
-def get_pickle_file_from_all_pics(cfg):
+def get_pickle_file_from_all_pics_and_audios(cfg):
     """
     Creates pickle file for all the train and test data
     :param cfg: config file for paths
