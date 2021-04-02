@@ -151,8 +151,8 @@ def face_extraction(pic_path, face_size=(50, 50)):
     deep neural network cnn which performance is better but it requires gpu!
     :param pic_path: path of the picture from which face should be extracted
     :param face_size: size of the face after extracting
-    :return: returns a numpy array, only the face part of the image if at least one is
-    detected otherwise returns whole image
+    :return: returns a numpy array, only the grayscale face part of the image if at least one is
+    detected otherwise returns whole grayscale image
     """
     image = face_recognition.load_image_file(pic_path)
     face_locs = face_recognition.face_locations(image)
@@ -165,10 +165,15 @@ def face_extraction(pic_path, face_size=(50, 50)):
         pil_image = Image.fromarray(image)
 
     pil_image = pil_image.resize(face_size)
+    # make it grayscale
+    pil_image = pil_image.convert('L')
     return np.array(pil_image)
 
 
-# TODO make a face grayscale
+def rgb2gray(rgb):
+    return np.dot(rgb[..., :3], [0.2989, 0.5870, 0.1140])
+
+
 def load_faces_for_one_video(pics_path):
     """
     Loads all the faces for one video
