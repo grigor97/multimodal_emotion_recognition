@@ -6,10 +6,6 @@ data:
   train_yp: '../data/preprocessed_data/train_data/train_y.npy'
   test_xp: '../data/preprocessed_data/train_data/test_x.npy'
   test_yp: '../data/preprocessed_data/train_data/test_y.npy'
-#  train_xp: '../data/train_x.npy'
-#  train_yp: '../data/train_y.npy'
-#  test_xp: '../data/test_x.npy'
-#  test_yp: '../data/test_y.npy'
 
   preprocessed_data_path: "../data/preprocessed_data/"
   iemocap_data_path: "../data/IEMOCAP_full_release/"

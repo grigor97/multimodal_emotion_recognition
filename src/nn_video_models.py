@@ -6,6 +6,7 @@ from tensorflow.keras.utils import to_categorical
 from tensorflow.keras import Model
 
 from utils.nn_utils import *
+from utils.utils import *
 
 
 def run_video_model(model_name,
@@ -19,15 +20,19 @@ def run_video_model(model_name,
                     ):
     # tf.random.set_seed(random_seed)
     logs_path = cfg['logs']['logs_path']
+    train_pkl = cfg['data']['train_pkl']
+    test_pkl = cfg['data']['test_pkl']
 
+    train = load_pickle(train_pkl)
+    test = load_pickle(test_pkl)
     # loading datasets
-    audio_train = None
-    pic_train = None
-    labels_train = None
+    audio_train = train['train_audio_data']
+    pic_train = train['train_pic_data']
+    labels_train = train['train_label_data']
 
-    audio_test = None
-    pic_test = None
-    labels_test = None
+    audio_test = test['test_audio_data']
+    pic_test = test['test_pic_data']
+    labels_test = test['test_label_data']
 
     print("shapes of train is {}, {} and shape of label is {}".format(audio_train.shape,
                                                                       pic_train.shape,
