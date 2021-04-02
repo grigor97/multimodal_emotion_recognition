@@ -49,6 +49,7 @@ def get_features_for_df(df):
     audio_data, pic_data, label_data = [], [], []
     for i, row in df.iterrows():
         pics_path = row[0].replace('/home/student/keropyan', '..')
+        # extracting wav file path from npy file path
         audio_path = row[1].replace('/home/student/keropyan', '..')[:-13] + '.wav'
         label = FINALl_EMOTIONS[row[2]]
         audio_fs, pics_fs, labels = get_features_for_one_video(pics_path, audio_path, label)
@@ -364,9 +365,20 @@ def prepare_one_video(video_path, save_data_path):
     video = VideoFileClip(video_path)
     video_length = video.duration
 
+    del video.reader
+    del video
+
     paths = []
     cnt = 0
     start = 0
+
+    if 'iemocap' not in video_path:
+        pth = extract_video_images_and_audio_features(video_path, 0.6, 3.6, save_data_path, 0)
+        if pth[0] is not None:
+            paths.append(pth)
+
+        return paths
+
     while start < video_length:
         end = start + 3
         if end > video_length:
@@ -380,9 +392,6 @@ def prepare_one_video(video_path, save_data_path):
 
         start = start + ONE_CLIP_LENGTH - OVERLAP
         cnt += 1
-
-    del video.reader
-    del video
 
     return paths  # pictures paths and npy file paths which is audio features
 
