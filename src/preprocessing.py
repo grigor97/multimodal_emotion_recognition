@@ -40,7 +40,7 @@ def get_pickle_file_from_all_pics(cfg):
     test_pickle = cfg['data']['test_pkl']
     save_pickle(test_pickle, test_data)
 
-    train_audio_data, train_pic_data, train_label_data = get_features_for_df(test)
+    train_audio_data, train_pic_data, train_label_data = get_features_for_df(train)
     train_data = {'train_audio_data': train_audio_data,
                   'train_pic_data': train_pic_data,
                   'train_label_data': train_label_data,
