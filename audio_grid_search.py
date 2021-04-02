@@ -32,7 +32,7 @@ def main(args):
                     best_batch_size = 64
                     best_model_name = model_name
 
-                    with open(logs_path + 'audio_best_model_params.txt', 'w') as f:
+                    with open(logs_path + 'audio_best_model_params.txt', 'a+') as f:
                         f.write("best accuracy is ")
                         f.write(str(best_acc) + ',   ')
                         f.write("best lr is ")
