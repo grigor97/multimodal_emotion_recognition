@@ -50,13 +50,11 @@ def get_pickle_file_from_all_pics_and_audios(cfg):
     save_pickle(train_pickle, train_data)
 
 
-# TODO fix paths
 def get_features_for_df(df):
     audio_data, pic_data, label_data = [], [], []
     for i, row in df.iterrows():
-        pics_path = row[0].replace('/home/student/keropyan', '..')
-        # extracting wav file path from npy file path
-        audio_path = row[1].replace('/home/student/keropyan', '..')[:-13] + '.wav'
+        pics_path = row[0]
+        audio_path = row[1]
         label = FINALl_EMOTIONS[row[2]]
         audio_fs, pics_fs, labels = get_features_for_one_video(pics_path, audio_path, label)
         audio_data.extend(audio_fs)
@@ -64,6 +62,20 @@ def get_features_for_df(df):
         label_data.extend(labels)
 
     return np.asarray(audio_data), np.asarray(pic_data), np.asarray(label_data)
+
+# def get_features_for_df(df):
+#     audio_data, pic_data, label_data = [], [], []
+#     for i, row in df.iterrows():
+#         pics_path = row[0].replace('/home/student/keropyan', '..')
+#         # extracting wav file path from npy file path
+#         audio_path = row[1].replace('/home/student/keropyan', '..')[:-13] + '.wav'
+#         label = FINALl_EMOTIONS[row[2]]
+#         audio_fs, pics_fs, labels = get_features_for_one_video(pics_path, audio_path, label)
+#         audio_data.extend(audio_fs)
+#         pic_data.extend(pics_fs)
+#         label_data.extend(labels)
+#
+#     return np.asarray(audio_data), np.asarray(pic_data), np.asarray(label_data)
 
 
 def noise(data):
@@ -252,9 +264,9 @@ def iemocap_extract_video_images_and_audio_features(vid_path, st, et, all_data_p
 
     path_to_audio = clip_audio(path_to_audio, st, et, save_folder + vid_name + '_' + str(nth_sub_video) + '.wav')
 
-    audio_features = get_audio_features(path_to_audio)
-    audio_features_path = save_folder + vid_name + '_' + str(nth_sub_video) + '_features.npy'
-    np.save(audio_features_path, audio_features)
+    # audio_features = get_audio_features(path_to_audio)
+    # audio_features_path = save_folder + vid_name + '_' + str(nth_sub_video) + '_features.npy'
+    # np.save(audio_features_path, audio_features)
 
     cap = cv2.VideoCapture(path_to_clip)
     length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -302,7 +314,7 @@ def iemocap_extract_video_images_and_audio_features(vid_path, st, et, all_data_p
 
     cap.release()
     print("Done!")
-    return pic_path, audio_features_path
+    return pic_path, path_to_audio
 
 
 def other_extract_video_images_and_audio_features(vid_path, st, et, all_data_path, nth_sub_video):
@@ -323,9 +335,9 @@ def other_extract_video_images_and_audio_features(vid_path, st, et, all_data_pat
     del audio_clip.reader
     del audio_clip
 
-    audio_features = get_audio_features(audio_path)
-    audio_features_path = save_folder + vid_name + '_' + str(nth_sub_video) + '_features.npy'
-    np.save(audio_features_path, audio_features)
+    # audio_features = get_audio_features(audio_path)
+    # audio_features_path = save_folder + vid_name + '_' + str(nth_sub_video) + '_features.npy'
+    # np.save(audio_features_path, audio_features)
 
     cap = cv2.VideoCapture(path_to_clip)
     length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -356,7 +368,7 @@ def other_extract_video_images_and_audio_features(vid_path, st, et, all_data_pat
 
     cap.release()
     print("Done!")
-    return pic_path, audio_features_path
+    return pic_path, audio_path
 
 
 def extract_video_images_and_audio_features(vid_path, st, et, all_data_path, nth_sub_video):
@@ -366,7 +378,6 @@ def extract_video_images_and_audio_features(vid_path, st, et, all_data_path, nth
         return other_extract_video_images_and_audio_features(vid_path, st, et, all_data_path, nth_sub_video)
 
 
-# TODO fix dividing videos part if RAVDESS do not divide
 def prepare_one_video(video_path, save_data_path):
     video = VideoFileClip(video_path)
     video_length = video.duration
@@ -403,19 +414,19 @@ def prepare_one_video(video_path, save_data_path):
 
 
 def prepare_whole_data(data_paths, save_data_path, save_name):
-    pic_paths, npy_paths, emotions = [], [], []
+    pic_paths, wav_paths, emotions = [], [], []
 
     for i, row in data_paths.iterrows():
         paths = prepare_one_video(row[0], save_data_path)
         for path in paths:
             pic_paths.append(path[0])
-            npy_paths.append(path[1])
+            wav_paths.append(path[1])
             emotions.append(row[1])
 
     df = pd.DataFrame(columns=['pic_paths', 'npy_paths', 'emotion'])
 
     df['pic_paths'] = pic_paths
-    df['npy_paths'] = npy_paths
+    df['wav_paths'] = wav_paths
     df['emotion'] = emotions
     df.to_csv(save_data_path + save_name, index=False)
     return df
