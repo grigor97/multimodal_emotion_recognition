@@ -49,7 +49,7 @@ def get_features_for_df(df):
     audio_data, pic_data, label_data = [], [], []
     for i, row in df.iterrows():
         pics_path = row[0].replace('/home/student/keropyan', '..')
-        audio_path = row[1].replace('/home/student/keropyan', '..').replace('.npy', '.wav')
+        audio_path = row[1].replace('/home/student/keropyan', '..')[:-13] + '.wav'
         label = FINALl_EMOTIONS[row[2]]
         audio_fs, pics_fs, labels = get_features_for_one_video(pics_path, audio_path, label)
         audio_data.extend(audio_fs)
@@ -359,6 +359,7 @@ def extract_video_images_and_audio_features(vid_path, st, et, all_data_path, nth
         return other_extract_video_images_and_audio_features(vid_path, st, et, all_data_path, nth_sub_video)
 
 
+# TODO fix dividing videos part if RAVDESS do not divide
 def prepare_one_video(video_path, save_data_path):
     video = VideoFileClip(video_path)
     video_length = video.duration
