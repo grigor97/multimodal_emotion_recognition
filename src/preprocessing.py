@@ -12,7 +12,7 @@ from moviepy.editor import *
 
 from utils.utils import *
 
-final_emos = {'sad': 0, 'neu': 1, 'hap': 2, 'ang': 3, 'fru': 4, 'exc': 5, 'oth': 6}
+FINALl_EMOTIONS = {'sad': 0, 'neu': 1, 'hap': 2, 'ang': 3, 'fru': 4, 'exc': 5, 'oth': 6}
 
 
 def get_pickle_file_from_all_pics(cfg):
@@ -50,7 +50,7 @@ def get_features_for_df(df):
     for i, row in df.iterrows():
         pics_path = row[0].replace('/home/student/keropyan', '..')
         audio_path = row[1].replace('/home/student/keropyan', '..').replace('.npy', '.wav')
-        label = final_emos[row[2]]
+        label = FINALl_EMOTIONS[row[2]]
         audio_fs, pics_fs, labels = get_features_for_one_video(pics_path, audio_path, label)
         audio_data.extend(audio_fs)
         pic_data.extend(pics_fs)
@@ -105,10 +105,6 @@ def extract_features(data, sample_rate):
 
 
 def get_audio_features(path):
-    # duration and offset are used to take care of the no
-    # audio in start and the ending of each audio files as seen above.
-    # TODO fix this part of duration and offset
-    # data, sample_rate = librosa.load(path, duration=2.5, offset=0.6)
     data, sample_rate = librosa.load(path)
 
     # without augmentation
@@ -346,11 +342,6 @@ def other_extract_video_images_and_audio_features(vid_path, st, et, all_data_pat
 
             filename = pic_path + str(vid_name) + '_' + str(nth_sub_video) + "_" + str(int(x)) + ".jpg"
             x += 1
-            print("Frame shape Before resize", frame.shape)
-
-            frame = cv2.resize(frame, PIC_DIMS, interpolation=cv2.INTER_LINEAR)
-
-            print("Frame shape Before resize", frame.shape)
 
             if not os.path.exists(pic_path):
                 os.makedirs(pic_path)
