@@ -14,7 +14,7 @@ from utils.utils import *
 def reshape_tmp(pic_data):
     new_data = np.zeros((0, 50, 50, 20))
     for i in pic_data:
-        new_data = np.vstack((new_data, i))
+        new_data = np.vstack((new_data, [i]))
     return new_data
 
 
