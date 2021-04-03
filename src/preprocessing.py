@@ -220,8 +220,7 @@ def clip_video(video_path, audio_save_path, start_time, end_time, save_path):
 
     sub_video = video.subclip(start_time, end_time)
     sub_video.write_videofile(
-        save_path,
-        audio=True
+        save_path
         # codec='libx264',
         # audio_codec='aac',
         # temp_audiofile='temp-audio.m4a',
