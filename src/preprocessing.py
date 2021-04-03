@@ -226,7 +226,7 @@ def clip_video(video_path, audio_save_path, start_time, end_time, save_path):
         temp_audiofile='temp-audio.m4a',
         remove_temp=True)
 
-    sub_video.audio.write_videofile(audio_save_path)
+    sub_video.audio.write_audiofile(audio_save_path)
 
     # del video.reader
     # del sub_video.reader
