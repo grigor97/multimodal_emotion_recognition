@@ -1,4 +1,5 @@
 import os
+import numpy as np
 
 import tensorflow as tf
 from tensorflow.keras import activations
@@ -28,11 +29,11 @@ def run_video_model(model_name,
     test = load_pickle(test_pkl)
     # loading datasets
     audio_train = train['train_audio_data']
-    pic_train = train['train_pic_data']
+    pic_train = np.transpose(train['train_pic_data'], (0, 2, 3, 1))
     labels_train = train['train_label_data']
 
     audio_test = test['test_audio_data']
-    pic_test = test['test_pic_data']
+    pic_test = np.transpose(test['test_pic_data'], (0, 2, 3, 1))
     labels_test = test['test_label_data']
 
     print("shapes of train is {}, {} and shape of label is {}".format(audio_train.shape,
@@ -112,7 +113,7 @@ def run_video_model(model_name,
     return acc
 
 
-def create_video_cnn_model(optimizer, audio_dim, pic_shape, output_dim=7):
+def create_video_cnn_model(optimizer, audio_dim, pic_shape=(50, 50, 20), output_dim=7):
     # audio network part
     audio_input = Input(shape=(audio_dim, 1), name='audio_input')
     audio_x = Conv1D(128, 8, padding='same', activation=activations.relu)(audio_input)
@@ -149,9 +150,16 @@ def create_video_cnn_model(optimizer, audio_dim, pic_shape, output_dim=7):
 
     # pictures network part
     pic_input = Input(shape=pic_shape, name='pic_input')
-    pic_x = Conv1D(10, kernel_size=3, padding='same', activation='relu')(pic_input)
+    pic_x = Conv2D(16, kernel_size=(3, 3), padding="same")(pic_input)
+    pic_x = BatchNormalization()(pic_x)
+    pic_x = Activation(activations.relu)(pic_x)
+    pic_x = MaxPool2D()(pic_x)
+    pic_x = Conv2D(8, kernel_size=(3, 3), padding="same")(pic_input)
+    pic_x = BatchNormalization()(pic_x)
+    pic_x = Activation(activations.relu)(pic_x)
+    pic_x = MaxPool2D()(pic_x)
     pic_x = Flatten()(pic_x)
-    pic_x = Dense(10, activation='relu')(pic_x)
+    pic_x = Dense(32, activation='relu')(pic_x)
     # end of pictures network part
 
     # concatenation of two networks
@@ -174,3 +182,4 @@ def create_video_cnn_model(optimizer, audio_dim, pic_shape, output_dim=7):
     )
 
     return model
+
