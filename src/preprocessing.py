@@ -221,14 +221,16 @@ def clip_video(video_path, audio_save_path, start_time, end_time, save_path):
     sub_video = video.subclip(start_time, end_time)
     sub_video.write_videofile(
         save_path,
-        audio=True
-        # codec='libx264',
-        # audio_codec='aac',
-        # temp_audiofile='temp-audio.m4a',
-        # remove_temp=True
+        codec='libx264',
+        audio_codec='aac',
+        temp_audiofile='temp-audio.m4a',
+        remove_temp=True
         )
 
-    sub_video.audio.write_audiofile(audio_save_path)
+    audio_path = video_path.split('.')[0] + '.wav'
+    audio = AudioFileClip(audio_path)
+    sub_audio = audio.subclip(start_time, end_time)
+    sub_audio.write_audiofile(audio_save_path)
 
     # del video.reader
     # del sub_video.reader
