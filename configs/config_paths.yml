@@ -2,7 +2,7 @@ logs:
   logs_path: 'logs/'
 
 data:
-  iemocap_data_path: "../data/IEMOCAP_full_release/"
+  iemocap_data_path: "../data/iemocap_full_release/"
 
   preprocessed_data_path: "../data/preprocessed_data/"
   enterfece_data_path: "../data/enterface_database/"
