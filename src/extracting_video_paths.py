@@ -140,8 +140,8 @@ def iemocap_divide_videos_to_clips(data_path, pre_processed_data_path, video_sav
                 sub_video.audio.write_audiofile(
                     video_name_folder + file_name + ".wav")
 
-                del video.reader
-                del sub_video.reader
+                # del video.reader
+                # del sub_video.reader
                 del video
                 del sub_video
 
