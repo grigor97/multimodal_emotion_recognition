@@ -17,7 +17,8 @@ def main(args):
     num_epochs = 200
     opts = ['SGD', 'RMSprop', 'Adam']
     lrs = [0.01, 0.03, 0.001, 0.003, 0.0001, 0.0003, 0.00001, 0.00003]
-    model_names = ['audio_lstm', 'audio_blstm', 'audio_stacked_lstm', 'audio_cnn']
+    # 'audio_lstm', 'audio_blstm', 'audio_stacked_lstm',
+    model_names = ['audio_cnn']
     best_acc, best_optimizer, best_lr, best_batch_size, best_model_name = 0, None, None, None, None
     for model_name in model_names:
         for opt in opts:
