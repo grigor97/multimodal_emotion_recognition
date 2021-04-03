@@ -213,32 +213,27 @@ DISREGARD_LENGTH = 0.5  # if video length is less than DISREGARD_LENGTH then we 
 PIC_DIMS = (360, 240)
 
 
+# TODO maybe deltee audio also
 def iemocap_clip_video(video_path, audio_save_path, start_time, end_time, save_path):
     video = VideoFileClip(video_path)
     if end_time > video.duration:
         end_time = video.duration
 
     sub_video = video.subclip(start_time, end_time)
-    sub_video.write_videofile(
-        save_path
-        # codec='libx264',
-        # audio_codec='aac',
-        # temp_audiofile='temp-audio.m4a',
-        # remove_temp=True
-        )
+    sub_video.write_videofile(save_path)
 
     audio_path = video_path[:-4] + '.wav'
     print('======------>>>>' + video_path + '<<<<--------------------------------------------------------------------')
     print('======------>>>>' + audio_path + '<<<<--------------------------------------------------------------------')
-    # sub_video.audio.write_audiofile(audio_save_path)
+
     audio = AudioFileClip(audio_path)
     sub_audio = audio.subclip(start_time, end_time)
     sub_audio.write_audiofile(audio_save_path)
 
-    # del video.reader
-    # del sub_video.reader
-    # del video
-    # del sub_video
+    del video.reader
+    del sub_video.reader
+    del video
+    del sub_video
 
     return save_path
 
@@ -270,12 +265,6 @@ def iemocap_extract_video_images_and_audio_features(vid_path, st, et, all_data_p
 
     audio_save_path = save_folder + vid_name + '_' + str(nth_sub_video) + '.wav'
     path_to_clip = iemocap_clip_video(vid_path, audio_save_path, st, et, save_folder + vid_name + '_' + str(nth_sub_video) + '.mp4')
-
-    # path_to_audio = clip_audio(path_to_audio, st, et, audio_save_path)
-
-    # audio_features = get_audio_features(path_to_audio)
-    # audio_features_path = save_folder + vid_name + '_' + str(nth_sub_video) + '_features.npy'
-    # np.save(audio_features_path, audio_features)
 
     cap = cv2.VideoCapture(path_to_clip)
     length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -332,26 +321,17 @@ def other_clip_video(video_path, audio_save_path, start_time, end_time, save_pat
         end_time = video.duration
 
     sub_video = video.subclip(start_time, end_time)
-    sub_video.write_videofile(
-        save_path
-        # codec='libx264',
-        # audio_codec='aac',
-        # temp_audiofile='temp-audio.m4a',
-        # remove_temp=True
-        )
+    sub_video.write_videofile(save_path)
 
     audio_path = video_path[:-4] + '.wav'
     print('======------>>>>' + video_path + '<<<<--------------------------------------------------------------------')
     print('======------>>>>' + audio_path + '<<<<--------------------------------------------------------------------')
     sub_video.audio.write_audiofile(audio_save_path)
-    # audio = AudioFileClip(audio_path)
-    # sub_audio = audio.subclip(start_time, end_time)
-    # sub_audio.write_audiofile(audio_save_path)
 
-    # del video.reader
-    # del sub_video.reader
-    # del video
-    # del sub_video
+    del video.reader
+    del sub_video.reader
+    del video
+    del sub_video
 
     return save_path
 
@@ -367,16 +347,6 @@ def other_extract_video_images_and_audio_features(vid_path, st, et, all_data_pat
 
     audio_save_path = save_folder + vid_name + '_' + str(nth_sub_video) + '.wav'
     path_to_clip = other_clip_video(vid_path, audio_save_path, st, et, save_folder + vid_name + '_' + str(nth_sub_video) + '.mp4')
-
-    # audio_clip = AudioFileClip(path_to_clip)
-    # audio_clip.write_audiofile(audio_save_path)
-
-    # del audio_clip.reader
-    # del audio_clip
-
-    # audio_features = get_audio_features(audio_path)
-    # audio_features_path = save_folder + vid_name + '_' + str(nth_sub_video) + '_features.npy'
-    # np.save(audio_features_path, audio_features)
 
     cap = cv2.VideoCapture(path_to_clip)
     length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -439,8 +409,8 @@ def prepare_one_video(video_path, save_data_path):
         start = start + ONE_CLIP_LENGTH - OVERLAP
         cnt += 1
 
-    # del video.reader
-    # del video
+    del video.reader
+    del video
 
     return paths  # pictures paths and npy file paths which is audio features
 
