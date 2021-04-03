@@ -260,7 +260,6 @@ def iemocap_clip_video(video_path, audio_save_path, start_time, end_time, save_p
 
 
 def iemocap_extract_video_images_and_audio_features(vid_path, st, et, all_data_path, nth_sub_video):
-    path_to_audio = vid_path.split('.')[0] + '.wav'
     vid_n = os.path.basename(vid_path)
     vid_name = vid_n.split(".")[0]
     num_images = 19
@@ -324,7 +323,7 @@ def iemocap_extract_video_images_and_audio_features(vid_path, st, et, all_data_p
 
     cap.release()
     print("Done!")
-    return pic_path, path_to_audio
+    return pic_path, audio_save_path
 
 
 def other_clip_video(video_path, audio_save_path, start_time, end_time, save_path):
