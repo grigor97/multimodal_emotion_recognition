@@ -371,13 +371,6 @@ def other_extract_video_images_and_audio_features(vid_path, st, et, all_data_pat
     return pic_path, audio_path
 
 
-def extract_video_images_and_audio_features(vid_path, st, et, all_data_path, nth_sub_video):
-    if 'iemocap' in vid_path:
-        return iemocap_extract_video_images_and_audio_features(vid_path, st, et, all_data_path, nth_sub_video)
-    else:
-        return other_extract_video_images_and_audio_features(vid_path, st, et, all_data_path, nth_sub_video)
-
-
 def prepare_one_video(video_path, save_data_path):
     video = VideoFileClip(video_path)
     video_length = video.duration
@@ -390,7 +383,7 @@ def prepare_one_video(video_path, save_data_path):
     start = 0
 
     if 'iemocap' not in video_path:
-        pth = extract_video_images_and_audio_features(video_path, 0.6, 3.6, save_data_path, 0)
+        pth = other_extract_video_images_and_audio_features(video_path, 0.6, 3.6, save_data_path, 0)
         if pth[0] is not None:
             paths.append(pth)
 
@@ -403,7 +396,7 @@ def prepare_one_video(video_path, save_data_path):
         if start > 0 and end - start < 2 * OVERLAP:
             break
 
-        pth = extract_video_images_and_audio_features(video_path, start, end, save_data_path, cnt)
+        pth = iemocap_extract_video_images_and_audio_features(video_path, start, end, save_data_path, cnt)
         if pth[0] is not None:
             paths.append(pth)
 
