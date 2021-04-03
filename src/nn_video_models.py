@@ -15,8 +15,7 @@ def reshape_tmp(pic_data):
     new_data = []
     for i in pic_data:
         # print(i.shape)
-        new_data.append([np.transpose(i, (1, 2, 0))])
-    # print(len(new_data))
+        new_data.append([i])
     return np.array(new_data)
 
 
