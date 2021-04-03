@@ -133,15 +133,19 @@ def create_audio_cnn_model(optimizer, train_dim, output_dim=7):
     model.add(Activation('relu'))
     model.add(Conv1D(64, 8, padding='same'))
     model.add(Activation('relu'))
+
     model.add(Conv1D(64, 8, padding='same'))
     model.add(BatchNormalization())
     model.add(Activation('relu'))
     model.add(Dropout(0.25))
     model.add(MaxPooling1D(pool_size=(8)))
+
     model.add(Conv1D(32, 8, padding='same'))
     model.add(Activation('relu'))
+
     model.add(Conv1D(32, 8, padding='same'))
     model.add(Activation('relu'))
+
     model.add(Flatten())
     model.add(Dense(output_dim))  # Target class number
     model.add(Activation('softmax'))
