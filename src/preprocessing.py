@@ -226,7 +226,7 @@ def clip_video(video_path, audio_save_path, start_time, end_time, save_path):
         temp_audiofile='temp-audio.m4a',
         remove_temp=True)
 
-    sub_video.audio.write_audiofile(audio_save_path)
+    # sub_video.audio.write_audiofile(audio_save_path)
 
     # del video.reader
     # del sub_video.reader
@@ -266,7 +266,7 @@ def iemocap_extract_video_images_and_audio_features(vid_path, st, et, all_data_p
     audio_save_path = save_folder + vid_name + '_' + str(nth_sub_video) + '.wav'
     path_to_clip = clip_video(vid_path, audio_save_path, st, et, save_folder + vid_name + '_' + str(nth_sub_video) + '.mp4')
 
-    # path_to_audio = clip_audio(path_to_audio, st, et, save_folder + vid_name + '_' + str(nth_sub_video) + '.wav')
+    path_to_audio = clip_audio(path_to_audio, st, et, audio_save_path)
 
     # audio_features = get_audio_features(path_to_audio)
     # audio_features_path = save_folder + vid_name + '_' + str(nth_sub_video) + '_features.npy'
@@ -330,11 +330,11 @@ def other_extract_video_images_and_audio_features(vid_path, st, et, all_data_pat
     if not os.path.exists(save_folder):
         os.makedirs(save_folder)
 
-    audio_path = save_folder + vid_name + '_' + str(nth_sub_video) + '.wav'
-    path_to_clip = clip_video(vid_path, audio_path, st, et, save_folder + vid_name + '_' + str(nth_sub_video) + '.mp4')
+    audio_save_path = save_folder + vid_name + '_' + str(nth_sub_video) + '.wav'
+    path_to_clip = clip_video(vid_path, audio_save_path, st, et, save_folder + vid_name + '_' + str(nth_sub_video) + '.mp4')
 
-    # audio_clip = AudioFileClip(path_to_clip)
-    # audio_clip.write_audiofile(audio_path)
+    audio_clip = AudioFileClip(path_to_clip)
+    audio_clip.write_audiofile(audio_save_path)
 
     # del audio_clip.reader
     # del audio_clip
