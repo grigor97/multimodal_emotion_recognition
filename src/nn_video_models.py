@@ -11,6 +11,14 @@ from utils.nn_utils import *
 from utils.utils import *
 
 
+def reshape_tmp(pic_data):
+    new_data = []
+    for i in pic_data:
+        new_data.append((np.transpose(i, (1, 2, 0))))
+
+    return np.array(new_data)
+
+
 def run_video_model(model_name,
                     cfg,
                     restore=False,
@@ -29,13 +37,13 @@ def run_video_model(model_name,
     test = load_pickle(test_pkl)
     # loading datasets
     audio_train = train['train_audio_data']
-    print('train pic shape is  {}'.format(train['train_pic_data'].reshape((len(train['train_pic_data']), 50, 50, 20))))
-    pic_train = np.transpose(train['train_pic_data'].reshape((len(train['train_pic_data']), 50, 50, 20)), (0, 2, 3, 1))
+    print('train pic shape is  {}'.format(reshape_tmp(train['train_pic_data']).shape))
+    pic_train = reshape_tmp(train['train_pic_data'])
     labels_train = train['train_label_data']
 
     audio_test = test['test_audio_data']
-    print('test pic shape is  {}'.format(np.asarray(test['test_pic_data']).shape))
-    pic_test = np.transpose(np.asarray(test['test_pic_data']), (0, 2, 3, 1))
+    print('test pic shape is  {}'.format(reshape_tmp(test['test_pic_data']).shape))
+    pic_test = reshape_tmp(test['test_pic_data'])
     labels_test = test['test_label_data']
 
     print("shapes of train is {}, {} and shape of label is {}".format(audio_train.shape,
