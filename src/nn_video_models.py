@@ -76,7 +76,7 @@ def run_video_model(model_name,
         print("sorry you do not have such a {} model".format(model_name))
         return
 
-    print("{} model summary is \n {}".format(model_name, model.summary()))
+    # print("{} model summary is \n {}".format(model_name, model.summary()))
 
     checkpoint_path = logs_path + model_name + str(num_epochs) + optimizer + str(lr) + "/cp.ckpt"
     checkpoint_dir = os.path.dirname(checkpoint_path)
