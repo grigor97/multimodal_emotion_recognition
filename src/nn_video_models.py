@@ -76,7 +76,7 @@ def run_video_model(model_name,
         print("sorry you do not have such a {} model".format(model_name))
         return
 
-    # print("{} model summary is \n {}".format(model_name, model.summary()))
+    print("{} model summary is \n {}".format(model_name, model.summary()))
 
     checkpoint_path = logs_path + model_name + str(num_epochs) + optimizer + str(lr) + "/cp.ckpt"
     checkpoint_dir = os.path.dirname(checkpoint_path)
@@ -185,7 +185,7 @@ def create_video_cnn_model(optimizer, audio_dim, pic_shape=(50, 50, 20), output_
         outputs=[out]
     )
 
-    tf.keras.utils.plot_model(model, show_shapes=True)
+    # tf.keras.utils.plot_model(model, show_shapes=True)
 
     model.compile(
         optimizer=optimizer,
