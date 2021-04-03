@@ -65,7 +65,7 @@ def get_enterface_paths(enterfece_data_path, pre_processed_data_path):
     for subject in os.listdir(enterfece_data_path):
         if subject == '.DS_Store':
             continue
-        sub_path = enterfece_data_path + '/' + subject
+        sub_path = enterfece_data_path + subject
         for emotion in os.listdir(sub_path):
             if emotion == '.DS_Store':
                 continue
