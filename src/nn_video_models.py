@@ -16,8 +16,8 @@ def reshape_tmp(pic_data):
     for i in pic_data:
         print(np.transpose(i, (1, 2, 0)).shape)
         new_data.append(np.transpose(i, (1, 2, 0)))
-
-    return np.asarray(new_data)
+    print(len(new_data))
+    return np.asanarray(new_data)
 
 
 def run_video_model(model_name,
