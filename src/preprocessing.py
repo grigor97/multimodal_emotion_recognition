@@ -245,8 +245,8 @@ def clip_audio(audio_path, start_time, end_time, save_path):
 
     # del audio.reader
     # del sub_audio.reader
-    del audio
-    del sub_audio
+    # del audio
+    # del sub_audio
 
     return save_path
 
@@ -334,7 +334,7 @@ def other_extract_video_images_and_audio_features(vid_path, st, et, all_data_pat
     audio_clip.write_audiofile(audio_path)
 
     # del audio_clip.reader
-    del audio_clip
+    # del audio_clip
 
     # audio_features = get_audio_features(audio_path)
     # audio_features_path = save_folder + vid_name + '_' + str(nth_sub_video) + '_features.npy'
