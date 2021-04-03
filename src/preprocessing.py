@@ -333,7 +333,7 @@ def other_extract_video_images_and_audio_features(vid_path, st, et, all_data_pat
     audio_path = save_folder + vid_name + '_' + str(nth_sub_video) + '.wav'
     audio_clip.write_audiofile(audio_path)
 
-    del audio_clip.reader
+    # del audio_clip.reader
     del audio_clip
 
     # audio_features = get_audio_features(audio_path)
