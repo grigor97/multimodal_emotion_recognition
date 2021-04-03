@@ -54,6 +54,8 @@ def get_features_for_df(df):
     audio_data, pic_data, label_data = [], [], []
     for i, row in df.iterrows():
         pics_path = row[0]
+        if len(glob.glob(pics_path + '*.jpg')) != 20:
+            continue
         audio_path = row[1]
         label = FINALl_EMOTIONS[row[2]]
         audio_fs, pics_fs, labels = get_features_for_one_video(pics_path, audio_path, label)
@@ -202,7 +204,7 @@ def load_faces_for_one_video(pics_path):
         pcs.append(img)
 
     pcs = np.asarray(pcs)
-    return pcs
+    return np.transpose(pcs, (1, 2, 0))
 
 
 ONE_CLIP_LENGTH = 3  # each video length is 3 seconds
