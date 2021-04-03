@@ -12,11 +12,10 @@ from utils.utils import *
 
 
 def reshape_tmp(pic_data):
-    new_data = []
+    new_data = np.zeros((0, 50, 50, 20))
     for i in pic_data:
-        # print(i.shape)
-        new_data.append([i])
-    return np.array(new_data)
+        new_data = np.vstack((new_data, i))
+    return new_data
 
 
 def run_video_model(model_name,
