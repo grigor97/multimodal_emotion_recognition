@@ -230,8 +230,8 @@ def clip_video(video_path, audio_save_path, start_time, end_time, save_path):
 
     # del video.reader
     # del sub_video.reader
-    del video
-    del sub_video
+    # del video
+    # del sub_video
 
     return save_path
 
@@ -247,8 +247,8 @@ def clip_audio(audio_path, start_time, end_time, save_path):
 
     # del audio.reader
     # del sub_audio.reader
-    del audio
-    del sub_audio
+    # del audio
+    # del sub_audio
 
     return save_path
 
@@ -372,7 +372,7 @@ def other_extract_video_images_and_audio_features(vid_path, st, et, all_data_pat
 
     cap.release()
     print("Done!")
-    return pic_path, audio_path
+    return pic_path, audio_save_path
 
 
 def prepare_one_video(video_path, save_data_path):
@@ -405,7 +405,7 @@ def prepare_one_video(video_path, save_data_path):
         cnt += 1
 
     # del video.reader
-    del video
+    # del video
 
     return paths  # pictures paths and npy file paths which is audio features
 
