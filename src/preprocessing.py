@@ -420,7 +420,7 @@ def prepare_whole_data(data_paths, save_data_path, save_name):
             wav_paths.append(path[1])
             emotions.append(row[1])
 
-    df = pd.DataFrame(columns=['pic_paths', 'npy_paths', 'emotion'])
+    df = pd.DataFrame(columns=['pic_paths', 'wav_paths', 'emotion'])
 
     df['pic_paths'] = pic_paths
     df['wav_paths'] = wav_paths

@@ -23,11 +23,15 @@ def main(args):
 
     print('starting prepare test data ----------------------------------')
 
+    if not os.path.exists(save_test_data_path):
+        os.makedirs(save_test_data_path)
     test_df_paths = pd.read_csv(test_paths)
     prepare_whole_data(test_df_paths, save_test_data_path, save_test_name)
 
     print('starting prepare train data ----------------------------------')
 
+    if not os.path.exists(save_train_data_path):
+        os.makedirs(save_train_data_path)
     train_df_paths = pd.read_csv(train_paths)
     prepare_whole_data(train_df_paths, save_train_data_path, save_train_name)
 
