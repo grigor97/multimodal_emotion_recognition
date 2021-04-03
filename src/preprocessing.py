@@ -244,7 +244,7 @@ def clip_audio(audio_path, start_time, end_time, save_path):
         save_path)
 
     # del audio.reader
-    del sub_audio.reader
+    # del sub_audio.reader
     del audio
     del sub_audio
 
