@@ -2,7 +2,7 @@ from src.preprocessing import *
 from src.extracting_video_paths import *
 
 
-path_cfg = 'configs/config_paths.yml'
+path_cfg = '../configs/config_paths.yml'
 cfg = load_cfg(path_cfg)
 logs_path = cfg['logs']['logs_path']
 preprocessed_data_path = cfg['data']['preprocessed_data_path']

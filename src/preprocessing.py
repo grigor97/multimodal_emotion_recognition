@@ -213,7 +213,6 @@ DISREGARD_LENGTH = 0.5  # if video length is less than DISREGARD_LENGTH then we 
 PIC_DIMS = (360, 240)
 
 
-# TODO maybe deltee audio also
 def iemocap_clip_video(video_path, audio_save_path, start_time, end_time, save_path):
     video = VideoFileClip(video_path)
     if end_time > video.duration:
@@ -240,22 +239,6 @@ def iemocap_clip_video(video_path, audio_save_path, start_time, end_time, save_p
     return save_path
 
 
-# def clip_audio(audio_path, start_time, end_time, save_path):
-#     audio = AudioFileClip(audio_path)
-#     if end_time > audio.duration:
-#         end_time = audio.duration
-#
-#     sub_audio = audio.subclip(start_time, end_time)
-#     sub_audio.write_audiofile(save_path)
-#
-#     # del audio.reader
-#     # del sub_audio.reader
-#     # del audio
-#     # del sub_audio
-#
-#     return save_path
-
-
 def iemocap_extract_video_images_and_audio_features(vid_path, st, et, all_data_path, nth_sub_video):
     vid_n = os.path.basename(vid_path)
     vid_name = vid_n.split(".")[0]
@@ -266,7 +249,8 @@ def iemocap_extract_video_images_and_audio_features(vid_path, st, et, all_data_p
         os.makedirs(save_folder)
 
     audio_save_path = save_folder + vid_name + '_' + str(nth_sub_video) + '.wav'
-    path_to_clip = iemocap_clip_video(vid_path, audio_save_path, st, et, save_folder + vid_name + '_' + str(nth_sub_video) + '.mp4')
+    path_to_clip = iemocap_clip_video(vid_path, audio_save_path, st, et,
+                                      save_folder + vid_name + '_' + str(nth_sub_video) + '.mp4')
 
     cap = cv2.VideoCapture(path_to_clip)
     length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -348,7 +332,8 @@ def other_extract_video_images_and_audio_features(vid_path, st, et, all_data_pat
         os.makedirs(save_folder)
 
     audio_save_path = save_folder + vid_name + '_' + str(nth_sub_video) + '.wav'
-    path_to_clip = other_clip_video(vid_path, audio_save_path, st, et, save_folder + vid_name + '_' + str(nth_sub_video) + '.mp4')
+    path_to_clip = other_clip_video(vid_path, audio_save_path, st, et,
+                                    save_folder + vid_name + '_' + str(nth_sub_video) + '.mp4')
 
     cap = cv2.VideoCapture(path_to_clip)
     length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
