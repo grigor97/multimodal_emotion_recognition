@@ -230,9 +230,10 @@ def clip_video(video_path, audio_save_path, start_time, end_time, save_path):
     audio_path = video_path[:-4] + '.wav'
     print('======------>>>>' + video_path + '<<<<--------------------------------------------------------------------')
     print('======------>>>>' + audio_path + '<<<<--------------------------------------------------------------------')
-    audio = AudioFileClip(audio_path)
-    sub_audio = audio.subclip(start_time, end_time)
-    sub_audio.write_audiofile(audio_save_path)
+    sub_video.audio.write_audiofile(audio_save_path)
+    # audio = AudioFileClip(audio_path)
+    # sub_audio = audio.subclip(start_time, end_time)
+    # sub_audio.write_audiofile(audio_save_path)
 
     # del video.reader
     # del sub_video.reader
