@@ -237,7 +237,7 @@ def clip_video(video_path, audio_save_path, start_time, end_time, save_path):
 
 
 def clip_audio(audio_path, start_time, end_time, save_path):
-    audio = VideoFileClip(audio_path)
+    audio = AudioFileClip(audio_path)
     if end_time > audio.duration:
         end_time = audio.duration
 
