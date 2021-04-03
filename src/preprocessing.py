@@ -213,7 +213,7 @@ DISREGARD_LENGTH = 0.5  # if video length is less than DISREGARD_LENGTH then we 
 PIC_DIMS = (360, 240)
 
 
-def clip_video(video_path, audio_save_path, start_time, end_time, save_path):
+def iemocap_clip_video(video_path, audio_save_path, start_time, end_time, save_path):
     video = VideoFileClip(video_path)
     if end_time > video.duration:
         end_time = video.duration
@@ -243,20 +243,20 @@ def clip_video(video_path, audio_save_path, start_time, end_time, save_path):
     return save_path
 
 
-def clip_audio(audio_path, start_time, end_time, save_path):
-    audio = AudioFileClip(audio_path)
-    if end_time > audio.duration:
-        end_time = audio.duration
-
-    sub_audio = audio.subclip(start_time, end_time)
-    sub_audio.write_audiofile(save_path)
-
-    # del audio.reader
-    # del sub_audio.reader
-    # del audio
-    # del sub_audio
-
-    return save_path
+# def clip_audio(audio_path, start_time, end_time, save_path):
+#     audio = AudioFileClip(audio_path)
+#     if end_time > audio.duration:
+#         end_time = audio.duration
+#
+#     sub_audio = audio.subclip(start_time, end_time)
+#     sub_audio.write_audiofile(save_path)
+#
+#     # del audio.reader
+#     # del sub_audio.reader
+#     # del audio
+#     # del sub_audio
+#
+#     return save_path
 
 
 def iemocap_extract_video_images_and_audio_features(vid_path, st, et, all_data_path, nth_sub_video):
@@ -270,7 +270,7 @@ def iemocap_extract_video_images_and_audio_features(vid_path, st, et, all_data_p
         os.makedirs(save_folder)
 
     audio_save_path = save_folder + vid_name + '_' + str(nth_sub_video) + '.wav'
-    path_to_clip = clip_video(vid_path, audio_save_path, st, et, save_folder + vid_name + '_' + str(nth_sub_video) + '.mp4')
+    path_to_clip = iemocap_clip_video(vid_path, audio_save_path, st, et, save_folder + vid_name + '_' + str(nth_sub_video) + '.mp4')
 
     # path_to_audio = clip_audio(path_to_audio, st, et, audio_save_path)
 
@@ -327,6 +327,36 @@ def iemocap_extract_video_images_and_audio_features(vid_path, st, et, all_data_p
     return pic_path, path_to_audio
 
 
+def other_clip_video(video_path, audio_save_path, start_time, end_time, save_path):
+    video = VideoFileClip(video_path)
+    if end_time > video.duration:
+        end_time = video.duration
+
+    sub_video = video.subclip(start_time, end_time)
+    sub_video.write_videofile(
+        save_path
+        # codec='libx264',
+        # audio_codec='aac',
+        # temp_audiofile='temp-audio.m4a',
+        # remove_temp=True
+        )
+
+    audio_path = video_path[:-4] + '.wav'
+    print('======------>>>>' + video_path + '<<<<--------------------------------------------------------------------')
+    print('======------>>>>' + audio_path + '<<<<--------------------------------------------------------------------')
+    sub_video.audio.write_audiofile(audio_save_path)
+    # audio = AudioFileClip(audio_path)
+    # sub_audio = audio.subclip(start_time, end_time)
+    # sub_audio.write_audiofile(audio_save_path)
+
+    # del video.reader
+    # del sub_video.reader
+    # del video
+    # del sub_video
+
+    return save_path
+
+
 def other_extract_video_images_and_audio_features(vid_path, st, et, all_data_path, nth_sub_video):
     vid_n = os.path.basename(vid_path)
     vid_name = vid_n.split(".")[0]
@@ -337,7 +367,7 @@ def other_extract_video_images_and_audio_features(vid_path, st, et, all_data_pat
         os.makedirs(save_folder)
 
     audio_save_path = save_folder + vid_name + '_' + str(nth_sub_video) + '.wav'
-    path_to_clip = clip_video(vid_path, audio_save_path, st, et, save_folder + vid_name + '_' + str(nth_sub_video) + '.mp4')
+    path_to_clip = other_clip_video(vid_path, audio_save_path, st, et, save_folder + vid_name + '_' + str(nth_sub_video) + '.mp4')
 
     # audio_clip = AudioFileClip(path_to_clip)
     # audio_clip.write_audiofile(audio_save_path)
