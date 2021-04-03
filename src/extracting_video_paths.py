@@ -138,7 +138,7 @@ def iemocap_divide_videos_to_clips(data_path, pre_processed_data_path, video_sav
                     remove_temp=True
                     )
 
-                sub_video.audio.write_audiofile(video_name_folder + file_name + ".wav")
+                sub_video.audio.write_audiofile(video_name_folder + file_name + ".wav", codec='aac')
 
                 # video.close()
                 # del video.reader
