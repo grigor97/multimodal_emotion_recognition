@@ -19,7 +19,7 @@ def reshape_tmp(pic_data):
     # print(len(new_data))
     # return np.array(new_data)
 
-    return pic_data.tolist()
+    return np.array(pic_data.tolist())
 
 
 def run_video_model(model_name,
