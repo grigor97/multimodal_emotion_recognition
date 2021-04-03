@@ -29,11 +29,11 @@ def run_video_model(model_name,
     test = load_pickle(test_pkl)
     # loading datasets
     audio_train = train['train_audio_data']
-    pic_train = np.transpose(train['train_pic_data'], (0, 2, 3, 1))
+    pic_train = np.transpose(np.asarray(train['train_pic_data']), (0, 2, 3, 1))
     labels_train = train['train_label_data']
 
     audio_test = test['test_audio_data']
-    pic_test = np.transpose(test['test_pic_data'], (0, 2, 3, 1))
+    pic_test = np.transpose(np.asarray(test['test_pic_data']), (0, 2, 3, 1))
     labels_test = test['test_label_data']
 
     print("shapes of train is {}, {} and shape of label is {}".format(audio_train.shape,
