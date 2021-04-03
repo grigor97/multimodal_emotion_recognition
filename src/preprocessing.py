@@ -228,6 +228,7 @@ def clip_video(video_path, audio_save_path, start_time, end_time, save_path):
         )
 
     audio_path = video_path.split('.')[0] + '.wav'
+    print(audio_path)
     audio = AudioFileClip(audio_path)
     sub_audio = audio.subclip(start_time, end_time)
     sub_audio.write_audiofile(audio_save_path)
