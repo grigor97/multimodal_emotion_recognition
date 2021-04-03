@@ -234,6 +234,10 @@ def iemocap_clip_video(video_path, audio_save_path, start_time, end_time, save_p
     del sub_video.reader
     del video
     del sub_video
+    del audio.reader
+    del sub_audio.reader
+    del audio
+    del sub_audio
 
     return save_path
 
