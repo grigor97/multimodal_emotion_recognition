@@ -376,9 +376,6 @@ def prepare_one_video(video_path, save_data_path):
     video = VideoFileClip(video_path)
     video_length = video.duration
 
-    # del video.reader
-    del video
-
     paths = []
     cnt = 0
     start = 0
@@ -403,6 +400,9 @@ def prepare_one_video(video_path, save_data_path):
 
         start = start + ONE_CLIP_LENGTH - OVERLAP
         cnt += 1
+
+    # del video.reader
+    del video
 
     return paths  # pictures paths and npy file paths which is audio features
 
