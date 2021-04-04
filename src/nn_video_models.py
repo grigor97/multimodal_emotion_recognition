@@ -119,25 +119,29 @@ def create_video_cnn_model(optimizer, audio_dim, pic_shape=(50, 50, 20), output_
     # audio network part
     audio_input = Input(shape=(audio_dim, 1), name='audio_input')
     audio_x = Conv1D(128, 8, padding='same', activation=activations.relu)(audio_input)
+
     audio_x = Conv1D(128, 8, padding='same')(audio_x)
     audio_x = BatchNormalization()(audio_x)
     audio_x = Activation(activations.relu)(audio_x)
-    audio_x = Dropout(0.25)(audio_x)
+    # audio_x = Dropout(0.25)(audio_x)
     audio_x = MaxPooling1D(pool_size=8)(audio_x)
 
     audio_x = Conv1D(64, 8, padding='same')(audio_x)
-    audio_x = Activation(activations.relu)(audio_x)
-
-    audio_x = Conv1D(64, 8, padding='same')(audio_x)
-    audio_x = Activation(activations.relu)(audio_x)
-
-    audio_x = Conv1D(64, 8, padding='same')(audio_x)
+    audio_x = BatchNormalization()(audio_x)
     audio_x = Activation(activations.relu)(audio_x)
 
     audio_x = Conv1D(64, 8, padding='same')(audio_x)
     audio_x = BatchNormalization()(audio_x)
     audio_x = Activation(activations.relu)(audio_x)
-    audio_x = Dropout(0.25)(audio_x)
+
+    # audio_x = Conv1D(64, 8, padding='same')(audio_x)
+    # audio_x = BatchNormalization()(audio_x)
+    # audio_x = Activation(activations.relu)(audio_x)
+
+    audio_x = Conv1D(64, 8, padding='same')(audio_x)
+    audio_x = BatchNormalization()(audio_x)
+    audio_x = Activation(activations.relu)(audio_x)
+    # audio_x = Dropout(0.25)(audio_x)
     audio_x = MaxPooling1D(pool_size=8)(audio_x)
 
     audio_x = Conv1D(32, 8, padding='same')(audio_x)
@@ -152,14 +156,22 @@ def create_video_cnn_model(optimizer, audio_dim, pic_shape=(50, 50, 20), output_
 
     # pictures network part
     pic_input = Input(shape=pic_shape, name='pic_input')
+
     pic_x = Conv2D(16, kernel_size=(3, 3), padding="same")(pic_input)
     pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
     pic_x = MaxPool2D()(pic_x)
-    pic_x = Conv2D(8, kernel_size=(3, 3), padding="same")(pic_input)
+
+    pic_x = Conv2D(8, kernel_size=(3, 3), padding="same")(pic_x)
     pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
     pic_x = MaxPool2D()(pic_x)
+
+    pic_x = Conv2D(8, kernel_size=(3, 3), padding="same")(pic_x)
+    pic_x = BatchNormalization()(pic_x)
+    pic_x = Activation(activations.relu)(pic_x)
+    pic_x = MaxPool2D()(pic_x)
+
     pic_x = Flatten()(pic_x)
     pic_x = Dense(32, activation='relu')(pic_x)
     # end of pictures network part
