@@ -58,7 +58,7 @@ def main(args):
                                       continue_at=1,
                                       optimizer=opt,
                                       lr=lr,
-                                      batch_size=64,
+                                      batch_size=32,
                                       num_epochs=num_epochs)
 
                 if best_acc < acc:
