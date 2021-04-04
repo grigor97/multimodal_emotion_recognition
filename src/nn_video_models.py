@@ -1,5 +1,4 @@
 import os
-import numpy as np
 
 import tensorflow as tf
 from tensorflow.keras import activations
@@ -8,43 +7,20 @@ from tensorflow.keras.utils import to_categorical
 from tensorflow.keras import Model
 
 from utils.nn_utils import *
-from utils.utils import *
 
 
 def run_video_model(model_name,
-                    cfg,
+                    train_data,
+                    test_data,
+                    logs_path,
                     restore,
                     continue_at,
                     optimizer,
                     lr,
                     batch_size,
-                    num_epochs
-                    ):
-    # tf.random.set_seed(random_seed)
-    logs_path = cfg['logs']['logs_path']
-    train_pkl = cfg['data']['train_pkl']
-    test_pkl = cfg['data']['test_pkl']
-
-    train = load_pickle(train_pkl)
-    test = load_pickle(test_pkl)
-    # loading datasets
-    audio_train = train['train_audio_data']
-    audio_train = np.array(audio_train)
-    pic_train = train['train_pic_data']
-    labels_train = train['train_label_data']
-
-    audio_test = test['test_audio_data']
-    audio_test = np.array(audio_test)
-    pic_test = test['test_pic_data']
-    labels_test = test['test_label_data']
-
-    print("shapes of train is {}, {} and shape of label is {}".format(audio_train.shape,
-                                                                      pic_train.shape,
-                                                                      labels_train.shape))
-    print("shapes of test is {}, {} and shape of label is {}".format(audio_test.shape,
-                                                                     pic_test.shape,
-                                                                     labels_test.shape))
-
+                    num_epochs):
+    audio_train, pic_train, labels_train = train_data
+    audio_test, pic_test, labels_test = test_data
     labels_train_y = to_categorical(labels_train)
     labels_test_y = to_categorical(labels_test)
 
@@ -204,4 +180,3 @@ def create_video_cnn_model(optimizer, audio_dim, pic_shape=(50, 50, 20), output_
     )
 
     return model
-

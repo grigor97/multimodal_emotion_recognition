@@ -1,4 +1,6 @@
+import numpy as np
 import argparse
+from utils.utils import *
 from src.nn_video_models import *
 
 
@@ -11,7 +13,34 @@ def parse_args():
 
 def main(args):
     config = load_cfg(args.config)
+
+    # tf.random.set_seed(random_seed)
     logs_path = config['logs']['logs_path']
+    train_pkl = config['data']['train_pkl']
+    test_pkl = config['data']['test_pkl']
+
+    train = load_pickle(train_pkl)
+    test = load_pickle(test_pkl)
+    # loading datasets
+    audio_train = train['train_audio_data']
+    audio_train = np.array(audio_train)
+    pic_train = train['train_pic_data']
+    labels_train = train['train_label_data']
+
+    audio_test = test['test_audio_data']
+    audio_test = np.array(audio_test)
+    pic_test = test['test_pic_data']
+    labels_test = test['test_label_data']
+
+    print("shapes of train is {}, {} and shape of label is {}".format(audio_train.shape,
+                                                                      pic_train.shape,
+                                                                      labels_train.shape))
+    print("shapes of test is {}, {} and shape of label is {}".format(audio_test.shape,
+                                                                     pic_test.shape,
+                                                                     labels_test.shape))
+
+    train_data = (audio_train, pic_train, labels_train)
+    test_data = (audio_test, pic_test, labels_test)
 
     num_epochs = 100
     opts = ['SGD', 'RMSprop', 'Adam']
@@ -21,8 +50,16 @@ def main(args):
     for model_name in model_names:
         for opt in opts:
             for lr in lrs:
-                acc = run_video_model(model_name, config, restore=False, continue_at=1, optimizer=opt, lr=lr,
-                                      batch_size=64, num_epochs=num_epochs)
+                acc = run_video_model(model_name,
+                                      train_data,
+                                      test_data,
+                                      logs_path,
+                                      restore=False,
+                                      continue_at=1,
+                                      optimizer=opt,
+                                      lr=lr,
+                                      batch_size=64,
+                                      num_epochs=num_epochs)
 
                 if best_acc < acc:
                     best_acc = acc
