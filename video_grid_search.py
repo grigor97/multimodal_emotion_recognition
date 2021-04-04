@@ -1,6 +1,5 @@
 import argparse
-from utils.utils import *
-from src.nn_audio_models import *
+from src.nn_video_models import *
 
 
 def parse_args():
@@ -14,16 +13,16 @@ def main(args):
     config = load_cfg(args.config)
     logs_path = config['logs']['logs_path']
 
-    num_epochs = 200
+    num_epochs = 100
     opts = ['SGD', 'RMSprop', 'Adam']
-    lrs = [0.01, 0.03, 0.001, 0.003, 0.0001, 0.0003, 0.00001, 0.00003]
-    model_names = ['audio_cnn', 'audio_lstm', 'audio_blstm', 'audio_stacked_lstm']
+    lrs = [0.3, 0.01, 0.03, 0.001, 0.003, 0.0001, 0.0003, 0.00001, 0.00003, 0.000001]
+    model_names = ['video_cnn']
     best_acc, best_optimizer, best_lr, best_batch_size, best_model_name = 0, None, None, None, None
     for model_name in model_names:
         for opt in opts:
             for lr in lrs:
-                acc = run_model(model_name, config, restore=False, continue_at=1, optimizer=opt, lr=lr,
-                                batch_size=64, num_epochs=num_epochs)
+                acc = run_video_model(model_name, config, restore=False, continue_at=1, optimizer=opt, lr=lr,
+                                      batch_size=64, num_epochs=num_epochs)
 
                 if best_acc < acc:
                     best_acc = acc
@@ -32,7 +31,7 @@ def main(args):
                     best_batch_size = 64
                     best_model_name = model_name
 
-                    with open(logs_path + 'audio_best_model_params.txt', 'a+') as f:
+                    with open(logs_path + 'video_best_model_params.txt', 'a+') as f:
                         f.write("best accuracy is ")
                         f.write(str(best_acc) + ',   ')
                         f.write("best lr is ")
