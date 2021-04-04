@@ -134,9 +134,9 @@ def create_video_cnn_model(optimizer, audio_dim, pic_shape=(50, 50, 20), output_
     audio_x = BatchNormalization()(audio_x)
     audio_x = Activation(activations.relu)(audio_x)
 
-    # audio_x = Conv1D(64, 8, padding='same')(audio_x)
-    # audio_x = BatchNormalization()(audio_x)
-    # audio_x = Activation(activations.relu)(audio_x)
+    audio_x = Conv1D(64, 8, padding='same')(audio_x)
+    audio_x = BatchNormalization()(audio_x)
+    audio_x = Activation(activations.relu)(audio_x)
 
     audio_x = Conv1D(64, 8, padding='same')(audio_x)
     audio_x = BatchNormalization()(audio_x)
@@ -158,6 +158,11 @@ def create_video_cnn_model(optimizer, audio_dim, pic_shape=(50, 50, 20), output_
     pic_input = Input(shape=pic_shape, name='pic_input')
 
     pic_x = Conv2D(16, kernel_size=(3, 3), padding="same")(pic_input)
+    # pic_x = BatchNormalization()(pic_x)
+    pic_x = Activation(activations.relu)(pic_x)
+    pic_x = MaxPool2D()(pic_x)
+
+    pic_x = Conv2D(32, kernel_size=(3, 3), padding="same")(pic_x)
     # pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
     pic_x = MaxPool2D()(pic_x)
