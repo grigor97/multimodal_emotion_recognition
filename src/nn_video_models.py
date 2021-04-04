@@ -13,12 +13,12 @@ from utils.utils import *
 
 def run_video_model(model_name,
                     cfg,
-                    restore=False,
-                    continue_at=1,
-                    optimizer='Adam',
-                    lr=1e-3,
-                    batch_size=64,
-                    num_epochs=100
+                    restore,
+                    continue_at,
+                    optimizer,
+                    lr,
+                    batch_size,
+                    num_epochs
                     ):
     # tf.random.set_seed(random_seed)
     logs_path = cfg['logs']['logs_path']
