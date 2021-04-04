@@ -173,7 +173,8 @@ def create_video_cnn_model(optimizer, audio_dim, pic_shape=(50, 50, 20), output_
 
     model = Model(
         inputs=[audio_input, pic_input],
-        outputs=[out]
+        outputs=[out],
+        metrics=['accuracy']
     )
 
     # tf.keras.utils.plot_model(model, show_shapes=True)
