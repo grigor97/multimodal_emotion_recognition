@@ -28,8 +28,8 @@ test_x, pic_test, test_y = test_data
 pic_tr = pic_train.max(axis=3).mean(axis=2).reshape((pic_train.shape[0], 50, 1))
 pic_te = pic_test.max(axis=3).mean(axis=2).reshape((pic_test.shape[0], 50, 1))
 
-train_x = np.vstack([train_x, pic_tr])
-test_x = np.vstack([test_x, pic_te])
+train_x = np.hstack([train_x, pic_tr])
+test_x = np.hstack([test_x, pic_te])
 
 print("shape of train_x is {} and shape of train_y is {}".format(train_x.shape, train_y.shape))
 print("shape of test_x is {} and shape of test_y is {}".format(test_x.shape, test_y.shape))
