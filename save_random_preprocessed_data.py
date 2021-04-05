@@ -32,9 +32,9 @@ def main(args):
     train_samples_labels = labels_train[train_idx]
     train_samples = pic_train[train_idx, :, :, 9]
 
-    test_samples_audio = pic_test[test_idx, :]
+    test_samples_audio = audio_test[test_idx, :]
     test_samples_labels = labels_test[test_idx]
-    test_samples = audio_test[test_idx, :, :, 9]
+    test_samples = pic_test[test_idx, :, :, 9]
 
     samples_path = logs_path + 'samples/'
     if not os.path.exists(samples_path):
