@@ -25,8 +25,8 @@ def main(args):
     train_length = pic_train.shape[0]
     test_length = pic_test.shape[0]
 
-    train_idx = np.random.randint(train_length, num)
-    test_idx = np.random.randint(test_length, num)
+    train_idx = np.random.randint(train_length, size=num)
+    test_idx = np.random.randint(test_length, size=num)
 
     train_samples = pic_train[train_idx, :, :, 9]
     test_samples = pic_test[test_idx, :, :, 9]
