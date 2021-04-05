@@ -21,7 +21,7 @@ def main(args):
     num_epochs = 100
     opts = ['SGD', 'RMSprop', 'Adam']
     lrs = [0.3, 0.01, 0.03, 0.001, 0.003, 0.0001, 0.0003, 0.00001, 0.00003, 0.000001, 0.000000001]
-    model_names = ['video_cnn', 'video_batchnorm_cnn', 'video_big_cnn']
+    model_names = ['video_batchnorm_cnn', 'video_big_cnn', 'video_cnn']
     best_acc, best_optimizer, best_lr, best_batch_size, best_model_name = 0, None, None, None, None
     for model_name in model_names:
         for opt in opts:
