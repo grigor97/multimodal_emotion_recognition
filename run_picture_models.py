@@ -1,5 +1,5 @@
 import argparse
-from src.nn_video_models import *
+from src.nn_picture_models import *
 
 
 def parse_args():
@@ -24,16 +24,16 @@ def main(args):
     logs_path = config['logs']['logs_path']
     train_data, test_data = load_video_data(config)
 
-    run_video_model(model_name,
-                    train_data,
-                    test_data,
-                    logs_path,
-                    restore=args.restore,
-                    continue_at=args.continue_at,
-                    optimizer=args.optimizer,
-                    lr=args.learning_rate,
-                    batch_size=args.batch_size,
-                    num_epochs=args.iterations)
+    run_picture_model(model_name,
+                      train_data,
+                      test_data,
+                      logs_path,
+                      restore=args.restore,
+                      continue_at=args.continue_at,
+                      optimizer=args.optimizer,
+                      lr=args.learning_rate,
+                      batch_size=args.batch_size,
+                      num_epochs=args.iterations)
 
 
 if __name__ == '__main__':

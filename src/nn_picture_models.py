@@ -9,16 +9,16 @@ from tensorflow.keras import Model
 from utils.nn_utils import *
 
 
-def run_video_model(model_name,
-                    train_data,
-                    test_data,
-                    logs_path,
-                    restore,
-                    continue_at,
-                    optimizer,
-                    lr,
-                    batch_size,
-                    num_epochs):
+def run_picture_model(model_name,
+                      train_data,
+                      test_data,
+                      logs_path,
+                      restore,
+                      continue_at,
+                      optimizer,
+                      lr,
+                      batch_size,
+                      num_epochs):
     """
     Runs model for picture data
     :param model_name: name of the model
