@@ -69,7 +69,7 @@ def run_model(model_name,
                               callbacks=[cp_callback])
 
     # Evaluate the model
-    loss, acc = model.evaluate(audio_train, labels_test_y)
+    loss, acc = model.evaluate(audio_test, labels_test_y)
     print("{} model test accuracy: {:5.2f}%".format(model_name, 100 * acc))
     print("{} model test loss: {:5.2f}".format(model_name, loss))
 
