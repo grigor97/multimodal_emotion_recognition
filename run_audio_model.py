@@ -1,5 +1,4 @@
 import argparse
-from utils.utils import *
 from src.nn_audio_models import *
 
 
@@ -22,8 +21,13 @@ def main(args):
     config = load_cfg(args.config)
     model_name = args.model
 
+    logs_path = config['logs']['logs_path']
+    train_data, test_data = load_audio_data(config)
+
     run_model(model_name,
-              config,
+              train_data,
+              test_data,
+              logs_path,
               restore=args.restore,
               continue_at=args.continue_at,
               optimizer=args.optimizer,

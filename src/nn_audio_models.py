@@ -1,5 +1,4 @@
 import os
-import numpy as np
 from utils.nn_utils import *
 
 import tensorflow as tf
@@ -9,39 +8,23 @@ from tensorflow.keras.utils import to_categorical
 
 
 def run_model(model_name,
-              cfg,
+              train_data,
+              test_data,
+              logs_path,
               restore=False,
               continue_at=1,
               optimizer='Adam',
               lr=1e-3,
               batch_size=64,
               num_epochs=100):
+    audio_train, labels_train = train_data
+    audio_test, labels_test = test_data
+    labels_train_y = to_categorical(labels_train)
+    labels_test_y = to_categorical(labels_test)
 
-    # tf.random.set_seed(random_seed)
-    logs_path = cfg['logs']['logs_path']
+    audio_train_dim = audio_train.shape[1]
+    output_dim = labels_train_y.shape[1]
 
-    # loading datasets
-    train_x = np.load(cfg['data']['train_xp'])
-    train_y = np.load(cfg['data']['train_yp'])
-    test_x = np.load(cfg['data']['test_xp'])
-    test_y = np.load(cfg['data']['test_yp'])
-
-    # normalizing datasets
-    train_mean = train_x.mean(axis=0)
-    train_x -= train_mean
-    test_x -= train_mean
-    train_x / train_x.sum(axis=1).reshape((train_x.shape[0], 1))
-    test_x / test_x.sum(axis=1).reshape((test_x.shape[0], 1))
-
-    print("shape of train_x is {} and shape of train_y is {}".format(train_x.shape, train_y.shape))
-    print("shape of test_x is {} and shape of test_y is {}".format(test_x.shape, test_y.shape))
-
-    labels_train_y = to_categorical(train_y)
-    labels_test_y = to_categorical(test_y)
-
-    # opt = keras.optimizers.SGD(lr=0.0001, momentum=0.0, decay=0.0, nesterov=False)
-    # opt = keras.optimizers.Adam(lr=0.0001)
-    # opt = tf.keras.optimizers.RMSprop(lr=0.00001, decay=1e-6)
     if optimizer == 'Adam':
         opt = tf.keras.optimizers.Adam(lr=lr)
     elif optimizer == 'RMSprop':
@@ -52,15 +35,14 @@ def run_model(model_name,
         print("sorry your optimizer is not correct!")
         return
 
-    print("train and test shapes are {} {}".format(train_x.shape, test_x.shape))
     if model_name == 'audio_cnn':
-        model = create_audio_cnn_model(opt, train_x.shape[1], 7)
+        model = create_audio_cnn_model(opt, audio_train_dim, output_dim)
     elif model_name == 'audio_lstm':
-        model = create_audio_lstm_model(opt, train_x.shape[1], 7)
+        model = create_audio_lstm_model(opt, audio_train_dim, output_dim)
     elif model_name == 'audio_blstm':
-        model = create_audio_blstm_model(opt, train_x.shape[1], 7)
+        model = create_audio_blstm_model(opt, audio_train_dim, output_dim)
     elif model_name == 'audio_stacked_lstm':
-        model = create_audio_stacked_lstm_model(opt, train_x.shape[1], 7)
+        model = create_audio_stacked_lstm_model(opt, audio_train_dim, output_dim)
     else:
         print("sorry you do not have such a {} model".format(model_name))
         return
@@ -79,7 +61,7 @@ def run_model(model_name,
         model.load_weights(checkpoint_path)
         num_epochs = num_epochs - continue_at + 1
 
-    model_history = model.fit(np.expand_dims(train_x, -1),
+    model_history = model.fit(audio_train,
                               labels_train_y,
                               batch_size=batch_size,
                               epochs=num_epochs,
@@ -87,7 +69,7 @@ def run_model(model_name,
                               callbacks=[cp_callback])
 
     # Evaluate the model
-    loss, acc = model.evaluate(np.expand_dims(test_x, -1), labels_test_y)
+    loss, acc = model.evaluate(audio_train, labels_test_y)
     print("{} model test accuracy: {:5.2f}%".format(model_name, 100 * acc))
     print("{} model test loss: {:5.2f}".format(model_name, loss))
 
@@ -126,7 +108,7 @@ def create_audio_cnn_model(optimizer, train_dim, output_dim=7):
     model.add(BatchNormalization())
     model.add(Activation('relu'))
     model.add(Dropout(0.25))
-    model.add(MaxPooling1D(pool_size=(8)))
+    model.add(MaxPooling1D(pool_size=8))
     model.add(Conv1D(64, 8, padding='same'))
     model.add(Activation('relu'))
     model.add(Conv1D(64, 8, padding='same'))
@@ -138,7 +120,7 @@ def create_audio_cnn_model(optimizer, train_dim, output_dim=7):
     model.add(BatchNormalization())
     model.add(Activation('relu'))
     model.add(Dropout(0.25))
-    model.add(MaxPooling1D(pool_size=(8)))
+    model.add(MaxPooling1D(pool_size=8))
 
     model.add(Conv1D(32, 8, padding='same'))
     model.add(Activation('relu'))

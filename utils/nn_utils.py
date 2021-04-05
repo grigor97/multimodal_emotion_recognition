@@ -38,8 +38,17 @@ def nn_save_model_plots(model_history, save_path):
     plt.savefig(save_path + "/accuracy.png")
 
 
+def normalize_data(audio_train, audio_test):
+    train_mean = audio_train.mean(axis=0)
+    audio_train -= train_mean
+    audio_test -= train_mean
+    audio_train / audio_train.sum(axis=1).reshape((audio_train.shape[0], 1))
+    audio_test / audio_test.sum(axis=1).reshape((audio_test.shape[0], 1))
+
+    return audio_train, audio_test
+
+
 def load_data(config):
-    # tf.random.set_seed(random_seed)
     train_pkl = config['data']['train_pkl']
     test_pkl = config['data']['test_pkl']
 
@@ -56,6 +65,8 @@ def load_data(config):
     pic_test = test['test_pic_data']
     labels_test = test['test_label_data']
 
+    audio_train, audio_test = normalize_data(audio_train, audio_test)
+
     print("shapes of train is {}, {} and shape of label is {}".format(audio_train.shape,
                                                                       pic_train.shape,
                                                                       labels_train.shape))
@@ -70,12 +81,12 @@ def load_data(config):
 
 
 def load_audio_data(config):
-    # tf.random.set_seed(random_seed)
     train_pkl = config['data']['train_pkl']
     test_pkl = config['data']['test_pkl']
 
     train = load_pickle(train_pkl)
     test = load_pickle(test_pkl)
+
     # loading datasets
     audio_train = train['train_audio_data']
     # audio_train = np.array(audio_train)
@@ -84,6 +95,8 @@ def load_audio_data(config):
     audio_test = test['test_audio_data']
     # audio_test = np.array(audio_test)
     labels_test = test['test_label_data']
+
+    audio_train, audio_test = normalize_data(audio_train, audio_test)
 
     print("shapes of train is {} and shape of label is {}".format(audio_train.shape,
                                                                   labels_train.shape))
