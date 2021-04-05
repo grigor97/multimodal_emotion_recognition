@@ -1,22 +1,20 @@
-import numpy as np
 import random
 from lightgbm import LGBMClassifier
 from hyperopt import fmin, tpe, hp, Trials
 from sklearn.model_selection import KFold, cross_val_score
+from utils.nn_utils import *
 
 
-train_xp = "../data/preprocessed_data/train_data/train_x.npy"
-train_yp = "../data/preprocessed_data/train_data/train_y.npy"
-test_xp = "../data/preprocessed_data/train_data/test_x.npy"
-test_yp = "../data/preprocessed_data/train_data/test_y.npy"
+config = load_cfg('configs/config_paths.yml')
 
-train_x = np.load(train_xp)
-train_y = np.load(train_yp)
-test_x = np.load(test_xp)
-test_y = np.load(test_yp)
+logs_path = config['logs']['logs_path']
+train_data, test_data = load_video_data(config)
 
-data_x = np.vstack([train_x, test_x])
-data_y = np.hstack([train_y, test_y])
+audio_train, pic_train, labels_train = train_data
+audio_test, pic_test, labels_test = test_data
+
+data_x = np.vstack([audio_train, audio_test])
+data_y = np.hstack([labels_train, labels_test])
 data = np.hstack([data_x, data_y.reshape(-1, 1)])
 print("shape of data_x is {} and shape of data_y is {}, data shape {}".format(data_x.shape, data_y.shape, data.shape))
 
@@ -42,7 +40,7 @@ num_folds = 5
 kf = KFold(n_splits=num_folds, shuffle=True, random_state=random_state)
 
 
-def gb_mse_cv(params, random_state=random_state, cv=kf, X=train_x, y=train_y):
+def gb_mse_cv(params, cv=kf, X=train_x, y=train_y):
     # the function gets a set of variable parameters in "params"
     params = {'n_estimators': int(params['n_estimators']),
               'learning_rate': params['learning_rate'],

@@ -1,10 +1,10 @@
-import numpy as np
 from lightgbm import LGBMClassifier
 from hyperopt import fmin, tpe, hp, Trials
 from sklearn.model_selection import KFold, cross_val_score
 
-import matplotlib.pyplot as plt
 from sklearn.metrics import plot_confusion_matrix
+
+from utils.nn_utils import *
 
 
 def save_cm(cm, path):
@@ -15,60 +15,14 @@ def save_cm(cm, path):
     plt.xlabel('Predicated Label')
     plt.savefig(path)
 
-# final_emos = {'sad': 0, 'neu': 1, 'hap': 2, 'ang': 3, 'fru': 4, 'exc': 5, 'oth': 6}
-#
-# train_paths = "../data/preprocessed_data/train_data/final_train_paths.csv"
-# test_paths = "../data/preprocessed_data/test_data/final_test_paths.csv"
-#
-# train_ps = pd.read_csv(train_paths)
-# test_ps = pd.read_csv(test_paths)
-# train_ps.dropna(inplace=True)
-# test_ps.dropna(inplace=True)
-#
-#
-# def get_audio_features(df_paths):
-#     x = np.array([]).reshape((0, 162))
-#     y = []
-#     for i, row in df_paths.iterrows():
-#         # print(row[1])
-#         npy_path = row[1]
-#         lb = final_emos[row[2]]
-#         label = [lb, lb, lb, lb]
-#         features = np.load(npy_path)
-#
-#         x = np.vstack([x, features])
-#         y.extend(label)
-#
-#     y = np.array(y)
-#     return x, y
-#
-#
-# train_x, train_y = get_audio_features(train_ps)
-# test_x, test_y = get_audio_features(test_ps)
 
+config = load_cfg('configs/config_paths.yml')
 
-train_xp = "../data/preprocessed_data/train_data/train_x.npy"
-train_yp = "../data/preprocessed_data/train_data/train_y.npy"
-test_xp = "../data/preprocessed_data/train_data/test_x.npy"
-test_yp = "../data/preprocessed_data/train_data/test_y.npy"
-# np.save(train_xp, train_x)
-# np.save(train_yp, train_y)
-# np.save(test_xp, test_x)
-# np.save(test_yp, test_y)
+logs_path = config['logs']['logs_path']
+train_data, test_data = load_video_data(config)
 
-
-# loading datasets
-train_x = np.load(train_xp)
-train_y = np.load(train_yp)
-test_x = np.load(test_xp)
-test_y = np.load(test_yp)
-
-# normalizing datasets
-train_mean = train_x.mean(axis=0)
-train_x -= train_mean
-test_x -= train_mean
-train_x/train_x.sum(axis=1).reshape((train_x.shape[0], 1))
-test_x/test_x.sum(axis=1).reshape((test_x.shape[0], 1))
+train_x, pic_train, train_y = train_data
+test_x, pic_test, test_y = test_data
 
 print("shape of train_x is {} and shape of train_y is {}".format(train_x.shape, train_y.shape))
 print("shape of test_x is {} and shape of test_y is {}".format(test_x.shape, test_y.shape))
@@ -78,7 +32,7 @@ num_folds = 5
 kf = KFold(n_splits=num_folds, shuffle=True, random_state=random_state)
 
 
-def gb_mse_cv(params, random_state=random_state, cv=kf, X=train_x, y=train_y):
+def gb_mse_cv(params, cv=kf, X=train_x, y=train_y):
     # the function gets a set of variable parameters in "param"
     params = {'n_estimators': int(params['n_estimators']),
               'learning_rate': params['learning_rate'],
