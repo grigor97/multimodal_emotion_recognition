@@ -22,7 +22,8 @@ def main(args):
     model_name = args.model
 
     logs_path = config['logs']['logs_path']
-    train_data, test_data = load_audio_data(config)
+    # train_data, test_data = load_audio_data(config)
+    train_data, test_data = load_subset_labels_data(config)
 
     run_model(model_name,
               train_data,

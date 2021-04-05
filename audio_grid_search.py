@@ -12,6 +12,8 @@ def parse_args():
 def main(args):
     config = load_cfg(args.config)
     logs_path = config['logs']['logs_path']
+    # train_data, test_data = load_audio_data(config)
+    train_data, test_data = load_subset_labels_data(config)
 
     num_epochs = 200
     opts = ['SGD', 'RMSprop', 'Adam']
@@ -21,8 +23,8 @@ def main(args):
     for model_name in model_names:
         for opt in opts:
             for lr in lrs:
-                acc = run_model(model_name, config, restore=False, continue_at=1, optimizer=opt, lr=lr,
-                                batch_size=64, num_epochs=num_epochs)
+                acc = run_model(model_name, train_data, test_data, logs_path, restore=False,
+                                continue_at=1, optimizer=opt, lr=lr, batch_size=64, num_epochs=num_epochs)
 
                 if best_acc < acc:
                     best_acc = acc
