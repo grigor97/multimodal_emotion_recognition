@@ -129,7 +129,7 @@ def load_audio_data(config):
 FINALl_EMOTIONS = {'sad': 0, 'neu': 1, 'hap': 2, 'ang': 3, 'fru': 4, 'exc': 5, 'oth': 6}
 
 
-def load_subset_labels_data(config, labels=('hap', 'sad', 'ang')):
+def load_subset_labels_data(config, labels=('sad', 'neu', 'hap', 'ang')):
     """
     Loads train and test data for video models
     :param labels: subset of all labels
@@ -156,6 +156,7 @@ def load_subset_labels_data(config, labels=('hap', 'sad', 'ang')):
 
     sub_tr_idx = np.fromiter((i for i, x in enumerate(labels_train) if x in lbs), dtype=labels_train.dtype)
     sub_te_idx = np.fromiter((i for i, x in enumerate(labels_test) if x in lbs), dtype=labels_train.dtype)
+
     audio_train = audio_train[sub_tr_idx]
     pic_train = pic_train[sub_tr_idx]
     labels_train = labels_train[sub_tr_idx]
