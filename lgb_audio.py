@@ -47,7 +47,7 @@ def gb_mse_cv(params, cv=kf, tr_x=train_x, tr_y=train_y):
     return score
 
 
-n_iter = 10
+n_iter = 100
 # possible values of parameters
 space = {'n_estimators': hp.quniform('n_estimators', 20, 5000, 400),
          'max_depth': hp.quniform('max_depth', 10, 150, 20),
