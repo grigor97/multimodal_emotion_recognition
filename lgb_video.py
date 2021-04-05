@@ -25,8 +25,8 @@ train_data, test_data = load_subset_labels_data(config)
 train_x, pic_train, train_y = train_data
 test_x, pic_test, test_y = test_data
 
-pic_tr = pic_train.max(axis=3).mean(axis=2).reshape((pic_train.shape[0], 50))
-pic_te = pic_test.max(axis=3).mean(axis=2).reshape((pic_test.shape[0], 50))
+pic_tr = pic_train.max(axis=3).reshape((pic_train.shape[0], 2500))
+pic_te = pic_test.max(axis=3).reshape((pic_test.shape[0], 2500))
 
 train_x = np.hstack([train_x, pic_tr])
 test_x = np.hstack([test_x, pic_te])
