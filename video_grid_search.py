@@ -14,11 +14,12 @@ def main(args):
 
     # tf.random.set_seed(random_seed)
     logs_path = config['logs']['logs_path']
-    train_data, test_data = load_video_data(config)
+    # train_data, test_data = load_video_data(config)
+    train_data, test_data = load_subset_labels_data(config)
 
     num_epochs = 100
     opts = ['SGD', 'RMSprop', 'Adam']
-    lrs = [0.3, 0.01, 0.03, 0.001, 0.003, 0.0001, 0.0003, 0.00001, 0.00003, 0.000001]
+    lrs = [0.3, 0.01, 0.03, 0.001, 0.003, 0.0001, 0.0003, 0.00001, 0.00003, 0.000001, 0.000000001]
     model_names = ['video_cnn']
     best_acc, best_optimizer, best_lr, best_batch_size, best_model_name = 0, None, None, None, None
     for model_name in model_names:
