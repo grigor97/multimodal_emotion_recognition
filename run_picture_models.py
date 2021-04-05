@@ -3,7 +3,7 @@ from src.nn_video_models import *
 
 
 def parse_args():
-    parser = argparse.ArgumentParser("train video model, you can run following models: video_cnn, ")
+    parser = argparse.ArgumentParser("train video model, you can run following models: picture_cnn, ")
     parser.add_argument('-c', '--config', type=str, default='configs/config_paths.yml')
     parser.add_argument('-m', '--model', type=str, default='picture_cnn')
     parser.add_argument('-r', '--restore', type=bool, default=False)

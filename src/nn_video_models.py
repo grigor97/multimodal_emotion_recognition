@@ -51,7 +51,7 @@ def run_video_model(model_name,
         print("sorry your optimizer is not correct!")
         return
 
-    if model_name == 'video_cnn':
+    if model_name == 'picture_cnn':
         model = create_video_cnn_model(opt, audio_train.shape[1], pic_train[0].shape, 7)
     else:
         print("sorry you do not have such a {} model".format(model_name))
