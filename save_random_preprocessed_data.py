@@ -48,11 +48,11 @@ def main(args):
         te_im.save(samples_path + str(i) + 'test.jpeg')
 
         with open(samples_path + str(i) + 'train_audio.txt', 'w') as f:
-            f.write("label is {}".format(train_samples_labels[i]))
+            f.write("label is {} \n".format(train_samples_labels[i]))
             f.write("audio data is \n {}".format(train_samples_audio[i]))
 
         with open(samples_path + str(i) + 'test_audio.txt', 'w') as f:
-            f.write("label is {}".format(test_samples_labels[i]))
+            f.write("label is {} \n".format(test_samples_labels[i]))
             f.write("audio data is \n {}".format(test_samples_audio[i]))
 
 
