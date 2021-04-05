@@ -56,6 +56,11 @@ def normalize_data(audio_train, audio_test):
 
 
 def load_video_data(config):
+    """
+    Loads train and test data for video models
+    :param config: configuration file
+    :return: train and test data
+    """
     train_pkl = config['data']['train_pkl']
     test_pkl = config['data']['test_pkl']
 
@@ -88,6 +93,11 @@ def load_video_data(config):
 
 
 def load_audio_data(config):
+    """
+    Loads train and test data for audio models
+    :param config: configuration file
+    :return: train and test data
+    """
     train_pkl = config['data']['train_pkl']
     test_pkl = config['data']['test_pkl']
 

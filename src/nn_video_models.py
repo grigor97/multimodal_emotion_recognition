@@ -19,6 +19,20 @@ def run_video_model(model_name,
                     lr,
                     batch_size,
                     num_epochs):
+    """
+    Runs model for video data
+    :param model_name: name of the model
+    :param train_data: train data
+    :param test_data: test data
+    :param logs_path: path of logs
+    :param restore: restore training  or not
+    :param continue_at: if restore then in which point it should start
+    :param optimizer: optimizer for a model
+    :param lr: learning rate
+    :param batch_size: batch size
+    :param num_epochs: number of epochs
+    :return: accuracy
+    """
     audio_train, pic_train, labels_train = train_data
     audio_test, pic_test, labels_test = test_data
     labels_train_y = to_categorical(labels_train)
@@ -92,6 +106,14 @@ def run_video_model(model_name,
 
 
 def create_video_cnn_model(optimizer, audio_dim, pic_shape=(50, 50, 20), output_dim=7):
+    """
+    Creates cnn model for video data
+    :param optimizer: optimizer for a cnn
+    :param audio_dim: dimension of audio data
+    :param pic_shape: shape of the pictures
+    :param output_dim: dimension of output
+    :return: compiled cnn model
+    """
     # audio network part
     audio_input = Input(shape=(audio_dim, 1), name='audio_input')
     audio_x = Conv1D(128, 8, padding='same', activation=activations.relu)(audio_input)
