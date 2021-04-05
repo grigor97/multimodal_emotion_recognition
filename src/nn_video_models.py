@@ -59,7 +59,7 @@ def run_video_model(model_name,
     elif model_name == 'video_batchnorm_cnn':
         model = create_video_batchnorm_cnn_model(opt, audio_train_dim, pic_train[0].shape, output_dim)
     elif model_name == 'video_big_cnn':
-        model = create_video_cnn_model(opt, audio_train_dim, pic_train[0].shape, output_dim)
+        model = create_video_big_cnn_model(opt, audio_train_dim, pic_train[0].shape, output_dim)
     else:
         print("sorry you do not have such a {} model".format(model_name))
         return
