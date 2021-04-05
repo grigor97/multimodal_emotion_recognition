@@ -8,7 +8,8 @@ from utils.nn_utils import *
 config = load_cfg('configs/config_paths.yml')
 
 logs_path = config['logs']['logs_path']
-train_data, test_data = load_video_data(config)
+# train_data, test_data = load_video_data(config)
+train_data, test_data = load_subset_labels_data(config)
 
 audio_train, pic_train, labels_train = train_data
 audio_test, pic_test, labels_test = test_data
@@ -55,7 +56,7 @@ def gb_mse_cv(params, cv=kf, tr_x=train_x, tr_y=train_y):
     return score
 
 
-n_iter = 100
+n_iter = 10
 # possible values of parameters
 space = {'n_estimators': hp.quniform('n_estimators', 20, 5000, 400),
          'max_depth': hp.quniform('max_depth', 10, 150, 20),

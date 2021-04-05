@@ -19,7 +19,8 @@ def save_cm(cm, path):
 config = load_cfg('configs/config_paths.yml')
 
 logs_path = config['logs']['logs_path']
-train_data, test_data = load_video_data(config)
+# train_data, test_data = load_video_data(config)
+train_data, test_data = load_subset_labels_data(config)
 
 train_x, pic_train, train_y = train_data
 test_x, pic_test, test_y = test_data
@@ -47,7 +48,7 @@ def gb_mse_cv(params, cv=kf, tr_x=train_x, tr_y=train_y):
     return score
 
 
-n_iter = 100
+n_iter = 10
 # possible values of parameters
 space = {'n_estimators': hp.quniform('n_estimators', 20, 5000, 400),
          'max_depth': hp.quniform('max_depth', 10, 150, 20),
