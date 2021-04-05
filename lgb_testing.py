@@ -40,7 +40,7 @@ num_folds = 5
 kf = KFold(n_splits=num_folds, shuffle=True, random_state=random_state)
 
 
-def gb_mse_cv(params, cv=kf, X=train_x, y=train_y):
+def gb_mse_cv(params, cv=kf, tr_x=train_x, tr_y=train_y):
     # the function gets a set of variable parameters in "params"
     params = {'n_estimators': int(params['n_estimators']),
               'learning_rate': params['learning_rate'],
@@ -48,9 +48,9 @@ def gb_mse_cv(params, cv=kf, X=train_x, y=train_y):
               'boosting_type': params['boosting_type'],
               'objective': params['objective'], }
 
-    clf = LGBMClassifier(**params)
+    classifier = LGBMClassifier(**params)
 
-    score = -cross_val_score(clf, X, y, scoring='accuracy', cv=cv).mean()
+    score = -cross_val_score(classifier, tr_x, tr_y, scoring='accuracy', cv=cv).mean()
 
     return score
 
@@ -58,7 +58,7 @@ def gb_mse_cv(params, cv=kf, X=train_x, y=train_y):
 n_iter = 10
 # possible values of parameters
 space = {'n_estimators': hp.quniform('n_estimators', 20, 5000, 400),
-         'max_depth' : hp.quniform('max_depth', 10, 150, 20),
+         'max_depth': hp.quniform('max_depth', 10, 150, 20),
          'learning_rate': hp.loguniform('learning_rate', -5, 0),
          'boosting_type': 'gbdt',  # GradientBoostingDecisionTree
          'objective': 'multiclass',  # Multi-class target feature
@@ -72,7 +72,7 @@ best = fmin(fn=gb_mse_cv,  # function to optimize
             algo=tpe.suggest,  # optimization algorithm, hyperopt will select its parameters automatically
             max_evals=n_iter,  # maximum number of iterations
             trials=trials,  # logging
-            rstate=np.random.RandomState(random_state) # fixing random state for the reproducibility
+            rstate=np.random.RandomState(random_state)  # fixing random state for the reproducibility
             )
 
 
@@ -81,14 +81,11 @@ clf = LGBMClassifier(boosting_type='gbdt', objective='multiclass',
                      max_depth=int(best['max_depth']),
                      n_estimators=int(best['n_estimators']))
 
-
 clf.fit(train_x, train_y)
-preds = clf.predict(train_x)
-train_acc = (train_y.reshape(1, -1) == preds.reshape(1, -1)).sum()/preds.size
+train_acc = clf.score(train_x, train_y)
 print("train accuracy is   ", train_acc)
 
-preds = clf.predict(test_x)
-test_acc = (test_y.reshape(1, -1) == preds.reshape(1, -1)).sum()/preds.size
+test_acc = clf.score(test_x, test_y)
 print("test accuracy is   ", test_acc)
 
 print("best params are {}".format(best))

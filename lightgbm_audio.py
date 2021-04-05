@@ -8,7 +8,7 @@ from utils.nn_utils import *
 
 
 def save_cm(cm, path):
-    fig = plt.figure()
+    plt.figure()
     plt.matshow(cm)
     plt.colorbar()
     plt.ylabel('True Label')
@@ -32,7 +32,7 @@ num_folds = 5
 kf = KFold(n_splits=num_folds, shuffle=True, random_state=random_state)
 
 
-def gb_mse_cv(params, cv=kf, X=train_x, y=train_y):
+def gb_mse_cv(params, cv=kf, tr_x=train_x, tr_y=train_y):
     # the function gets a set of variable parameters in "param"
     params = {'n_estimators': int(params['n_estimators']),
               'learning_rate': params['learning_rate'],
@@ -40,9 +40,9 @@ def gb_mse_cv(params, cv=kf, X=train_x, y=train_y):
               'boosting_type': params['boosting_type'],
               'objective': params['objective'], }
 
-    clf = LGBMClassifier(**params)
+    classifier = LGBMClassifier(**params)
 
-    score = -cross_val_score(clf, X, y, scoring='accuracy', cv=cv).mean()
+    score = -cross_val_score(classifier, tr_x, tr_y, scoring='accuracy', cv=cv).mean()
 
     return score
 
@@ -64,7 +64,7 @@ best = fmin(fn=gb_mse_cv,  # function to optimize
             algo=tpe.suggest,  # optimization algorithm, hyperopt will select its parameters automatically
             max_evals=n_iter,  # maximum number of iterations
             trials=trials,  # logging
-            rstate=np.random.RandomState(random_state) # fixing random state for the reproducibility
+            rstate=np.random.RandomState(random_state)  # fixing random state for the reproducibility
             )
 
 
@@ -75,13 +75,9 @@ clf = LGBMClassifier(boosting_type='gbdt', objective='multiclass',
 
 
 clf.fit(train_x, train_y)
-# preds = clf.predict(train_x)
-# train_acc = (train_y.reshape(1, -1) == preds.reshape(1, -1)).sum()/preds.size
 train_acc = clf.score(train_x, train_y)
 print("train accuracy is   ", train_acc)
 
-# preds = clf.predict(test_x)
-# test_acc = (test_y.reshape(1, -1) == preds.reshape(1, -1)).sum()/preds.size
 test_acc = clf.score(test_x, test_y)
 print("test accuracy is   ", test_acc)
 
