@@ -1,3 +1,4 @@
+import numpy as np
 from utils.utils import *
 import matplotlib.pyplot as plt
 
@@ -39,6 +40,12 @@ def nn_save_model_plots(model_history, save_path):
 
 
 def normalize_data(audio_train, audio_test):
+    """
+    Normalizes dataset with mean zero and variance 1
+    :param audio_train: train data for audio
+    :param audio_test: test data for audio
+    :return: normalized data
+    """
     train_mean = audio_train.mean(axis=0)
     audio_train -= train_mean
     audio_test -= train_mean
@@ -48,7 +55,7 @@ def normalize_data(audio_train, audio_test):
     return audio_train, audio_test
 
 
-def load_data(config):
+def load_video_data(config):
     train_pkl = config['data']['train_pkl']
     test_pkl = config['data']['test_pkl']
 
@@ -103,7 +110,7 @@ def load_audio_data(config):
     print("shapes of test is {} and shape of label is {}".format(audio_test.shape,
                                                                  labels_test.shape))
 
-    train_data = (audio_train, labels_train)
-    test_data = (audio_test, labels_test)
+    train_data = (np.expand_dims(audio_train, -1), labels_train)
+    test_data = (np.expand_dims(audio_test, -1), labels_test)
 
     return train_data, test_data

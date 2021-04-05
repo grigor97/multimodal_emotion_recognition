@@ -22,7 +22,7 @@ def main(args):
 
     # tf.random.set_seed(random_seed)
     logs_path = config['logs']['logs_path']
-    train_data, test_data = load_data(config)
+    train_data, test_data = load_video_data(config)
 
     run_video_model(model_name,
                     train_data,
