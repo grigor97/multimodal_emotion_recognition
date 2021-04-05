@@ -93,7 +93,7 @@ def run_model(model_name,
     return acc
 
 
-def create_audio_cnn_model(optimizer, train_dim, output_dim=7):
+def create_audio_cnn_model(optimizer, train_dim, output_dim):
     """
     Creates cnn model for audio data
     :param optimizer: nn optimizer
@@ -178,7 +178,7 @@ def create_audio_cnn_model(optimizer, train_dim, output_dim=7):
 
 
 # Define the LSTM model
-def create_audio_lstm_model(optimizer, train_dim, output_dim=7, lstm_length=250):
+def create_audio_lstm_model(optimizer, train_dim, output_dim, lstm_length=250):
     """
     Creates lstm model for audio data
     :param optimizer: nn optimizer
@@ -211,7 +211,7 @@ def create_audio_lstm_model(optimizer, train_dim, output_dim=7, lstm_length=250)
 
 
 # Define the BLSTM model
-def create_audio_blstm_model(optimizer, train_dim, output_dim=7, blstm_length=180):
+def create_audio_blstm_model(optimizer, train_dim, output_dim, blstm_length=180):
     """
     Creates blstm model for audio data
     :param optimizer: nn optimizer
@@ -244,7 +244,7 @@ def create_audio_blstm_model(optimizer, train_dim, output_dim=7, blstm_length=18
 
 
 # Define the stacked lstm model
-def create_audio_stacked_lstm_model(optimizer, train_dim, output_dim=7, stacked_lstm_length=150):
+def create_audio_stacked_lstm_model(optimizer, train_dim, output_dim, stacked_lstm_length=150):
     """
     Creates stacked lstm model for audio data
     :param optimizer: nn optimizer

@@ -38,6 +38,9 @@ def run_picture_model(model_name,
     labels_train_y = to_categorical(labels_train)
     labels_test_y = to_categorical(labels_test)
 
+    # audio_train_dim = audio_train.shape[1]
+    output_dim = labels_train_y.shape[1]
+
     if optimizer == 'Adam':
         opt = tf.keras.optimizers.Adam(lr=lr)
     elif optimizer == 'RMSprop':
@@ -49,7 +52,7 @@ def run_picture_model(model_name,
         return
 
     if model_name == 'picture_cnn':
-        model = create_picture_cnn_model(opt, pic_train[0].shape, 7)
+        model = create_picture_cnn_model(opt, pic_train[0].shape, output_dim)
     else:
         print("sorry you do not have such a {} model".format(model_name))
         return
@@ -102,7 +105,7 @@ def run_picture_model(model_name,
     return acc
 
 
-def create_picture_cnn_model(optimizer, pic_shape=(50, 50, 20), output_dim=7):
+def create_picture_cnn_model(optimizer, pic_shape, output_dim):
     """
     Creates cnn model for video data
     :param optimizer: optimizer for a cnn

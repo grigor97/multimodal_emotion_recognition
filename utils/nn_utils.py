@@ -124,3 +124,56 @@ def load_audio_data(config):
     test_data = (np.expand_dims(audio_test, -1), labels_test)
 
     return train_data, test_data
+
+
+FINALl_EMOTIONS = {'sad': 0, 'neu': 1, 'hap': 2, 'ang': 3, 'fru': 4, 'exc': 5, 'oth': 6}
+
+
+def load_subset_labels_data(config, labels=('hap', 'sad', 'ang')):
+    """
+    Loads train and test data for video models
+    :param labels: subset of all labels
+    :param config: configuration file
+    :return: train and test data
+    """
+    lbs = []
+    for lb in labels:
+        lbs.append(FINALl_EMOTIONS[lb])
+
+    train_pkl = config['data']['train_pkl']
+    test_pkl = config['data']['test_pkl']
+
+    train = load_pickle(train_pkl)
+    test = load_pickle(test_pkl)
+    # loading datasets
+    audio_train = train['train_audio_data']
+    pic_train = train['train_pic_data']
+    labels_train = train['train_label_data']
+
+    audio_test = test['test_audio_data']
+    pic_test = test['test_pic_data']
+    labels_test = test['test_label_data']
+
+    sub_tr_idx = np.fromiter((i for i, x in enumerate(labels_train) if x in lbs), dtype=labels_train.dtype)
+    sub_te_idx = np.fromiter((i for i, x in enumerate(labels_test) if x in lbs), dtype=labels_train.dtype)
+    audio_train = audio_train[sub_tr_idx]
+    pic_train = pic_train[sub_tr_idx]
+    labels_train = labels_train[sub_tr_idx]
+
+    audio_test = audio_test[sub_te_idx]
+    pic_test = pic_test[sub_te_idx]
+    labels_test = labels_test[sub_te_idx]
+
+    audio_train, audio_test = normalize_data(audio_train, audio_test)
+
+    print("shapes of train is {}, {} and shape of label is {}".format(audio_train.shape,
+                                                                      pic_train.shape,
+                                                                      labels_train.shape))
+    print("shapes of test is {}, {} and shape of label is {}".format(audio_test.shape,
+                                                                     pic_test.shape,
+                                                                     labels_test.shape))
+
+    train_data = (audio_train, pic_train, labels_train)
+    test_data = (audio_test, pic_test, labels_test)
+
+    return train_data, test_data
