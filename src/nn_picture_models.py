@@ -118,22 +118,22 @@ def create_picture_cnn_model(optimizer, pic_shape, output_dim):
     pic_input = Input(shape=pic_shape, name='pic_input')
 
     pic_x = Conv2D(16, kernel_size=(3, 3), padding="same")(pic_input)
-    # pic_x = BatchNormalization()(pic_x)
+    pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
     pic_x = MaxPool2D()(pic_x)
 
     pic_x = Conv2D(32, kernel_size=(3, 3), padding="same")(pic_x)
-    # pic_x = BatchNormalization()(pic_x)
+    pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
     pic_x = MaxPool2D()(pic_x)
 
     pic_x = Conv2D(32, kernel_size=(3, 3), padding="same")(pic_x)
-    # pic_x = BatchNormalization()(pic_x)
+    pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
     pic_x = MaxPool2D()(pic_x)
 
     pic_x = Conv2D(16, kernel_size=(3, 3), padding="same")(pic_x)
-    # pic_x = BatchNormalization()(pic_x)
+    pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
     pic_x = MaxPool2D()(pic_x)
 
@@ -141,7 +141,6 @@ def create_picture_cnn_model(optimizer, pic_shape, output_dim):
     pic_x = Dense(64, activation='relu')(pic_x)
     pic_x = Dropout(0.25)(pic_x)
     pic_x = Dense(32, activation='relu')(pic_x)
-    # end of pictures network part
 
     pic_x = Dense(32, activation='relu')(pic_x)
 
@@ -151,8 +150,6 @@ def create_picture_cnn_model(optimizer, pic_shape, output_dim):
         inputs=[pic_input],
         outputs=[out]
     )
-
-    # tf.keras.utils.plot_model(model, show_shapes=True)
 
     model.compile(
         optimizer=optimizer,
