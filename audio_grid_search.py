@@ -15,7 +15,7 @@ def main(args):
     # train_data, test_data = load_data(config)
     train_data, test_data = load_subset_labels_data(config)
 
-    num_epochs = 200
+    num_epochs = 100
     opts = ['SGD', 'RMSprop', 'Adam']
     lrs = [0.3, 0.01, 0.03, 0.001, 0.003, 0.0001, 0.0003, 0.00001, 0.00003, 0.000001, 0.000000001]
     model_names = ['audio_cnn', 'audio_lstm', 'audio_blstm', 'audio_stacked_lstm']
