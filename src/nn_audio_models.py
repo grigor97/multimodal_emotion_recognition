@@ -17,8 +17,10 @@ def run_model(model_name,
               lr=1e-3,
               batch_size=64,
               num_epochs=100):
-    audio_train, labels_train = train_data
-    audio_test, labels_test = test_data
+    audio_train, pic_train, labels_train = train_data
+    audio_test, pic_test, labels_test = test_data
+    audio_train = np.expand_dims(audio_train, -1)
+    audio_test = np.expand_dims(audio_test, -1)
     labels_train_y = to_categorical(labels_train)
     labels_test_y = to_categorical(labels_test)
 
