@@ -125,6 +125,21 @@ def extract_features(data, sample_rate):
     return result
 
 
+def get_audio_features_only_noise(path):
+    data, sample_rate = librosa.load(path)
+
+    # without augmentation
+    res1 = extract_features(data, sample_rate)
+    result = np.array(res1)
+
+    # data with noise
+    noise_data = noise(data)
+    res2 = extract_features(noise_data, sample_rate)
+    result = np.vstack((result, res2))  # stacking vertically
+
+    return result
+
+
 def get_audio_features(path):
     data, sample_rate = librosa.load(path)
 
@@ -153,13 +168,24 @@ def get_audio_features(path):
 
 def get_features_for_one_video(pics_path, wav_path, label):
     faces = load_faces_for_one_video(pics_path)
-    audio_features = get_audio_features(wav_path)
+    audio_features = get_audio_features_only_noise(wav_path)
 
-    audio_fs = [audio_features[0], audio_features[1], audio_features[2], audio_features[3]]
-    pics_fs = [faces, faces, faces, faces]
-    labels = [label, label, label, label]
+    audio_fs = [audio_features[0], audio_features[1]]
+    pics_fs = [faces, faces]
+    labels = [label, label]
 
     return audio_fs, pics_fs, labels
+
+
+# def get_features_for_one_video(pics_path, wav_path, label):
+#     faces = load_faces_for_one_video(pics_path)
+#     audio_features = get_audio_features(wav_path)
+#
+#     audio_fs = [audio_features[0], audio_features[1], audio_features[2], audio_features[3]]
+#     pics_fs = [faces, faces, faces, faces]
+#     labels = [label, label, label, label]
+#
+#     return audio_fs, pics_fs, labels
 
 
 def face_extraction(pic_path, face_size=(50, 50)):
