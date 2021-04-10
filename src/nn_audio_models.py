@@ -18,7 +18,7 @@ def random_split(train_x, train_y, spl=0.15):
     val_ind = np.array(list(set(pop).difference(set(train_ind))))
 
     tr_x = train_x[train_ind]
-    tr_y = train_y[val_ind]
+    tr_y = train_y[train_ind]
     val_x = train_x[val_ind]
     val_y = train_y[val_ind]
 
@@ -82,6 +82,9 @@ def run_model(model_name,
         num_epochs = num_epochs - continue_at + 1
 
     tr_x, tr_y, val_x, val_y = random_split(audio_train, labels_train_y)
+
+    print("train, val and test shapes are {}, {}, {}, {}, {}, {}".
+          format(tr_x.shape, val_x.shape, audio_test.shape, tr_y.shape, val_y.shape, labels_test_y.shape))
 
     model_history = model.fit(tr_x,
                               tr_y,
