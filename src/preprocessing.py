@@ -1,6 +1,10 @@
 import math
 import numpy as np
 import pandas as pd
+import random
+import subprocess as sb
+from scipy.io import wavfile
+from tqdm import tqdm
 
 import librosa
 
@@ -13,6 +17,27 @@ from moviepy.editor import *
 from utils.utils import *
 
 FINALl_EMOTIONS = {'sad': 0, 'neu': 1, 'hap': 2, 'ang': 3, 'fru': 4, 'exc': 5, 'oth': 6}
+
+
+def random_split(train_df, spl=0.15):
+    """
+    Random split of train data into train val
+    :param train_df: trainf data frame
+    :param spl: split percent
+    :return: train and validation data
+    """
+    random.seed(14)
+    n = train_df.shape[0]
+    tr_s = int(n * spl)
+
+    pop = range(n)
+    val_ind = np.array(random.sample(pop, tr_s))
+    train_ind = np.array(list(set(pop).difference(set(val_ind))))
+
+    train = train_df.iloc[train_ind]
+    val = train_df.iloc[val_ind]
+
+    return train, val
 
 
 def get_pickle_file_from_all_pics_and_audios(cfg):
@@ -29,7 +54,21 @@ def get_pickle_file_from_all_pics_and_audios(cfg):
     train.dropna(inplace=True)
     test.dropna(inplace=True)
 
-    test_audio_data, test_pic_data, test_label_data = get_features_for_df(test)
+    train, val = random_split(train)
+
+    noise_path = cfg['data']['noise_path']
+    noises = glob.glob(noise_path + '*.wav')
+    print('number of noise audios is {}'.format(len(noises)))
+    noise_datas = []
+    for pth in noises:
+        v_rate, noise_data = wavfile.read(pth)
+        if v_rate != 32000:
+            print("noise sr is not 32000")
+            return
+        noise_datas.append(noise_data)
+
+    print('starting prepare train data --------------')
+    test_audio_data, test_pic_data, test_label_data = get_features_for_df(test, noise_datas)
 
     test_data = {
             'test_audio_data': test_audio_data,
@@ -40,7 +79,20 @@ def get_pickle_file_from_all_pics_and_audios(cfg):
     test_pickle = cfg['data']['test_pkl']
     save_pickle(test_pickle, test_data)
 
-    train_audio_data, train_pic_data, train_label_data = get_features_for_df(train)
+    print('starting prepare val data --------------')
+    val_audio_data, val_pic_data, val_label_data = get_features_for_df(val, noise_datas)
+
+    test_data = {
+        'test_audio_data': val_audio_data,
+        'test_pic_data': val_pic_data,
+        'test_label_data': val_label_data
+    }
+
+    test_pickle = cfg['data']['val_pkl']
+    save_pickle(test_pickle, test_data)
+
+    print('starting prepare train data --------------')
+    train_audio_data, train_pic_data, train_label_data = get_features_for_df(train, noise_datas)
     train_data = {'train_audio_data': train_audio_data,
                   'train_pic_data': train_pic_data,
                   'train_label_data': train_label_data,
@@ -50,53 +102,39 @@ def get_pickle_file_from_all_pics_and_audios(cfg):
     save_pickle(train_pickle, train_data)
 
 
-def get_features_for_df(df):
+def get_features_for_df(df, noise_datas):
     audio_data, pic_data, label_data = [], [], []
-    for i, row in df.iterrows():
+    for i, row in tqdm(df.iterrows(), total=df.shape[0]):
         pics_path = row[0]
         if len(glob.glob(pics_path + '*.jpg')) != 20:
             continue
         audio_path = row[1]
         label = FINALl_EMOTIONS[row[2]]
-        audio_fs, pics_fs, labels = get_features_for_one_video(pics_path, audio_path, label)
+        audio_fs, pics_fs, labels = get_features_for_one_video(pics_path, audio_path, label, noise_datas)
         audio_data.extend(audio_fs)
         pic_data.extend(pics_fs)
         label_data.extend(labels)
 
     return np.asarray(audio_data), np.asarray(pic_data), np.asarray(label_data)
 
-# def get_features_for_df(df):
-#     audio_data, pic_data, label_data = [], [], []
-#     for i, row in df.iterrows():
-#         pics_path = row[0].replace('/home/student/keropyan', '..')
-#         # extracting wav file path from npy file path
-#         audio_path = row[1].replace('/home/student/keropyan', '..')[:-13] + '.wav'
-#         label = FINALl_EMOTIONS[row[2]]
-#         audio_fs, pics_fs, labels = get_features_for_one_video(pics_path, audio_path, label)
-#         audio_data.extend(audio_fs)
-#         pic_data.extend(pics_fs)
-#         label_data.extend(labels)
+
+# def noise(data):
+#     noise_amp = 0.035*np.random.uniform()*np.amax(data)
+#     data = data + noise_amp*np.random.normal(size=data.shape[0])
+#     return data
 #
-#     return np.asarray(audio_data), np.asarray(pic_data), np.asarray(label_data)
-
-
-def noise(data):
-    noise_amp = 0.035*np.random.uniform()*np.amax(data)
-    data = data + noise_amp*np.random.normal(size=data.shape[0])
-    return data
-
-
-def stretch(data, rate=0.8):
-    return librosa.effects.time_stretch(data, rate)
-
-
-def shift(data):
-    shift_range = int(np.random.uniform(low=-5, high=5)*1000)
-    return np.roll(data, shift_range)
-
-
-def pitch(data, sampling_rate, pitch_factor=0.7):
-    return librosa.effects.pitch_shift(data, sampling_rate, pitch_factor)
+#
+# def stretch(data, rate=0.8):
+#     return librosa.effects.time_stretch(data, rate)
+#
+#
+# def shift(data):
+#     shift_range = int(np.random.uniform(low=-5, high=5)*1000)
+#     return np.roll(data, shift_range)
+#
+#
+# def pitch(data, sampling_rate, pitch_factor=0.7):
+#     return librosa.effects.pitch_shift(data, sampling_rate, pitch_factor)
 
 
 def extract_features(data, sample_rate):
@@ -125,56 +163,103 @@ def extract_features(data, sample_rate):
     return result
 
 
-def get_audio_features_only_noise(path):
-    data, sample_rate = librosa.load(path)
+def mix_audios(voice_data, noise_data, pref_db):
+    # audios should be float to avoid int overflow
+    voice_data = voice_data.astype('float')
+    noise_data = noise_data.astype('float')
 
-    # without augmentation
-    res1 = extract_features(data, sample_rate)
+    voice_len = len(voice_data)
+    noise_len = len(noise_data)
+
+    # tile noise if needed
+    if noise_len < voice_len:
+        tile_no = (int(2 * voice_len / noise_len) + 1)
+        noise_data = np.tile(noise_data, tile_no)
+        noise_len = len(noise_data)
+
+    # pick voice length interval randomly from noise
+    start = np.random.choice(range(noise_len - voice_len + 1))
+    noise_data = noise_data[start: start + voice_len]
+
+    assert len(noise_data) == len(voice_data), 'Trying to mix different length audios'
+
+    voice_energy = np.sum(voice_data ** 2)
+    noise_energy = np.sum(noise_data ** 2)
+
+    SNR = voice_energy / noise_energy
+
+    noise_coeff = math.sqrt(SNR * math.exp(-pref_db * np.log(10) / 10))
+    noise_data *= noise_coeff
+
+    mix_data = voice_data + noise_data
+
+    # handle clipping
+    max_absolute_mix = np.max(np.abs(mix_data))
+    if max_absolute_mix > 32767:
+        mix_data = mix_data * (32767 / max_absolute_mix)
+
+    # save as int16 audio
+    mix_data = np.array(mix_data).astype('int16').flatten()
+
+    return mix_data
+
+
+def get_audio_features_augmented(path, noise_datas):
+    dbs = [0, 5, 10]
+    sample_rate = 32000
+    out_path = path[:-4] + '_changedrate.wav'
+    sb.call(["ffmpeg", "-i", path, "-ar", str(sample_rate), "-ac", "1", out_path])
+
+    v_rate, voice_data = wavfile.read(out_path)
+
+    res1 = extract_features(voice_data, sample_rate)
     result = np.array(res1)
 
-    # data with noise
-    noise_data = noise(data)
-    res2 = extract_features(noise_data, sample_rate)
-    result = np.vstack((result, res2))  # stacking vertically
+    for pref_db in dbs:
+        for noise_data in noise_datas:
+            mix_data = mix_audios(voice_data, noise_data, pref_db)
+            res2 = extract_features(mix_data, sample_rate)
+            result = np.vstack((result, res2))  # stacking vertically
 
     return result
 
 
-def get_audio_features(path):
-    data, sample_rate = librosa.load(path)
+# def get_audio_features(path):
+#     data, sample_rate = librosa.load(path, sr=32000)
+#
+#     # without augmentation
+#     res1 = extract_features(data, sample_rate)
+#     result = np.array(res1)
+#
+#     # data with noise
+#     noise_data = noise(data)
+#     res2 = extract_features(noise_data, sample_rate)
+#     result = np.vstack((result, res2))  # stacking vertically
+#
+#     # data with stretching and pitching
+#     new_data = stretch(data)
+#     data_stretch_pitch = pitch(new_data, sample_rate)
+#     res3 = extract_features(data_stretch_pitch, sample_rate)
+#     result = np.vstack((result, res3))  # stacking vertically
+#
+#     # data with shift
+#     shft_data = shift(data)
+#     res4 = extract_features(shft_data, sample_rate)
+#     result = np.vstack((result, res4))
+#
+#     return result
 
-    # without augmentation
-    res1 = extract_features(data, sample_rate)
-    result = np.array(res1)
 
-    # data with noise
-    noise_data = noise(data)
-    res2 = extract_features(noise_data, sample_rate)
-    result = np.vstack((result, res2))  # stacking vertically
-
-    # data with stretching and pitching
-    new_data = stretch(data)
-    data_stretch_pitch = pitch(new_data, sample_rate)
-    res3 = extract_features(data_stretch_pitch, sample_rate)
-    result = np.vstack((result, res3))  # stacking vertically
-
-    # data with shift
-    shft_data = shift(data)
-    res4 = extract_features(shft_data, sample_rate)
-    result = np.vstack((result, res4))
-
-    return result
-
-
-def get_features_for_one_video(pics_path, wav_path, label):
+def get_features_for_one_video(pics_path, wav_path, label, noise_datas):
     faces = load_faces_for_one_video(pics_path)
-    audio_features = get_audio_features_only_noise(wav_path)
 
-    audio_fs = [audio_features[0], audio_features[1]]
-    pics_fs = [faces, faces]
-    labels = [label, label]
+    audio_features = get_audio_features_augmented(wav_path, noise_datas)
 
-    return audio_fs, pics_fs, labels
+    num = audio_features.shape[0]
+    pics_fs = np.asarray([faces]*num)
+    labels = np.asarray([label]*num)
+
+    return audio_features, pics_fs, labels
 
 
 # def get_features_for_one_video(pics_path, wav_path, label):

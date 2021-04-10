@@ -17,6 +17,7 @@ data:
   train_paths: "../data/preprocessed_data/filtered_emotions_paths/train_paths.csv"
 
   train_pkl: '../data/preprocessed_data/train_pkl.pkl'
+  val_pkl: '../data/preprocessed_data/val_pkl.pkl'
   test_pkl: '../data/preprocessed_data/test_pkl.pkl'
 
   save_test_name: 'final_test_paths.csv'
@@ -26,3 +27,10 @@ data:
   train_yp: '../data/preprocessed_data/train_data/train_y.npy'
   test_xp: '../data/preprocessed_data/train_data/test_x.npy'
   test_yp: '../data/preprocessed_data/train_data/test_y.npy'
+
+  final_data: '../final_data/'
+  final_train_data: '../final_data/train/'
+  final_val_data: '../final_data/val/'
+  final_test_data: '../final_data/test/'
+
+  noise_path: '../data/noise/'
