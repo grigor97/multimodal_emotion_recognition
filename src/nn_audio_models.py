@@ -66,7 +66,9 @@ def run_model(model_name,
     tr_audio_x, tr_pic_x, tr_y, val_audio_x, val_pic_x, val_y = random_split(audio_train, pic_train, labels_train_y)
 
     print("train, val and test shapes are {} {} {}, {} {} {}, {} {} {}".
-          format(tr_audio_x.shape, tr_pic_x, tr_y, val_audio_x, val_pic_x, val_y, audio_test, pic_test, labels_test_y))
+          format(tr_audio_x.shape, tr_pic_x.shape, tr_y.shape,
+                 val_audio_x.shape, val_pic_x.shape, val_y.shape,
+                 audio_test.shape, pic_test.shape, labels_test_y.shape))
 
     model_history = model.fit(tr_audio_x,
                               tr_y,

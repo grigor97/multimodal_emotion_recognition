@@ -74,7 +74,9 @@ def run_picture_model(model_name,
     tr_audio_x, tr_pic_x, tr_y, val_audio_x, val_pic_x, val_y = random_split(audio_train, pic_train, labels_train_y)
 
     print("train, val and test shapes are {} {} {}, {} {} {}, {} {} {}".
-          format(tr_audio_x.shape, tr_pic_x, tr_y, val_audio_x, val_pic_x, val_y, audio_test, pic_test, labels_test_y))
+          format(tr_audio_x.shape, tr_pic_x.shape, tr_y.shape,
+                 val_audio_x.shape, val_pic_x.shape, val_y.shape,
+                 audio_test.shape, pic_test.shape, labels_test_y.shape))
 
     model_history = model.fit(tr_pic_x,
                               tr_y,
@@ -84,12 +86,12 @@ def run_picture_model(model_name,
                               callbacks=[cp_callback])
 
     # Evaluate the validation
-    val_loss, val_acc = model.evaluate(val_audio_x, val_y)
+    val_loss, val_acc = model.evaluate(val_pic_x, val_y)
     print("{} model val accuracy: {:5.2f}%".format(model_name, 100 * val_acc))
     print("{} model val loss: {:5.2f}".format(model_name, val_loss))
 
     # Evaluate the model
-    test_loss, test_acc = model.evaluate(audio_test, labels_test_y)
+    test_loss, test_acc = model.evaluate(pic_test, labels_test_y)
     print("{} model test accuracy: {:5.2f}%".format(model_name, 100 * test_acc))
     print("{} model test loss: {:5.2f}".format(model_name, test_loss))
 
