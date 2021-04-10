@@ -103,6 +103,69 @@ def get_pickle_file_from_all_pics_and_audios(cfg):
     save_pickle(train_pickle, train_data)
 
 
+def get_pickle_file_from_all_pics_and_audios_1(cfg):
+    """
+    Creates pickle file for all the train and test data
+    :param cfg: config file for paths
+    :return: Nothing, just saves data in pickle file
+    """
+    test_path = cfg['data']['save_test_data_path'] + cfg['data']['save_test_name']
+    train_path = cfg['data']['save_train_data_path'] + cfg['data']['save_train_name']
+
+    test = pd.read_csv(test_path)
+    train = pd.read_csv(train_path)
+    train.dropna(inplace=True)
+    test.dropna(inplace=True)
+
+    train, val = random_split(train)
+
+    noise_path = cfg['data']['noise_path']
+    noises = glob.glob(noise_path + '*.wav')
+    print('number of noise audios is {}'.format(len(noises)))
+    noise_datas = []
+    for pth in noises:
+        v_rate, noise_data = wavfile.read(pth)
+        noise_data = noise_data.astype('float')
+        if v_rate != 32000:
+            print("noise sr is not 32000")
+            return
+        noise_datas.append(noise_data)
+
+    # print('starting prepare test data --------------')
+    # test_audio_data, test_pic_data, test_label_data = get_features_for_df(test, noise_datas)
+    #
+    # test_data = {
+    #         'test_audio_data': test_audio_data,
+    #         'test_pic_data': test_pic_data,
+    #         'test_label_data': test_label_data
+    #         }
+    #
+    # test_pickle = cfg['data']['test_pkl']
+    # save_pickle(test_pickle, test_data)
+    #
+    # print('starting prepare val data --------------')
+    # val_audio_data, val_pic_data, val_label_data = get_features_for_df(val, noise_datas)
+    #
+    # test_data = {
+    #     'test_audio_data': val_audio_data,
+    #     'test_pic_data': val_pic_data,
+    #     'test_label_data': val_label_data
+    # }
+    #
+    # test_pickle = cfg['data']['val_pkl']
+    # save_pickle(test_pickle, test_data)
+
+    print('starting prepare train data --------------')
+    train_audio_data, train_pic_data, train_label_data = get_features_for_df(train, noise_datas)
+    train_data = {'train_audio_data': train_audio_data,
+                  'train_pic_data': train_pic_data,
+                  'train_label_data': train_label_data,
+                  }
+
+    train_pickle = cfg['data']['train_pkl']
+    save_pickle(train_pickle, train_data)
+
+
 def get_features_for_df(df, noise_datas):
     audio_data, pic_data, label_data = [], [], []
     for i, row in tqdm(df.iterrows(), total=df.shape[0]):
