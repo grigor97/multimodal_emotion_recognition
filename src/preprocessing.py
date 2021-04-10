@@ -67,7 +67,7 @@ def get_pickle_file_from_all_pics_and_audios(cfg):
             return
         noise_datas.append(noise_data)
 
-    print('starting prepare train data --------------')
+    print('starting prepare test data --------------')
     test_audio_data, test_pic_data, test_label_data = get_features_for_df(test, noise_datas)
 
     test_data = {
@@ -199,7 +199,7 @@ def mix_audios(voice_data, noise_data, pref_db):
         mix_data = mix_data * (32767 / max_absolute_mix)
 
     # save as int16 audio
-    mix_data = np.array(mix_data).astype('int16').flatten()
+    mix_data = np.array(mix_data).flatten()
 
     return mix_data
 
