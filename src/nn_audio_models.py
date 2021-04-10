@@ -14,8 +14,8 @@ def random_split(train_x, train_y, spl=0.15):
     tr_s = int(n * spl)
 
     pop = range(n)
-    train_ind = np.array(random.sample(pop, tr_s))
-    val_ind = np.array(list(set(pop).difference(set(train_ind))))
+    val_ind = np.array(random.sample(pop, tr_s))
+    train_ind = np.array(list(set(pop).difference(set(val_ind))))
 
     tr_x = train_x[train_ind]
     tr_y = train_y[train_ind]
