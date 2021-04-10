@@ -209,7 +209,7 @@ def get_audio_features_augmented(path, noise_datas):
     dbs = [0, 5, 10]
     sample_rate = 32000
     out_path = path[:-4] + '_changedrate.wav'
-    sb.call(["ffmpeg", "-i", path, "-ar", str(sample_rate), "-ac", "1", out_path])
+    sb.call(["ffmpeg", "-y", "-i", path, "-ar", str(sample_rate), "-ac", "1", out_path])
 
     v_rate, voice_data = wavfile.read(out_path)
     voice_data = voice_data.astype('float')
