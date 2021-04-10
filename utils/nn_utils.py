@@ -1,6 +1,34 @@
 import numpy as np
+import random
 from utils.utils import *
 import matplotlib.pyplot as plt
+
+
+def random_split(audio_x, pic_x, y, spl=0.15):
+    """
+    Random split of train data into train val
+    :param y: labels
+    :param audio_x: audio features data
+    :param pic_x: picture label data
+    :param spl: split percent
+    :return: train and validation data
+    """
+    random.seed(14)
+    n = audio_x.shape[0]
+    tr_s = int(n * spl)
+
+    pop = range(n)
+    val_ind = np.array(random.sample(pop, tr_s))
+    train_ind = np.array(list(set(pop).difference(set(val_ind))))
+
+    tr_audio_x = audio_x[train_ind]
+    tr_pic_x = pic_x[train_ind]
+    tr_y = y[train_ind]
+    val_audio_x = audio_x[val_ind]
+    val_pic_x = pic_x[val_ind]
+    val_y = y[val_ind]
+
+    return tr_audio_x, tr_pic_x, tr_y, val_audio_x, val_pic_x, val_y
 
 
 def nn_save_model_plots(model_history, save_path):

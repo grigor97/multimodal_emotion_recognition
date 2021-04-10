@@ -1,28 +1,10 @@
 import os
-import random
 from utils.nn_utils import *
 
 import tensorflow as tf
 from tensorflow.keras.layers import *
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.utils import to_categorical
-
-
-def random_split(train_x, train_y, spl=0.15):
-    random.seed(14)
-    n = train_x.shape[0]
-    tr_s = int(n * spl)
-
-    pop = range(n)
-    val_ind = np.array(random.sample(pop, tr_s))
-    train_ind = np.array(list(set(pop).difference(set(val_ind))))
-
-    tr_x = train_x[train_ind]
-    tr_y = train_y[train_ind]
-    val_x = train_x[val_ind]
-    val_y = train_y[val_ind]
-
-    return tr_x, tr_y, val_x, val_y
 
 
 def run_model(model_name,
@@ -81,20 +63,20 @@ def run_model(model_name,
         model.load_weights(checkpoint_path)
         num_epochs = num_epochs - continue_at + 1
 
-    tr_x, tr_y, val_x, val_y = random_split(audio_train, labels_train_y)
+    tr_audio_x, tr_pic_x, tr_y, val_audio_x, val_pic_x, val_y = random_split(audio_train, pic_train, labels_train_y)
 
-    print("train, val and test shapes are {}, {}, {}, {}, {}, {}".
-          format(tr_x.shape, val_x.shape, audio_test.shape, tr_y.shape, val_y.shape, labels_test_y.shape))
+    print("train, val and test shapes are {} {} {}, {} {} {}, {} {} {}".
+          format(tr_audio_x.shape, tr_pic_x, tr_y, val_audio_x, val_pic_x, val_y, audio_test, pic_test, labels_test_y))
 
-    model_history = model.fit(tr_x,
+    model_history = model.fit(tr_audio_x,
                               tr_y,
                               batch_size=batch_size,
                               epochs=num_epochs,
-                              validation_data=(val_x, val_y),
+                              validation_data=(val_audio_x, val_y),
                               callbacks=[cp_callback])
 
     # Evaluate the validation
-    val_loss, val_acc = model.evaluate(val_x, val_y)
+    val_loss, val_acc = model.evaluate(val_audio_x, val_y)
     print("{} model val accuracy: {:5.2f}%".format(model_name, 100 * val_acc))
     print("{} model val loss: {:5.2f}".format(model_name, val_loss))
 

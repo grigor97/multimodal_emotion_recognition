@@ -86,29 +86,37 @@ def run_video_model(model_name,
         model.load_weights(checkpoint_path)
         num_epochs = num_epochs - continue_at + 1
 
-    model_history = model.fit(
-        {'audio_input': audio_train, 'pic_input': pic_train},
-        labels_train_y,
-        epochs=num_epochs,
-        batch_size=batch_size,
-        validation_split=0.15,
-        callbacks=[cp_callback]
-    )
+    tr_audio_x, tr_pic_x, tr_y, val_audio_x, val_pic_x, val_y = random_split(audio_train, pic_train, labels_train_y)
+
+    print("train, val and test shapes are {} {} {}, {} {} {}, {} {} {}".
+          format(tr_audio_x.shape, tr_pic_x, tr_y, val_audio_x, val_pic_x, val_y, audio_test, pic_test, labels_test_y))
+
+    model_history = model.fit(tr_audio_x,
+                              tr_y,
+                              batch_size=batch_size,
+                              epochs=num_epochs,
+                              validation_data=(val_audio_x, val_y),
+                              callbacks=[cp_callback])
+
+    # Evaluate the validation
+    val_loss, val_acc = model.evaluate(val_audio_x, val_y)
+    print("{} model val accuracy: {:5.2f}%".format(model_name, 100 * val_acc))
+    print("{} model val loss: {:5.2f}".format(model_name, val_loss))
 
     # Evaluate the model
-    loss, acc = model.evaluate({'audio_input': audio_test, 'pic_input': pic_test}, labels_test_y)
-    print("{} model test accuracy: {:5.2f}%".format(model_name, 100 * acc))
-    print("{} model test loss: {:5.2f}".format(model_name, loss))
+    test_loss, test_acc = model.evaluate(audio_test, labels_test_y)
+    print("{} model test accuracy: {:5.2f}%".format(model_name, 100 * test_acc))
+    print("{} model test loss: {:5.2f}".format(model_name, test_loss))
 
     model.save(checkpoint_dir + '/model.h5')
     nn_save_model_plots(model_history, checkpoint_dir)
 
     train_acc = model_history.history['accuracy'][-1]
-    val_acc = model_history.history['val_accuracy'][-1]
+    # val_acc = model_history.history['val_accuracy'][-1]
 
     with open(checkpoint_dir + '/' + model_name + '_res.txt', 'w') as f:
         f.write("test accuracy and loss are ")
-        f.write(str(acc) + ' ' + str(loss))
+        f.write(str(test_acc) + ' ' + str(test_loss))
         f.write('\n')
         f.write("val accuracy and loss are ")
         f.write(str(val_acc))
@@ -116,8 +124,6 @@ def run_video_model(model_name,
         f.write("train accuracy and loss are ")
         f.write(str(train_acc))
         f.write('\n')
-
-    return acc
 
 
 def create_video_cnn_model(optimizer, audio_dim, pic_shape, output_dim):
