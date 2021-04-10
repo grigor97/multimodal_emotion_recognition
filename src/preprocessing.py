@@ -62,6 +62,7 @@ def get_pickle_file_from_all_pics_and_audios(cfg):
     noise_datas = []
     for pth in noises:
         v_rate, noise_data = wavfile.read(pth)
+        noise_data = noise_data.astype('float')
         if v_rate != 32000:
             print("noise sr is not 32000")
             return
@@ -211,6 +212,7 @@ def get_audio_features_augmented(path, noise_datas):
     sb.call(["ffmpeg", "-i", path, "-ar", str(sample_rate), "-ac", "1", out_path])
 
     v_rate, voice_data = wavfile.read(out_path)
+    voice_data = voice_data.astype('float')
 
     res1 = extract_features(voice_data, sample_rate)
     result = np.array(res1)
