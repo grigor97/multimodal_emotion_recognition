@@ -11,7 +11,7 @@ from tensorflow.keras.utils import to_categorical
 def random_split(train_x, train_y, spl=0.15):
     random.seed(14)
     n = train_x.shape[0]
-    tr_s = int(n * spl / 100)
+    tr_s = int(n * spl)
 
     pop = range(n)
     train_ind = np.array(random.sample(pop, tr_s))
