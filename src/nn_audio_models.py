@@ -1,10 +1,28 @@
 import os
+import random
 from utils.nn_utils import *
 
 import tensorflow as tf
 from tensorflow.keras.layers import *
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.utils import to_categorical
+
+
+def random_split(train_x, train_y, spl=0.15):
+    random.seed(14)
+    n = train_x.shape[0]
+    tr_s = int(n * spl / 100)
+
+    pop = range(n)
+    train_ind = np.array(random.sample(pop, tr_s))
+    val_ind = np.array(list(set(pop).difference(set(train_ind))))
+
+    tr_x = train_x[train_ind]
+    tr_y = train_y[val_ind]
+    val_x = train_x[val_ind]
+    val_y = train_y[val_ind]
+
+    return tr_x, tr_y, val_x, val_y
 
 
 def run_model(model_name,
@@ -63,27 +81,34 @@ def run_model(model_name,
         model.load_weights(checkpoint_path)
         num_epochs = num_epochs - continue_at + 1
 
-    model_history = model.fit(audio_train,
-                              labels_train_y,
+    tr_x, tr_y, val_x, val_y = random_split(audio_train, labels_train_y)
+
+    model_history = model.fit(tr_x,
+                              tr_y,
                               batch_size=batch_size,
                               epochs=num_epochs,
-                              validation_split=0.15,
+                              validation_data=(val_x, val_y),
                               callbacks=[cp_callback])
 
+    # Evaluate the validation
+    val_loss, val_acc = model.evaluate(val_x, val_y)
+    print("{} model val accuracy: {:5.2f}%".format(model_name, 100 * val_acc))
+    print("{} model val loss: {:5.2f}".format(model_name, val_loss))
+
     # Evaluate the model
-    loss, acc = model.evaluate(audio_test, labels_test_y)
-    print("{} model test accuracy: {:5.2f}%".format(model_name, 100 * acc))
-    print("{} model test loss: {:5.2f}".format(model_name, loss))
+    test_loss, test_acc = model.evaluate(audio_test, labels_test_y)
+    print("{} model test accuracy: {:5.2f}%".format(model_name, 100 * test_acc))
+    print("{} model test loss: {:5.2f}".format(model_name, test_loss))
 
     model.save(checkpoint_dir + '/model.h5')
     nn_save_model_plots(model_history, checkpoint_dir)
 
     train_acc = model_history.history['accuracy'][-1]
-    val_acc = model_history.history['val_accuracy'][-1]
+    # val_acc = model_history.history['val_accuracy'][-1]
 
     with open(checkpoint_dir + '/' + model_name + '_res.txt', 'w') as f:
         f.write("test accuracy and loss are ")
-        f.write(str(acc) + ' ' + str(loss))
+        f.write(str(test_acc) + ' ' + str(test_loss))
         f.write('\n')
         f.write("val accuracy and loss are ")
         f.write(str(val_acc))
@@ -91,8 +116,6 @@ def run_model(model_name,
         f.write("train accuracy and loss are ")
         f.write(str(train_acc))
         f.write('\n')
-
-    return acc
 
 
 def create_audio_cnn_model(optimizer, train_dim, output_dim):
