@@ -67,20 +67,23 @@ def nn_save_model_plots(model_history, save_path):
     plt.savefig(save_path + "/accuracy.png")
 
 
-def normalize_data(audio_train, audio_test):
+def normalize_data(audio_train, audio_val, audio_test):
     """
     Normalizes dataset with mean zero and variance 1
+    :param audio_val: validation data for audio
     :param audio_train: train data for audio
     :param audio_test: test data for audio
     :return: normalized data
     """
     train_mean = audio_train.mean(axis=0)
     audio_train -= train_mean
+    audio_val -= train_mean
     audio_test -= train_mean
-    audio_train / audio_train.sum(axis=1).reshape((audio_train.shape[0], 1))
-    audio_test / audio_test.sum(axis=1).reshape((audio_test.shape[0], 1))
+    audio_train /= audio_train.sum(axis=1).reshape((audio_train.shape[0], 1))
+    audio_val /= audio_val.sum(axis=1).reshape((audio_val.shape[0], 1))
+    audio_test /= audio_test.sum(axis=1).reshape((audio_test.shape[0], 1))
 
-    return audio_train, audio_test
+    return audio_train, audio_val, audio_test
 
 
 def load_data(config):
@@ -90,34 +93,42 @@ def load_data(config):
     :return: train and test data
     """
     train_pkl = config['data']['train_pkl']
+    val_pkl = config['data']['val_pkl']
     test_pkl = config['data']['test_pkl']
 
     train = load_pickle(train_pkl)
+    val = load_pickle(val_pkl)
     test = load_pickle(test_pkl)
     # loading datasets
     audio_train = train['train_audio_data']
-    # audio_train = np.array(audio_train)
     pic_train = train['train_pic_data']
     labels_train = train['train_label_data']
 
+    audio_val = val['val_audio_data']
+    pic_val = val['val_pic_data']
+    labels_val = val['val_label_data']
+
     audio_test = test['test_audio_data']
-    # audio_test = np.array(audio_test)
     pic_test = test['test_pic_data']
     labels_test = test['test_label_data']
 
-    audio_train, audio_test = normalize_data(audio_train, audio_test)
+    audio_train, audio_val, audio_test = normalize_data(audio_train, audio_val, audio_test)
 
     print("shapes of train is {}, {} and shape of label is {}".format(audio_train.shape,
                                                                       pic_train.shape,
                                                                       labels_train.shape))
+    print("shapes of val is {}, {} and shape of label is {}".format(audio_val.shape,
+                                                                    pic_val.shape,
+                                                                    labels_val.shape))
     print("shapes of test is {}, {} and shape of label is {}".format(audio_test.shape,
                                                                      pic_test.shape,
                                                                      labels_test.shape))
 
     train_data = (audio_train, pic_train, labels_train)
+    val_data = (audio_val, pic_val, labels_val)
     test_data = (audio_test, pic_test, labels_test)
 
-    return train_data, test_data
+    return train_data, val_data, test_data
 
 
 FINALl_EMOTIONS = {'sad': 0, 'neu': 1, 'hap': 2, 'ang': 3, 'fru': 4, 'exc': 5, 'oth': 6}
@@ -135,40 +146,55 @@ def load_subset_labels_data(config, labels=('sad', 'neu', 'hap', 'ang')):
         lbs.append(FINALl_EMOTIONS[lb])
 
     train_pkl = config['data']['train_pkl']
+    val_pkl = config['data']['val_pkl']
     test_pkl = config['data']['test_pkl']
 
     train = load_pickle(train_pkl)
+    val = load_pickle(val_pkl)
     test = load_pickle(test_pkl)
     # loading datasets
     audio_train = train['train_audio_data']
     pic_train = train['train_pic_data']
     labels_train = train['train_label_data']
 
+    audio_val = val['val_audio_data']
+    pic_val = val['val_pic_data']
+    labels_val = val['val_label_data']
+
     audio_test = test['test_audio_data']
     pic_test = test['test_pic_data']
     labels_test = test['test_label_data']
 
     sub_tr_idx = np.fromiter((i for i, x in enumerate(labels_train) if x in lbs), dtype=labels_train.dtype)
-    sub_te_idx = np.fromiter((i for i, x in enumerate(labels_test) if x in lbs), dtype=labels_train.dtype)
+    sub_val_idx = np.fromiter((i for i, x in enumerate(labels_val) if x in lbs), dtype=labels_val.dtype)
+    sub_te_idx = np.fromiter((i for i, x in enumerate(labels_test) if x in lbs), dtype=labels_test.dtype)
 
     audio_train = audio_train[sub_tr_idx]
     pic_train = pic_train[sub_tr_idx]
     labels_train = labels_train[sub_tr_idx]
 
+    audio_val = audio_val[sub_val_idx]
+    pic_val = pic_val[sub_val_idx]
+    labels_val = labels_val[sub_val_idx]
+
     audio_test = audio_test[sub_te_idx]
     pic_test = pic_test[sub_te_idx]
     labels_test = labels_test[sub_te_idx]
 
-    audio_train, audio_test = normalize_data(audio_train, audio_test)
+    audio_train, audio_val, audio_test = normalize_data(audio_train, audio_val, audio_test)
 
     print("shapes of train is {}, {} and shape of label is {}".format(audio_train.shape,
                                                                       pic_train.shape,
                                                                       labels_train.shape))
+    print("shapes of val is {}, {} and shape of label is {}".format(audio_val.shape,
+                                                                    pic_val.shape,
+                                                                    labels_val.shape))
     print("shapes of test is {}, {} and shape of label is {}".format(audio_test.shape,
                                                                      pic_test.shape,
                                                                      labels_test.shape))
 
     train_data = (audio_train, pic_train, labels_train)
+    val_data = (audio_val, pic_val, labels_val)
     test_data = (audio_test, pic_test, labels_test)
 
-    return train_data, test_data
+    return train_data, val_data, test_data

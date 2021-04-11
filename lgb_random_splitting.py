@@ -9,7 +9,7 @@ config = load_cfg('configs/config_paths.yml')
 
 logs_path = config['logs']['logs_path']
 # train_data, test_data = load_video_data(config)
-train_data, test_data = load_subset_labels_data(config)
+train_data, val_data, test_data = load_subset_labels_data(config)
 
 audio_train, pic_train, labels_train = train_data
 audio_test, pic_test, labels_test = test_data

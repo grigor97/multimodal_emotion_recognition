@@ -9,6 +9,7 @@ from tensorflow.keras.utils import to_categorical
 
 def run_model(model_name,
               train_data,
+              val_data,
               test_data,
               logs_path,
               restore=False,
@@ -18,10 +19,12 @@ def run_model(model_name,
               batch_size=64,
               num_epochs=100):
     audio_train, pic_train, labels_train = train_data
+    audio_val, pic_val, labels_val = val_data
     audio_test, pic_test, labels_test = test_data
     audio_train = np.expand_dims(audio_train, -1)
     audio_test = np.expand_dims(audio_test, -1)
     labels_train_y = to_categorical(labels_train)
+    labels_val_y = to_categorical(labels_val)
     labels_test_y = to_categorical(labels_test)
 
     audio_train_dim = audio_train.shape[1]
@@ -63,22 +66,22 @@ def run_model(model_name,
         model.load_weights(checkpoint_path)
         num_epochs = num_epochs - continue_at + 1
 
-    tr_audio_x, tr_pic_x, tr_y, val_audio_x, val_pic_x, val_y = random_split(audio_train, pic_train, labels_train_y)
+    # tr_audio_x, tr_pic_x, tr_y, val_audio_x, val_pic_x, val_y = random_split(audio_train, pic_train, labels_train_y)
 
-    print("train, val and test shapes are {} {} {}, {} {} {}, {} {} {}".
-          format(tr_audio_x.shape, tr_pic_x.shape, tr_y.shape,
-                 val_audio_x.shape, val_pic_x.shape, val_y.shape,
-                 audio_test.shape, pic_test.shape, labels_test_y.shape))
+    # print("train, val and test shapes are {} {} {}, {} {} {}, {} {} {}".
+    #       format(tr_audio_x.shape, tr_pic_x.shape, tr_y.shape,
+    #              val_audio_x.shape, val_pic_x.shape, val_y.shape,
+    #              audio_test.shape, pic_test.shape, labels_test_y.shape))
 
-    model_history = model.fit(tr_audio_x,
-                              tr_y,
+    model_history = model.fit(audio_train,
+                              labels_train_y,
                               batch_size=batch_size,
                               epochs=num_epochs,
-                              validation_data=(val_audio_x, val_y),
+                              validation_data=(audio_val, labels_val_y),
                               callbacks=[cp_callback])
 
     # Evaluate the validation
-    val_loss, val_acc = model.evaluate(val_audio_x, val_y)
+    val_loss, val_acc = model.evaluate(audio_val, labels_val_y)
     print("{} model val accuracy: {:5.2f}%".format(model_name, 100 * val_acc))
     print("{} model val loss: {:5.2f}".format(model_name, val_loss))
 

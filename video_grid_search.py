@@ -16,7 +16,7 @@ def main(args):
     # tf.random.set_seed(random_seed)
     logs_path = config['logs']['logs_path']
     # train_data, test_data = load_data(config)
-    train_data, test_data = load_subset_labels_data(config)
+    train_data, val_data, test_data = load_subset_labels_data(config)
 
     num_epochs = 100
     opts = ['SGD', 'RMSprop', 'Adam']
@@ -30,6 +30,7 @@ def main(args):
             for lr in lrs:
                 acc = run_video_model(model_name,
                                       train_data,
+                                      val_data,
                                       test_data,
                                       logs_path,
                                       restore=False,
