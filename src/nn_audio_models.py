@@ -22,6 +22,7 @@ def run_model(model_name,
     audio_val, pic_val, labels_val = val_data
     audio_test, pic_test, labels_test = test_data
     audio_train = np.expand_dims(audio_train, -1)
+    audio_val = np.expand_dims(audio_val, -1)
     audio_test = np.expand_dims(audio_test, -1)
     labels_train_y = to_categorical(labels_train)
     labels_val_y = to_categorical(labels_val)
