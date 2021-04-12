@@ -113,7 +113,7 @@ def run_model(model_name,
                               batch_size=batch_size,
                               epochs=num_epochs,
                               validation_data=(audio_val, labels_val_y),
-                              callbacks=[cp_callback, CustomEarlyStopping()])
+                              callbacks=[CustomEarlyStopping()])
 
     # Evaluate the validation
     val_loss, val_acc = model.evaluate(audio_val, labels_val_y)
