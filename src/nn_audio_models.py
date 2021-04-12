@@ -25,6 +25,7 @@ class CustomEarlyStopping(tf.keras.callbacks.Callback):
 
         print('trai accc', t_acc)
         print('val accc', v_acc)
+        print('wait', self.wait)
         if t_acc - v_acc > self.tol:
             print('gap is larger wait time is {}'.format(self.wait))
             self.wait += 1
