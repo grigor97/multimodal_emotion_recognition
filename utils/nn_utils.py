@@ -38,7 +38,7 @@ def nn_save_model_plots(model_history, save_path):
     :param save_path: path to save plots
     :return: None
     """
-    loss = model_history.history['loss']
+    loss = model_history.history['train_loss']
     val_loss = model_history.history['val_loss']
 
     epochs = range(1, len(loss) + 1)
@@ -54,7 +54,7 @@ def nn_save_model_plots(model_history, save_path):
 
     plt.clf()
 
-    acc = model_history.history['accuracy']
+    acc = model_history.history['train_accuracy']
     val_acc = model_history.history['val_accuracy']
 
     plt.plot(epochs, acc, 'ro', label='Training acc')

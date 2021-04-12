@@ -7,6 +7,35 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.utils import to_categorical
 
 
+class CustomEarlyStopping(tf.keras.callbacks.Callback):
+    def __init__(self, tol=15):
+        super(CustomEarlyStopping, self).__init__()
+        self.tol = tol
+        # self.best_weights = None
+
+    # def on_train_begin(self, logs=None):
+    #     # The number of epoch it has waited when loss is no longer minimum.
+    #     self.wait = 0
+    #     # The epoch the training stops at.
+    #     self.stopped_epoch = 0
+    #     # Initialize the best as infinity.
+    #     self.best_v_loss = np.Inf
+    #     self.best_map10 = 0
+
+    def on_epoch_end(self, epoch, logs=None):
+        v_acc = logs.get('val_accuracy')
+        t_acc = logs.get('train_accuracy')
+        # map10 = logs.get('val_average_precision_at_k10')
+
+        if t_acc - v_acc < self.tol:
+            self.stopped_epoch = epoch
+            self.model.stop_training = True
+
+    def on_train_end(self, logs=None):
+        if self.stopped_epoch > 0:
+            print("Epoch %05d: early stopping" % (self.stopped_epoch + 1))
+
+
 def run_model(model_name,
               train_data,
               val_data,
