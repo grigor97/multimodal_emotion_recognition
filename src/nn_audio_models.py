@@ -8,7 +8,7 @@ from tensorflow.keras.utils import to_categorical
 
 
 class CustomEarlyStopping(tf.keras.callbacks.Callback):
-    def __init__(self, tol=0.15, patience=5):
+    def __init__(self, tol=0.15, patience=8):
         super(CustomEarlyStopping, self).__init__()
         self.tol = tol
         self.patience = patience
@@ -95,7 +95,7 @@ def run_model(model_name,
     #                                                  save_weights_only=True,
     #                                                  verbose=1)
 
-    es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', min_delta=0.01, patience=20, mode='max')
+    es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', min_delta=0.01, patience=50, mode='max')
 
     if restore:
         model.load_weights(checkpoint_path)
