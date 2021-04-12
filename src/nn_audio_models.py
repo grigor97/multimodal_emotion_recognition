@@ -107,6 +107,8 @@ def run_model(model_name,
         f.write(str(train_acc))
         f.write('\n')
 
+    return test_acc
+
 
 def create_audio_cnn_model(optimizer, train_dim, output_dim):
     """

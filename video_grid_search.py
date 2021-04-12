@@ -41,9 +41,6 @@ def main(args):
                                       batch_size=32,
                                       num_epochs=num_epochs)
 
-                if best_acc is None:
-                    continue
-
                 if best_acc < acc:
                     best_acc = acc
                     best_lr = lr

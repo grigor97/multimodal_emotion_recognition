@@ -131,6 +131,8 @@ def run_video_model(model_name,
         f.write(str(train_acc))
         f.write('\n')
 
+    return test_acc
+
 
 def create_video_cnn_model(optimizer, audio_dim, pic_shape, output_dim):
     """

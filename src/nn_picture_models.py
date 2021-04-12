@@ -116,6 +116,8 @@ def run_picture_model(model_name,
         f.write(str(train_acc))
         f.write('\n')
 
+    return test_acc
+
 
 def create_picture_cnn_model(optimizer, pic_shape, output_dim):
     """
