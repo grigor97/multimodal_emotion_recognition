@@ -38,7 +38,7 @@ def nn_save_model_plots(model_history, save_path):
     :param save_path: path to save plots
     :return: None
     """
-    print(model_history.keys())
+    print(model_history.history.keys())
     loss = model_history.history['loss']
     val_loss = model_history.history['val_loss']
 
