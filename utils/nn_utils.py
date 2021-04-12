@@ -3,6 +3,43 @@ import random
 from utils.utils import *
 import matplotlib.pyplot as plt
 
+import tensorflow as tf
+from tensorflow.keras.layers import *
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.utils import to_categorical
+
+
+class CustomEarlyStopping(tf.keras.callbacks.Callback):
+    def __init__(self, tol=0.15, patience=8):
+        super(CustomEarlyStopping, self).__init__()
+        self.tol = tol
+        self.patience = patience
+        # self.best_weights = None
+
+    def on_train_begin(self, logs=None):
+        # The number of epoch it has waited when loss is no longer minimum.
+        self.wait = 0
+        self.stopped_epoch = 0
+
+    def on_epoch_end(self, epoch, logs=None):
+        v_acc = logs.get('val_accuracy')
+        t_acc = logs.get('accuracy')
+
+        if t_acc - v_acc > self.tol:
+            print('gap is larger wait time is {}'.format(self.wait))
+            self.wait += 1
+        else:
+            self.wait = 0
+
+        if self.wait > self.patience and epoch > 1:
+            print('stopppppppinggggggggg')
+            self.stopped_epoch = epoch
+            self.model.stop_training = True
+
+    def on_train_end(self, logs=None):
+        if self.stopped_epoch > 0:
+            print("Epoch %05d: early stopping" % (self.stopped_epoch + 1))
+
 
 def random_split(audio_x, pic_x, y, spl=0.15):
     """

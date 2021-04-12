@@ -17,13 +17,14 @@ def main(args):
 
     num_epochs = 200
     # opts = ['SGD', 'RMSprop', 'Adam']
-    opts = ['Adam']
+    opts = ['SGD', 'RMSprop']
     lrs = [0.3, 0.01, 0.03, 0.001, 0.003, 0.0001, 0.0003, 0.00001, 0.00003, 0.000001, 0.000000001]
     model_names = ['audio_cnn', 'audio_lstm', 'audio_blstm', 'audio_stacked_lstm']
     best_acc, best_optimizer, best_lr, best_batch_size, best_model_name = 0, None, None, None, None
     for model_name in model_names:
         for opt in opts:
             for lr in lrs:
+                print('lr is  {}, opt is {}, model is {}'.format(lr, opt, model_name))
                 acc = run_model(model_name, train_data, val_data, test_data, logs_path, restore=False,
                                 continue_at=1, optimizer=opt, lr=lr, batch_size=64, num_epochs=num_epochs)
 

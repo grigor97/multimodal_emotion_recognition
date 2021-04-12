@@ -1,9 +1,6 @@
 import os
 
-import tensorflow as tf
 from tensorflow.keras import activations
-from tensorflow.keras.layers import *
-from tensorflow.keras.utils import to_categorical
 from tensorflow.keras import Model
 
 from utils.nn_utils import *
@@ -67,9 +64,9 @@ def run_picture_model(model_name,
     checkpoint_dir = os.path.dirname(checkpoint_path)
 
     # Create a callback that saves the model's weights
-    cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
-                                                     save_weights_only=True,
-                                                     verbose=1)
+    # cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
+    #                                                  save_weights_only=True,
+    #                                                  verbose=1)
 
     if restore:
         model.load_weights(checkpoint_path)
@@ -81,13 +78,14 @@ def run_picture_model(model_name,
     #       format(tr_audio_x.shape, tr_pic_x.shape, tr_y.shape,
     #              val_audio_x.shape, val_pic_x.shape, val_y.shape,
     #              audio_test.shape, pic_test.shape, labels_test_y.shape))
+    es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', min_delta=0.01, patience=50, mode='max')
 
     model_history = model.fit(pic_train,
                               labels_train_y,
                               batch_size=batch_size,
                               epochs=num_epochs,
                               validation_data=(pic_val, labels_val_y),
-                              callbacks=[cp_callback])
+                              callbacks=[CustomEarlyStopping(), es_callback])
 
     # Evaluate the validation
     val_loss, val_acc = model.evaluate(pic_val, labels_val_y)
