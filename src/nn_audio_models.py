@@ -62,6 +62,8 @@ def run_model(model_name,
                                                      save_weights_only=True,
                                                      verbose=1)
 
+    es_callback = tf.keras.callbacks.EarlyStopping(monitor='accuracy', min_delta=0.01, patience=6)
+
     if restore:
         model.load_weights(checkpoint_path)
         num_epochs = num_epochs - continue_at + 1
@@ -78,7 +80,7 @@ def run_model(model_name,
                               batch_size=batch_size,
                               epochs=num_epochs,
                               validation_data=(audio_val, labels_val_y),
-                              callbacks=[cp_callback])
+                              callbacks=[cp_callback, es_callback])
 
     # Evaluate the validation
     val_loss, val_acc = model.evaluate(audio_val, labels_val_y)
