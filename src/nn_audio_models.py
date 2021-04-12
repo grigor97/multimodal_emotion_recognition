@@ -22,15 +22,17 @@ class CustomEarlyStopping(tf.keras.callbacks.Callback):
         v_acc = logs.get('val_accuracy')
         t_acc = logs.get('accuracy')
 
-        if epoch < 15:
+        if epoch < 10:
             return
 
-        if t_acc - v_acc < self.tol:
+        if t_acc - v_acc > self.tol:
+            print('gap is larger wait time is {}'.format(self.wait))
             self.wait += 1
         else:
             self.wait = 0
 
         if self.wait > self.patience:
+            print('stopppppppinggggggggg')
             self.stopped_epoch = epoch
             self.model.stop_training = True
 
