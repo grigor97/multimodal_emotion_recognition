@@ -20,7 +20,7 @@ class CustomEarlyStopping(tf.keras.callbacks.Callback):
 
     def on_epoch_end(self, epoch, logs=None):
         v_acc = logs.get('val_accuracy')
-        t_acc = logs.get('train_accuracy')
+        t_acc = logs.get('accuracy')
 
         if epoch < 15:
             return
