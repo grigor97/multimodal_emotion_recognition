@@ -8,7 +8,7 @@ from tensorflow.keras.utils import to_categorical
 
 
 class CustomEarlyStopping(tf.keras.callbacks.Callback):
-    def __init__(self, tol=15, patience=5):
+    def __init__(self, tol=1, patience=1):
         super(CustomEarlyStopping, self).__init__()
         self.tol = tol
         self.patience = patience
@@ -17,13 +17,11 @@ class CustomEarlyStopping(tf.keras.callbacks.Callback):
     def on_train_begin(self, logs=None):
         # The number of epoch it has waited when loss is no longer minimum.
         self.wait = 0
+        self.stopped_epoch = 0
 
     def on_epoch_end(self, epoch, logs=None):
         v_acc = logs.get('val_accuracy')
         t_acc = logs.get('accuracy')
-
-        if epoch < 10:
-            return
 
         if t_acc - v_acc > self.tol:
             print('gap is larger wait time is {}'.format(self.wait))
@@ -31,7 +29,7 @@ class CustomEarlyStopping(tf.keras.callbacks.Callback):
         else:
             self.wait = 0
 
-        if self.wait > self.patience:
+        if self.wait > self.patience and epoch > 1:
             print('stopppppppinggggggggg')
             self.stopped_epoch = epoch
             self.model.stop_training = True
@@ -97,7 +95,7 @@ def run_model(model_name,
                                                      save_weights_only=True,
                                                      verbose=1)
 
-    es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', min_delta=0.01, patience=20, mode='max')
+    # es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', min_delta=0.01, patience=20, mode='max')
 
     if restore:
         model.load_weights(checkpoint_path)
@@ -115,7 +113,7 @@ def run_model(model_name,
                               batch_size=batch_size,
                               epochs=num_epochs,
                               validation_data=(audio_val, labels_val_y),
-                              callbacks=[cp_callback, CustomEarlyStopping(), es_callback])
+                              callbacks=[cp_callback, CustomEarlyStopping()])
 
     # Evaluate the validation
     val_loss, val_acc = model.evaluate(audio_val, labels_val_y)
