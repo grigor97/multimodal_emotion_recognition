@@ -57,7 +57,7 @@ def run_video_model(model_name,
 
     if model_name == 'video_cnn':
         model = create_video_cnn_model(opt, audio_train_dim, pic_train[0].shape, output_dim)
-    elif model_name == 'tetsing':
+    elif model_name == 'testing':
         model = create_video_testing_model(opt, audio_train_dim, pic_train[0].shape, output_dim)
     elif model_name == 'video_batchnorm_cnn':
         model = create_video_batchnorm_cnn_model(opt, audio_train_dim, pic_train[0].shape, output_dim)
