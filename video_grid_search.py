@@ -18,14 +18,14 @@ def main(args):
     # train_data, test_data = load_data(config)
     train_data, val_data, test_data = load_subset_labels_data(config)
 
-    num_epochs = 100
+    num_epochs = 200
     batch_size = 64
     opts = ['SGD', 'RMSprop', 'Adam']
     # opts = ['Adam']
-    lrs = [0.3, 0.01, 0.03, 0.001, 0.003, 0.0001, 0.0003, 0.00001, 0.00003, 0.000001, 0.000000001]
+    lrs = [0.001, 0.003, 0.0001]
     # model_names = ['video_big_batchnorm_cnn', 'video_batchnorm_cnn', 'video_big_cnn',
     # 'video_cnn', 'video_bcnn', 'video_bbcnn', 'video_blstm']
-    model_names = ['video_cnn', 'video_bcnn', 'video_bbcnn']
+    model_names = ['video_cnn', 'video_bcnn', 'video_bbcnn', 'video_big_batchnorm_cnn']
     best_acc, best_optimizer, best_lr, best_batch_size, best_model_name = 0, None, None, None, None
     for model_name in model_names:
         for opt in opts:
