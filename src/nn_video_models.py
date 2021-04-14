@@ -839,9 +839,10 @@ def create_video_blstm_model(optimizer, audio_dim, pic_shape, output_dim, blstm_
     return model
 
 
-def create_video_testing_model(optimizer, audio_dim, pic_shape, output_dim):
+def create_video_testing_model(optimizer, audio_dim, pic_shape, output_dim, lstm_length=250):
     """
     Creates cnn model for video data
+    :param lstm_length: lstm size
     :param optimizer: optimizer for a cnn
     :param audio_dim: dimension of audio data
     :param pic_shape: shape of the pictures
@@ -850,40 +851,19 @@ def create_video_testing_model(optimizer, audio_dim, pic_shape, output_dim):
     """
     # audio network part
     audio_input = Input(shape=(audio_dim, 1), name='audio_input')
-    audio_x = Conv1D(128, 8, padding='same', activation=activations.relu)(audio_input)
+    audio_x = LSTM(lstm_length, return_sequences=False, activation='relu')(audio_input)
 
-    audio_x = Conv1D(128, 8, padding='same')(audio_x)
+    audio_x = Dense(64)(audio_x)
     audio_x = BatchNormalization()(audio_x)
-    audio_x = Activation(activations.relu)(audio_x)
-    # audio_x = Dropout(0.25)(audio_x)
-    audio_x = MaxPooling1D(pool_size=8)(audio_x)
+    audio_x = Activation('relu')(audio_x)
 
-    audio_x = Conv1D(64, 8, padding='same')(audio_x)
-    audio_x = BatchNormalization()(audio_x)
-    audio_x = Activation(activations.relu)(audio_x)
-
-    audio_x = Conv1D(64, 8, padding='same')(audio_x)
-    audio_x = BatchNormalization()(audio_x)
-    audio_x = Activation(activations.relu)(audio_x)
-
-    audio_x = Conv1D(64, 8, padding='same')(audio_x)
-    audio_x = BatchNormalization()(audio_x)
-    audio_x = Activation(activations.relu)(audio_x)
-
-    audio_x = Conv1D(64, 8, padding='same')(audio_x)
-    audio_x = BatchNormalization()(audio_x)
-    audio_x = Activation(activations.relu)(audio_x)
-    # audio_x = Dropout(0.25)(audio_x)
-    audio_x = MaxPooling1D(pool_size=8)(audio_x)
-
-    audio_x = Conv1D(32, 8, padding='same')(audio_x)
-    audio_x = Activation(activations.relu)(audio_x)
-
-    audio_x = Conv1D(32, 8, padding='same')(audio_x)
-    audio_x = Activation(activations.relu)(audio_x)
-
-    audio_x = Flatten()(audio_x)
     audio_x = Dense(32)(audio_x)
+    audio_x = BatchNormalization()(audio_x)
+    audio_x = Activation('relu')(audio_x)
+
+    audio_x = Dense(32)(audio_x)
+    audio_x = BatchNormalization()(audio_x)
+    audio_x = Activation('relu')(audio_x)
     # end of audio network part
 
     # pictures network part
