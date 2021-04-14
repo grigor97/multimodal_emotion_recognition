@@ -20,8 +20,8 @@ def main(args):
 
     num_epochs = 200
     batch_size = 64
-    opts = ['SGD', 'RMSprop', 'Adam']
-    # opts = ['Adam']
+    # opts = ['SGD', 'RMSprop', 'Adam']
+    opts = ['Adam', 'SGD']
     lrs = [0.001, 0.003, 0.0001]
     # model_names = ['video_big_batchnorm_cnn', 'video_batchnorm_cnn', 'video_big_cnn',
     # 'video_cnn', 'video_bcnn', 'video_bbcnn', 'video_blstm']
