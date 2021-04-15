@@ -26,6 +26,9 @@ class CustomEarlyStopping(tf.keras.callbacks.Callback):
         t_acc = logs.get('accuracy')
 
         if t_acc - v_acc > self.tol:
+            if t_acc - v_acc > self.tol + 10:
+                print('gap is too larger wait time is {}'.format(self.wait))
+                self.wait += 100
             print('gap is larger wait time is {}'.format(self.wait))
             self.wait += 1
         else:
