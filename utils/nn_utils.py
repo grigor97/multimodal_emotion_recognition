@@ -10,7 +10,7 @@ from tensorflow.keras.utils import to_categorical
 
 
 class CustomEarlyStopping(tf.keras.callbacks.Callback):
-    def __init__(self, tol=0.15, patience=4):
+    def __init__(self, tol=0.15, patience=8):
         super(CustomEarlyStopping, self).__init__()
         self.tol = tol
         self.patience = patience
