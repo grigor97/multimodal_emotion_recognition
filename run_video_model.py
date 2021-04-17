@@ -7,13 +7,13 @@ def parse_args():
                                      "video_batchnorm_cnn, video_big_cnn, video_big_batchnorm_cnn, "
                                      "video_bcnn, video_bbcnn, video_blstm")
     parser.add_argument('-c', '--config', type=str, default='configs/config_paths.yml')
-    parser.add_argument('-m', '--model', type=str, default='video_cnn')
+    parser.add_argument('-m', '--model', type=str, default='testing')
     parser.add_argument('-r', '--restore', type=bool, default=False)
     parser.add_argument('-cont', '--continue_at', type=int, default=1)
-    parser.add_argument('-opt', '--optimizer', type=str, default='RMSprop')
+    parser.add_argument('-opt', '--optimizer', type=str, default='Adam')
     parser.add_argument('-lr', '--learning_rate', type=float, default=1e-3)
     parser.add_argument('-bs', '--batch_size', type=int, default=64)
-    parser.add_argument('-iter', '--iterations', type=int, default=100)
+    parser.add_argument('-iter', '--iterations', type=int, default=20)
 
     return parser.parse_args()
 
