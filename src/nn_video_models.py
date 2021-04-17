@@ -857,9 +857,9 @@ def create_video_testing_model(optimizer, audio_dim, pic_shape, output_dim, lstm
     audio_x = BatchNormalization()(audio_x)
     audio_x = Activation('relu')(audio_x)
 
-    audio_x = Dense(32)(audio_x)
-    audio_x = BatchNormalization()(audio_x)
-    audio_x = Activation('relu')(audio_x)
+    # audio_x = Dense(32)(audio_x)
+    # audio_x = BatchNormalization()(audio_x)
+    # audio_x = Activation('relu')(audio_x)
 
     audio_x = Dense(32)(audio_x)
     audio_x = BatchNormalization()(audio_x)
