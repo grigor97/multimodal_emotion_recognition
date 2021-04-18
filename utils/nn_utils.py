@@ -10,7 +10,7 @@ from tensorflow.keras.utils import to_categorical
 
 
 class CustomEarlyStopping(tf.keras.callbacks.Callback):
-    def __init__(self, tol=0.15, patience=3):
+    def __init__(self, tol=0.10, patience=3):
         super(CustomEarlyStopping, self).__init__()
         self.tol = tol
         self.patience = patience
@@ -26,7 +26,7 @@ class CustomEarlyStopping(tf.keras.callbacks.Callback):
         t_acc = logs.get('accuracy')
 
         if t_acc - v_acc > self.tol:
-            if t_acc - v_acc > self.tol + 10:
+            if t_acc - v_acc > self.tol + 5:
                 print('gap is too larger wait time is {}'.format(self.wait))
                 self.wait += 100
             print('gap is larger wait time is {}'.format(self.wait))
