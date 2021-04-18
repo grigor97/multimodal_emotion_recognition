@@ -857,9 +857,9 @@ def create_video_testing_model(optimizer, audio_dim, pic_shape, output_dim, lstm
     audio_x = BatchNormalization()(audio_x)
     audio_x = Activation('relu')(audio_x)
 
-    # audio_x = Dense(32)(audio_x)
-    # audio_x = BatchNormalization()(audio_x)
-    # audio_x = Activation('relu')(audio_x)
+    audio_x = Dense(32)(audio_x)
+    audio_x = BatchNormalization()(audio_x)
+    audio_x = Activation('relu')(audio_x)
 
     audio_x = Dense(32)(audio_x)
     audio_x = BatchNormalization()(audio_x)
@@ -898,9 +898,9 @@ def create_video_testing_model(optimizer, audio_dim, pic_shape, output_dim, lstm
     # concatenation of two networks
     x = concatenate([audio_x, pic_x])
 
-    x = Dense(32)(x)
-    x = BatchNormalization()(x)
-    x = Activation(activations.relu)(x)
+    # x = Dense(32)(x)
+    # x = BatchNormalization()(x)
+    # x = Activation(activations.relu)(x)
     x = Dense(32, activation='relu')(x)
     out = Dense(output_dim, activation='relu')(x)
 
