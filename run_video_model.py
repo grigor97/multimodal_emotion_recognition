@@ -13,7 +13,7 @@ def parse_args():
     parser.add_argument('-opt', '--optimizer', type=str, default='Adam')
     parser.add_argument('-lr', '--learning_rate', type=float, default=1e-3)
     parser.add_argument('-bs', '--batch_size', type=int, default=64)
-    parser.add_argument('-iter', '--iterations', type=int, default=20)
+    parser.add_argument('-iter', '--iterations', type=int, default=100)
 
     return parser.parse_args()
 
