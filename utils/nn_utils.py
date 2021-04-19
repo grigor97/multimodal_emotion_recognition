@@ -49,7 +49,7 @@ class CustomEarlyStopping(tf.keras.callbacks.Callback):
         else:
             self.wait = 0
 
-        if self.wait > self.patience and epoch > 1:
+        if (self.wait > self.patience or self.te_wait > self.patience) and epoch > 1:
             print('stopppppppinggggggggg')
             self.stopped_epoch = epoch
             self.model.stop_training = True
