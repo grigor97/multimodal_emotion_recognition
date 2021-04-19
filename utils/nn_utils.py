@@ -44,6 +44,16 @@ class CustomEarlyStopping(tf.keras.callbacks.Callback):
             print("Epoch %05d: early stopping" % (self.stopped_epoch + 1))
 
 
+class TestCallback(tf.keras.callbacks.Callback):
+    def __init__(self, test_data):
+        self.test_data = test_data
+
+    def on_epoch_end(self, epoch, logs={}):
+        x, y = self.test_data
+        loss, acc = self.model.evaluate(x, y, verbose=0)
+        print('\nTesting loss: {}, acc: {}\n'.format(loss, acc))
+
+
 def random_split(audio_x, pic_x, y, spl=0.15):
     """
     Random split of train data into train val

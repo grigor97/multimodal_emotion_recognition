@@ -98,12 +98,14 @@ def run_video_model(model_name,
 
     es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', min_delta=0.01, patience=50, mode='max')
 
+    test = ({'audio_input': audio_test, 'pic_input': pic_test}, labels_test_y)
+
     model_history = model.fit({'audio_input': audio_train, 'pic_input': pic_train},
                               labels_train_y,
                               batch_size=batch_size,
                               epochs=num_epochs,
                               validation_data=({'audio_input': audio_val, 'pic_input': pic_val}, labels_val_y),
-                              callbacks=[CustomEarlyStopping(), es_callback])
+                              callbacks=[CustomEarlyStopping(), es_callback, TestCallback(test)])
 
     # Evaluate the validation
     val_loss, val_acc = model.evaluate({'audio_input': audio_val, 'pic_input': pic_val}, labels_val_y)
