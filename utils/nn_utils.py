@@ -10,20 +10,35 @@ from tensorflow.keras.utils import to_categorical
 
 
 class CustomEarlyStopping(tf.keras.callbacks.Callback):
-    def __init__(self, tol=0.10, patience=3):
+    def __init__(self, test_data, tol=0.10, patience=3):
         super(CustomEarlyStopping, self).__init__()
         self.tol = tol
         self.patience = patience
         # self.best_weights = None
+        self.test_data = test_data
 
     def on_train_begin(self, logs=None):
         # The number of epoch it has waited when loss is no longer minimum.
         self.wait = 0
+        self.te_wait = 0
         self.stopped_epoch = 0
 
     def on_epoch_end(self, epoch, logs=None):
+        x, y = self.test_data
+        te_loss, te_acc = self.model.evaluate(x, y, verbose=0)
+        print('\nTesting loss: {}, acc: {}\n'.format(te_loss, te_acc))
+
         v_acc = logs.get('val_accuracy')
         t_acc = logs.get('accuracy')
+
+        if v_acc - te_acc > self.tol:
+            if v_acc - te_acc > self.tol + 5:
+                print('testing gap is too larger wait time is {}'.format(self.te_wait))
+                self.te_wait += 100
+            print('testing gap is larger wait time is {}'.format(self.te_wait))
+            self.te_wait += 1
+        else:
+            self.te_wait = 0
 
         if t_acc - v_acc > self.tol:
             if t_acc - v_acc > self.tol + 5:
@@ -44,14 +59,14 @@ class CustomEarlyStopping(tf.keras.callbacks.Callback):
             print("Epoch %05d: early stopping" % (self.stopped_epoch + 1))
 
 
-class TestCallback(tf.keras.callbacks.Callback):
-    def __init__(self, test_data):
-        self.test_data = test_data
-
-    def on_epoch_end(self, epoch, logs={}):
-        x, y = self.test_data
-        loss, acc = self.model.evaluate(x, y, verbose=0)
-        print('\nTesting loss: {}, acc: {}\n'.format(loss, acc))
+# class TestCallback(tf.keras.callbacks.Callback):
+#     def __init__(self, test_data):
+#         self.test_data = test_data
+#
+#     def on_epoch_end(self, epoch, logs={}):
+#         x, y = self.test_data
+#         loss, acc = self.model.evaluate(x, y, verbose=0)
+#         print('\nTesting loss: {}, acc: {}\n'.format(loss, acc))
 
 
 def random_split(audio_x, pic_x, y, spl=0.15):

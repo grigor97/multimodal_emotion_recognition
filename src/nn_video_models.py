@@ -105,7 +105,7 @@ def run_video_model(model_name,
                               batch_size=batch_size,
                               epochs=num_epochs,
                               validation_data=({'audio_input': audio_val, 'pic_input': pic_val}, labels_val_y),
-                              callbacks=[CustomEarlyStopping(), es_callback, TestCallback(test)])
+                              callbacks=[CustomEarlyStopping(test), es_callback])
 
     # Evaluate the validation
     val_loss, val_acc = model.evaluate({'audio_input': audio_val, 'pic_input': pic_val}, labels_val_y)
