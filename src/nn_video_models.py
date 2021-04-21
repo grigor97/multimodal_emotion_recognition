@@ -862,9 +862,9 @@ def create_video_testing_model(optimizer, audio_dim, pic_shape, output_dim, lstm
     audio_x = BatchNormalization()(audio_x)
     audio_x = Activation('relu')(audio_x)
 
-    audio_x = Dense(32)(audio_x)
-    audio_x = BatchNormalization()(audio_x)
-    audio_x = Activation('relu')(audio_x)
+    # audio_x = Dense(32)(audio_x)
+    # audio_x = BatchNormalization()(audio_x)
+    # audio_x = Activation('relu')(audio_x)
 
     audio_x = Dense(32)(audio_x)
     audio_x = BatchNormalization()(audio_x)
@@ -879,17 +879,17 @@ def create_video_testing_model(optimizer, audio_dim, pic_shape, output_dim, lstm
     pic_x = Activation(activations.relu)(pic_x)
     pic_x = MaxPool2D()(pic_x)
 
-    pic_x = Conv2D(16, kernel_size=(3, 3), padding="same")(pic_x)
+    pic_x = Conv2D(32, kernel_size=(3, 3), padding="same")(pic_x)
     # pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
     pic_x = MaxPool2D()(pic_x)
 
-    pic_x = Conv2D(16, kernel_size=(3, 3), padding="same")(pic_x)
+    pic_x = Conv2D(64, kernel_size=(3, 3), padding="same")(pic_x)
     # pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
     pic_x = MaxPool2D()(pic_x)
 
-    pic_x = Conv2D(16, kernel_size=(3, 3), padding="same")(pic_x)
+    pic_x = Conv2D(32, kernel_size=(3, 3), padding="same")(pic_x)
     # pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
     pic_x = MaxPool2D()(pic_x)
