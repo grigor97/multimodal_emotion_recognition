@@ -940,7 +940,7 @@ def create_video_testing_model(optimizer, audio_dim, pic_shape, output_dim, lstm
     # x = Dense(32)(x)
     # x = BatchNormalization()(x)
     # x = Activation(activations.relu)(x)
-    x = Dense(32, activation='relu')(x)
+    x = Dense(128, activation='relu')(x)
     # x = Dropout(0.15)(x)
     out = Dense(output_dim, activation='relu')(x)
 
