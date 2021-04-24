@@ -319,6 +319,7 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     x = concatenate([audio_x, pic_x])
 
     x = Dense(32, activation='relu')(x)
+    x = Dropout(0.2)(x)
 
     out = Dense(output_dim, activation='relu')(x)
 
