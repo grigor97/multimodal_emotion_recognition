@@ -900,21 +900,21 @@ def create_video_testing_model(optimizer, audio_dim, pic_shape, output_dim, lstm
     # pic_x = Dropout(0.5)(pic_x)
     pic_x = MaxPool2D()(pic_x)
 
-    pic_x = Conv2D(32, kernel_size=(3, 3), padding="same")(pic_x)
+    pic_x = Conv2D(16, kernel_size=(3, 3), padding="same")(pic_x)
     # pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
     pic_x = BatchNormalization()(pic_x)
     # pic_x = Dropout(0.5)(pic_x)
     # pic_x = MaxPool2D()(pic_x)
 
-    pic_x = Conv2D(32, kernel_size=(3, 3), padding="same")(pic_x)
+    pic_x = Conv2D(16, kernel_size=(3, 3), padding="same")(pic_x)
     # pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
     pic_x = BatchNormalization()(pic_x)
     # pic_x = Dropout(0.5)(pic_x)
     pic_x = MaxPool2D()(pic_x)
 
-    pic_x = Conv2D(32, kernel_size=(3, 3), padding="same")(pic_x)
+    pic_x = Conv2D(16, kernel_size=(3, 3), padding="same")(pic_x)
     # pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
     pic_x = BatchNormalization()(pic_x)
@@ -930,7 +930,7 @@ def create_video_testing_model(optimizer, audio_dim, pic_shape, output_dim, lstm
     pic_x = Flatten()(pic_x)
     # pic_x = Dense(64, activation='relu')(pic_x)
     # pic_x = Dropout(0.25)(pic_x)
-    pic_x = Dense(6, activation='relu')(pic_x)
+    pic_x = Dense(4, activation='relu')(pic_x)
     # pic_x = Dropout(0.25)(pic_x)
     # end of pictures network part
 
@@ -940,7 +940,7 @@ def create_video_testing_model(optimizer, audio_dim, pic_shape, output_dim, lstm
     # x = Dense(32)(x)
     # x = BatchNormalization()(x)
     # x = Activation(activations.relu)(x)
-    x = Dense(64, activation='relu')(x)
+    x = Dense(32, activation='relu')(x)
     x = Dense(32, activation='relu')(x)
     # x = Dropout(0.15)(x)
     out = Dense(output_dim, activation='relu')(x)
