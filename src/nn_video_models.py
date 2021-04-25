@@ -893,21 +893,21 @@ def create_video_testing_model(optimizer, audio_dim, pic_shape, output_dim, lstm
     # pictures network part
     pic_input = Input(shape=pic_shape, name='pic_input')
 
-    pic_x = Conv2D(16, kernel_size=(3, 3), padding="valid")(pic_input)
+    pic_x = Conv2D(16, kernel_size=(5, 5), padding="valid")(pic_input)
 
     pic_x = Activation(activations.relu)(pic_x)
     pic_x = BatchNormalization()(pic_x)
     # pic_x = Dropout(0.5)(pic_x)
     pic_x = MaxPool2D()(pic_x)
 
-    pic_x = Conv2D(16, kernel_size=(3, 3), padding="valid")(pic_x)
+    pic_x = Conv2D(16, kernel_size=(5, 5), padding="valid")(pic_x)
     # pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
     pic_x = BatchNormalization()(pic_x)
     # pic_x = Dropout(0.5)(pic_x)
     # pic_x = MaxPool2D()(pic_x)
 
-    pic_x = Conv2D(32, kernel_size=(3, 3), padding="valid")(pic_x)
+    pic_x = Conv2D(32, kernel_size=(5, 5), padding="valid")(pic_x)
     # pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
     pic_x = BatchNormalization()(pic_x)
@@ -934,7 +934,7 @@ def create_video_testing_model(optimizer, audio_dim, pic_shape, output_dim, lstm
     pic_x = BatchNormalization()(pic_x)
     # pic_x = MaxPool2D()(pic_x)
 
-    pic_x = Conv2D(16, kernel_size=(3, 3), padding="valid")(pic_x)
+    pic_x = Conv2D(16, kernel_size=(5, 5), padding="valid")(pic_x)
     # pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
     pic_x = BatchNormalization()(pic_x)
