@@ -10,7 +10,7 @@ from tensorflow.keras.utils import to_categorical
 
 
 class CustomEarlyStopping(tf.keras.callbacks.Callback):
-    def __init__(self, test_data, tol=0.15, patience=4):
+    def __init__(self, test_data, tol=0.10, patience=5):
         super(CustomEarlyStopping, self).__init__()
         self.tol = tol
         self.patience = patience
@@ -20,7 +20,6 @@ class CustomEarlyStopping(tf.keras.callbacks.Callback):
     def on_train_begin(self, logs=None):
         # The number of epoch it has waited when loss is no longer minimum.
         self.wait = 0
-        self.te_wait = 0
         self.stopped_epoch = 0
 
     def on_epoch_end(self, epoch, logs=None):
@@ -31,15 +30,6 @@ class CustomEarlyStopping(tf.keras.callbacks.Callback):
         v_acc = logs.get('val_accuracy')
         t_acc = logs.get('accuracy')
 
-        if v_acc - te_acc > self.tol:
-            if v_acc - te_acc > self.tol + 5:
-                print('testing gap is too larger wait time is {}'.format(self.te_wait))
-                self.te_wait += 100
-            print('testing gap is larger wait time is {}'.format(self.te_wait))
-            self.te_wait += 1
-        else:
-            self.te_wait = 0
-
         if t_acc - v_acc > self.tol:
             if t_acc - v_acc > self.tol + 5:
                 print('gap is too larger wait time is {}'.format(self.wait))
@@ -49,7 +39,7 @@ class CustomEarlyStopping(tf.keras.callbacks.Callback):
         else:
             self.wait = 0
 
-        if (self.wait > self.patience or self.te_wait > self.patience) and epoch > 1:
+        if self.wait > self.patience and epoch > 1:
             print('stopppppppinggggggggg')
             self.stopped_epoch = epoch
             self.model.stop_training = True
@@ -57,6 +47,57 @@ class CustomEarlyStopping(tf.keras.callbacks.Callback):
     def on_train_end(self, logs=None):
         if self.stopped_epoch > 0:
             print("Epoch %05d: early stopping" % (self.stopped_epoch + 1))
+
+
+
+# class CustomEarlyStopping(tf.keras.callbacks.Callback):
+#     def __init__(self, test_data, tol=0.15, patience=4):
+#         super(CustomEarlyStopping, self).__init__()
+#         self.tol = tol
+#         self.patience = patience
+#         # self.best_weights = None
+#         self.test_data = test_data
+#
+#     def on_train_begin(self, logs=None):
+#         # The number of epoch it has waited when loss is no longer minimum.
+#         self.wait = 0
+#         self.te_wait = 0
+#         self.stopped_epoch = 0
+#
+#     def on_epoch_end(self, epoch, logs=None):
+#         x, y = self.test_data
+#         te_loss, te_acc = self.model.evaluate(x, y, verbose=0)
+#         print('\nTesting loss: {}, acc: {}\n'.format(te_loss, te_acc))
+#
+#         v_acc = logs.get('val_accuracy')
+#         t_acc = logs.get('accuracy')
+#
+#         if v_acc - te_acc > self.tol:
+#             if v_acc - te_acc > self.tol + 5:
+#                 print('testing gap is too larger wait time is {}'.format(self.te_wait))
+#                 self.te_wait += 100
+#             print('testing gap is larger wait time is {}'.format(self.te_wait))
+#             self.te_wait += 1
+#         else:
+#             self.te_wait = 0
+#
+#         if t_acc - v_acc > self.tol:
+#             if t_acc - v_acc > self.tol + 5:
+#                 print('gap is too larger wait time is {}'.format(self.wait))
+#                 self.wait += 100
+#             print('gap is larger wait time is {}'.format(self.wait))
+#             self.wait += 1
+#         else:
+#             self.wait = 0
+#
+#         if (self.wait > self.patience or self.te_wait > self.patience) and epoch > 1:
+#             print('stopppppppinggggggggg')
+#             self.stopped_epoch = epoch
+#             self.model.stop_training = True
+#
+#     def on_train_end(self, logs=None):
+#         if self.stopped_epoch > 0:
+#             print("Epoch %05d: early stopping" % (self.stopped_epoch + 1))
 
 
 # class TestCallback(tf.keras.callbacks.Callback):

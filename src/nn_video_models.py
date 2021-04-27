@@ -96,7 +96,9 @@ def run_video_model(model_name,
     #              val_audio_x.shape, val_pic_x.shape, val_y.shape,
     #              audio_test.shape, pic_test.shape, labels_test_y.shape))
 
-    es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', min_delta=0.01, patience=50, mode='max')
+    # es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', min_delta=0.01, patience=50, mode='max')
+    mcp_save = tf.keras.callbacks.ModelCheckpoint('.mdl_wts.hdf5', save_best_only=True,
+                                                  monitor='val_accuracy', mode='max')
 
     test = ({'audio_input': audio_test, 'pic_input': pic_test}, labels_test_y)
 
@@ -105,7 +107,7 @@ def run_video_model(model_name,
                               batch_size=batch_size,
                               epochs=num_epochs,
                               validation_data=({'audio_input': audio_val, 'pic_input': pic_val}, labels_val_y),
-                              callbacks=[CustomEarlyStopping(test), es_callback])
+                              callbacks=[CustomEarlyStopping(test), mcp_save])
 
     # Evaluate the validation
     val_loss, val_acc = model.evaluate({'audio_input': audio_val, 'pic_input': pic_val}, labels_val_y)
@@ -290,45 +292,30 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     # pictures network part
     pic_input = Input(shape=pic_shape, name='pic_input')
 
-    pic_x = Conv2D(16, kernel_size=(5, 5), padding="valid")(pic_input)
-    pic_x = BatchNormalization()(pic_x)
-    pic_x = Activation(activations.relu)(pic_x)
-    # pic_x = Dropout(0.5)(pic_x)
-    # pic_x = MaxPool2D()(pic_x)
-
-    pic_x = Conv2D(16, kernel_size=(5, 5), padding="valid")(pic_x)
-    pic_x = BatchNormalization()(pic_x)
-    pic_x = Activation(activations.relu)(pic_x)
-    # pic_x = Dropout(0.5)(pic_x)
-    # pic_x = MaxPool2D()(pic_x)
-
-    pic_x = Conv2D(32, kernel_size=(5, 5), padding="valid")(pic_x)
-    pic_x = BatchNormalization()(pic_x)
-    pic_x = Activation(activations.relu)(pic_x)
-    # pic_x = Dropout(0.5)(pic_x)
-    # pic_x = MaxPool2D()(pic_x)
-
-    pic_x = Conv2D(32, kernel_size=(5, 5), padding="valid")(pic_x)
-    pic_x = BatchNormalization()(pic_x)
-    pic_x = Activation(activations.relu)(pic_x)
-    # pic_x = Dropout(0.5)(pic_x)
-    # pic_x = MaxPool2D()(pic_x)
-
-    pic_x = Conv2D(32, kernel_size=(5, 5), padding="valid")(pic_x)
-    pic_x = BatchNormalization()(pic_x)
-    pic_x = Activation(activations.relu)(pic_x)
-    # pic_x = Dropout(0.5)(pic_x)
-    # pic_x = MaxPool2D()(pic_x)
-
-    pic_x = Conv2D(16, kernel_size=(5, 5), padding="valid")(pic_x)
+    pic_x = Conv2D(16, kernel_size=(3, 3), padding="valid")(pic_input)
     pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
     # pic_x = MaxPool2D()(pic_x)
 
-    # pic_x = Conv2D(16, kernel_size=(5, 5), padding="valid")(pic_x)
+    pic_x = Conv2D(32, kernel_size=(3, 3), padding="valid")(pic_x)
+    pic_x = BatchNormalization()(pic_x)
+    pic_x = Activation(activations.relu)(pic_x)
+    # pic_x = MaxPool2D()(pic_x)
+
+    pic_x = Conv2D(32, kernel_size=(3, 3), padding="valid")(pic_x)
+    pic_x = BatchNormalization()(pic_x)
+    pic_x = Activation(activations.relu)(pic_x)
+    pic_x = MaxPool2D()(pic_x)
+
+    # pic_x = Conv2D(64, kernel_size=(3, 3), padding="same")(pic_x)
     # # pic_x = BatchNormalization()(pic_x)
     # pic_x = Activation(activations.relu)(pic_x)
-    # pic_x = BatchNormalization()(pic_x)
+    # pic_x = MaxPool2D()(pic_x)
+
+    pic_x = Conv2D(32, kernel_size=(3, 3), padding="valid")(pic_x)
+    pic_x = BatchNormalization()(pic_x)
+    pic_x = Activation(activations.relu)(pic_x)
+    pic_x = MaxPool2D()(pic_x)
 
     pic_x = Flatten()(pic_x)
     # pic_x = Dense(64, activation='relu')(pic_x)
