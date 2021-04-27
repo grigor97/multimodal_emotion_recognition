@@ -170,7 +170,7 @@ def nn_save_model_plots(model_history, save_path):
     plt.title('model accuracy')
     plt.xlabel('epoch')
     plt.ylabel('accuracy')
-    plt.legend(['train', 'val'], loc='upper left')
+    plt.legend(loc='upper left')
     plt.legend()
 
     plt.savefig(save_path + "/accuracy.png")
