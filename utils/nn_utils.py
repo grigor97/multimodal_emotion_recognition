@@ -153,6 +153,10 @@ def normalize_data(audio_train, audio_val, audio_test):
     audio_val /= safe_max
     audio_test /= safe_max
 
+    print(train_mean)
+    print('safe max')
+    print(safe_max)
+
     return audio_train, audio_val, audio_test
 
 
