@@ -951,7 +951,7 @@ def create_video_testing_model(optimizer, audio_dim, pic_shape, output_dim, lstm
     # pic_x = Dense(64, activation='relu')(pic_x)
     # pic_x = Dropout(0.25)(pic_x)
     pic_x = Dense(8, activation='relu')(pic_x)
-    pic_x = Dropout(0.5)(pic_x)
+    # pic_x = Dropout(0.5)(pic_x)
     # end of pictures network part
 
     # concatenation of two networks
