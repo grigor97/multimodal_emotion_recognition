@@ -97,7 +97,7 @@ def run_video_model(model_name,
     #              audio_test.shape, pic_test.shape, labels_test_y.shape))
 
     # es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', min_delta=0.01, patience=50, mode='max')
-    mcp_save = tf.keras.callbacks.ModelCheckpoint('.mdl_wts.hdf5', save_best_only=True,
+    mcp_save = tf.keras.callbacks.ModelCheckpoint(checkpoint_dir + '/mdl_wts.hdf5', save_best_only=True,
                                                   monitor='val_accuracy', mode='max')
 
     test = ({'audio_input': audio_test, 'pic_input': pic_test}, labels_test_y)
@@ -321,7 +321,7 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     # pic_x = Dense(64, activation='relu')(pic_x)
     # pic_x = Dropout(0.25)(pic_x)
     pic_x = Dense(4, activation='relu')(pic_x)
-    # pic_x = Dropout(0.5)(pic_x)
+    pic_x = Dropout(0.5)(pic_x)
     # end of pictures network part
 
     # concatenation of two networks
