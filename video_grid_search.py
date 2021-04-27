@@ -23,7 +23,7 @@ def main(args):
     # opts = ['SGD', 'RMSprop', 'Adam']
     opts = ['Adam']
     lrs = [0.001, 0.0001]
-    model_names = ['testing']
+    model_names = ['testing', 'video_batchnorm_cnn']
     # model_names = ['testing']
     best_acc, best_optimizer, best_lr, best_batch_size, best_model_name = 0, None, None, None, None
     for model_name in model_names:

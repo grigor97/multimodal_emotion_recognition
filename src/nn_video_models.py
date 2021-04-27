@@ -228,9 +228,8 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     # concatenation of two networks
     x = concatenate([audio_x, pic_x])
 
-    x = Dense(32, activation='relu')(x)
+    x = Dense(16, activation='relu')(x)
     x = Dropout(0.2)(x)
-    x = Dense(32, activation='relu')(x)
     # x = Dense(16, activation='relu')(x)
     # TODO improve
     # BATCHNORM_CNN
