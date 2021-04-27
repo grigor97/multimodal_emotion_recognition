@@ -98,7 +98,7 @@ def run_video_model(model_name,
     # model = create_video_batchnorm_cnn_model(opt, audio_train_dim, pic_train[0].shape, output_dim)
 
     # es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', min_delta=0.01, patience=50, mode='max')
-    earlyStopping = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=30, verbose=0, mode='min')
+    earlyStopping = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=15, verbose=0, mode='max')
     mcp_save = tf.keras.callbacks.ModelCheckpoint(checkpoint_dir + '/mdl_wts.hdf5', save_best_only=True, monitor='val_accuracy', mode='max')
     # reduce_lr_loss = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=7, verbose=1, epsilon=1e-4, mode='min')
     test = ({'audio_input': audio_test, 'pic_input': pic_test}, labels_test_y)
