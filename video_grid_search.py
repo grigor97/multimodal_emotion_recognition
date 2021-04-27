@@ -23,8 +23,7 @@ def main(args):
     # opts = ['SGD', 'RMSprop', 'Adam']
     opts = ['Adam']
     lrs = [0.001, 0.0001]
-    model_names = ['video_big_batchnorm_cnn', 'video_batchnorm_cnn', 'video_big_cnn',
-    'video_cnn', 'video_bcnn', 'video_bbcnn', 'video_blstm']
+    model_names = ['video_batchnorm_cnn', 'video_bcnn', 'video_blstm']
     # model_names = ['testing']
     best_acc, best_optimizer, best_lr, best_batch_size, best_model_name = 0, None, None, None, None
     for model_name in model_names:
