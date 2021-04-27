@@ -141,14 +141,20 @@ def normalize_data(audio_train, audio_val, audio_test):
     :param audio_test: test data for audio
     :return: normalized data
     """
-    train_mean = audio_train.mean(axis=0)
-    audio_train -= train_mean
-    audio_val -= train_mean
-    audio_test -= train_mean
-    audio_train /= audio_train.sum(axis=1).reshape((audio_train.shape[0], 1))
-    audio_val /= audio_val.sum(axis=1).reshape((audio_val.shape[0], 1))
-    audio_test /= audio_test.sum(axis=1).reshape((audio_test.shape[0], 1))
+    train_min = audio_train.min(axis=0)
+    train_denom = audio_train.max(axis=0) - audio_train.min(axis=0)
+    audio_train -= train_min
+    audio_val -= train_min
+    audio_test -= train_min
+    audio_train /= train_denom.reshape((audio_train.shape[0], 1))
+    audio_val /= train_denom.reshape((audio_val.shape[0], 1))
+    audio_test /= train_denom.reshape((audio_test.shape[0], 1))
 
+    print("after nomilization  ")
+    print(train_min)
+    print(train_denom)
+    print('dsvasva')
+    print(audio_train[0, :])
     return audio_train, audio_val, audio_test
 
 
