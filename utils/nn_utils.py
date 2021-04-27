@@ -148,9 +148,9 @@ def normalize_data(audio_train, audio_val, audio_test):
     audio_train -= train_min
     audio_val -= train_min
     audio_test -= train_min
-    audio_train /= safe_max.reshape((audio_train.shape[0], 1))
-    audio_val /= safe_max.reshape((audio_val.shape[0], 1))
-    audio_test /= safe_max.reshape((audio_test.shape[0], 1))
+    audio_train /= safe_max
+    audio_val /= safe_max
+    audio_test /= safe_max
 
     print("after nomilization  ")
     print(train_min)
