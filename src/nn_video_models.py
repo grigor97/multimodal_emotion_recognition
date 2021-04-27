@@ -97,9 +97,9 @@ def run_video_model(model_name,
     #              audio_test.shape, pic_test.shape, labels_test_y.shape))
 
     # es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', min_delta=0.01, patience=50, mode='max')
-    mcp_save = tf.keras.callbacks.ModelCheckpoint(checkpoint_dir + '/mdl_wts.hdf5', save_best_only=True,
-                                                  monitor='val_accuracy', mode='max')
-
+    earlyStopping = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=10, verbose=0, mode='min')
+    mcp_save = tf.keras.callbacks.ModelCheckpoint('.mdl_wts.hdf5', save_best_only=True, monitor='val_accuracy', mode='max')
+    reduce_lr_loss = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=7, verbose=1, epsilon=1e-4, mode='min')
     test = ({'audio_input': audio_test, 'pic_input': pic_test}, labels_test_y)
 
     model_history = model.fit({'audio_input': audio_train, 'pic_input': pic_train},
@@ -107,7 +107,7 @@ def run_video_model(model_name,
                               batch_size=batch_size,
                               epochs=num_epochs,
                               validation_data=({'audio_input': audio_val, 'pic_input': pic_val}, labels_val_y),
-                              callbacks=[mcp_save])
+                              callbacks=[earlyStopping, mcp_save, reduce_lr_loss])
 
     # Evaluate the validation
     val_loss, val_acc = model.evaluate({'audio_input': audio_val, 'pic_input': pic_val}, labels_val_y)
