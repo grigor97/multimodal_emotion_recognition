@@ -103,6 +103,7 @@ def run_video_model(model_name,
     # reduce_lr_loss = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=7, verbose=1, epsilon=1e-4, mode='min')
     test = ({'audio_input': audio_test, 'pic_input': pic_test}, labels_test_y)
 
+
     model_history = model.fit({'audio_input': audio_train, 'pic_input': pic_train},
                               labels_train_y,
                               batch_size=batch_size,
