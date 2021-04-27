@@ -95,20 +95,22 @@ def run_video_model(model_name,
     #       format(tr_audio_x.shape, tr_pic_x.shape, tr_y.shape,
     #              val_audio_x.shape, val_pic_x.shape, val_y.shape,
     #              audio_test.shape, pic_test.shape, labels_test_y.shape))
-    model = create_video_batchnorm_cnn_model(opt, audio_train_dim, pic_train[0].shape, output_dim)
+    # model = create_video_batchnorm_cnn_model(opt, audio_train_dim, pic_train[0].shape, output_dim)
+
+    # es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', min_delta=0.01, patience=50, mode='max')
+    earlyStopping = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=10, verbose=0, mode='min')
+    mcp_save = tf.keras.callbacks.ModelCheckpoint(checkpoint_dir + '/mdl_wts.hdf5', save_best_only=True, monitor='val_accuracy', mode='max')
+    # reduce_lr_loss = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=7, verbose=1, epsilon=1e-4, mode='min')
+    test = ({'audio_input': audio_test, 'pic_input': pic_test}, labels_test_y)
+
+    model_history = model.fit({'audio_input': audio_train, 'pic_input': pic_train},
+                              labels_train_y,
+                              batch_size=batch_size,
+                              epochs=num_epochs,
+                              validation_data=({'audio_input': audio_val, 'pic_input': pic_val}, labels_val_y),
+                              callbacks=[earlyStopping, mcp_save])
+
     model.load_weights(filepath=checkpoint_dir + '/mdl_wts.hdf5')
-    # # es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', min_delta=0.01, patience=50, mode='max')
-    # earlyStopping = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=10, verbose=0, mode='min')
-    # mcp_save = tf.keras.callbacks.ModelCheckpoint(checkpoint_dir + '/mdl_wts.hdf5', save_best_only=True, monitor='val_accuracy', mode='max')
-    # # reduce_lr_loss = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=7, verbose=1, epsilon=1e-4, mode='min')
-    # test = ({'audio_input': audio_test, 'pic_input': pic_test}, labels_test_y)
-    #
-    # model_history = model.fit({'audio_input': audio_train, 'pic_input': pic_train},
-    #                           labels_train_y,
-    #                           batch_size=batch_size,
-    #                           epochs=num_epochs,
-    #                           validation_data=({'audio_input': audio_val, 'pic_input': pic_val}, labels_val_y),
-    #                           callbacks=[earlyStopping, mcp_save])
 
     # Evaluate the validation
     val_loss, val_acc = model.evaluate({'audio_input': audio_val, 'pic_input': pic_val}, labels_val_y)
@@ -120,24 +122,24 @@ def run_video_model(model_name,
     print("{} model test accuracy: {:5.2f}%".format(model_name, 100 * test_acc))
     print("{} model test loss: {:5.2f}".format(model_name, test_loss))
 
-    # model.save(checkpoint_dir + '/model.h5')
-    # nn_save_model_plots(model_history, checkpoint_dir)
-    #
-    # train_acc = model_history.history['accuracy'][-1]
-    # # val_acc = model_history.history['val_accuracy'][-1]
-    #
-    # with open(checkpoint_dir + '/' + model_name + '_res.txt', 'w') as f:
-    #     f.write("test accuracy and loss are ")
-    #     f.write(str(test_acc) + ' ' + str(test_loss))
-    #     f.write('\n')
-    #     f.write("val accuracy and loss are ")
-    #     f.write(str(val_acc))
-    #     f.write('\n')
-    #     f.write("train accuracy and loss are ")
-    #     f.write(str(train_acc))
-    #     f.write('\n')
-    #
-    # return test_acc
+    model.save(checkpoint_dir + '/model.h5')
+    nn_save_model_plots(model_history, checkpoint_dir)
+
+    train_acc = model_history.history['accuracy'][-1]
+    # val_acc = model_history.history['val_accuracy'][-1]
+
+    with open(checkpoint_dir + '/' + model_name + '_res.txt', 'w') as f:
+        f.write("test accuracy and loss are ")
+        f.write(str(test_acc) + ' ' + str(test_loss))
+        f.write('\n')
+        f.write("val accuracy and loss are ")
+        f.write(str(val_acc))
+        f.write('\n')
+        f.write("train accuracy and loss are ")
+        f.write(str(train_acc))
+        f.write('\n')
+
+    return test_acc
 
 
 def create_video_cnn_model(optimizer, audio_dim, pic_shape, output_dim):
