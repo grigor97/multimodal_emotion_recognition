@@ -58,7 +58,7 @@ def run_model(model_name,
     #                                                  save_weights_only=True,
     #                                                  verbose=1)
 
-    es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', min_delta=0.01, patience=50, mode='max')
+    # es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', min_delta=0.01, patience=50, mode='max')
 
     if restore:
         model.load_weights(checkpoint_path)
@@ -70,13 +70,18 @@ def run_model(model_name,
     #       format(tr_audio_x.shape, tr_pic_x.shape, tr_y.shape,
     #              val_audio_x.shape, val_pic_x.shape, val_y.shape,
     #              audio_test.shape, pic_test.shape, labels_test_y.shape))
+    earlyStopping = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=10, verbose=0, mode='min')
+    mcp_save = tf.keras.callbacks.ModelCheckpoint(checkpoint_dir + '/mdl_wts.hdf5', save_best_only=True,
+                                                  monitor='val_accuracy', mode='max')
 
     model_history = model.fit(audio_train,
                               labels_train_y,
                               batch_size=batch_size,
                               epochs=num_epochs,
                               validation_data=(audio_val, labels_val_y),
-                              callbacks=[CustomEarlyStopping(), es_callback])
+                              callbacks=[earlyStopping, mcp_save])
+
+    model.load_weights(filepath=checkpoint_dir + '/mdl_wts.hdf5')
 
     # Evaluate the validation
     val_loss, val_acc = model.evaluate(audio_val, labels_val_y)
@@ -88,7 +93,7 @@ def run_model(model_name,
     print("{} model test accuracy: {:5.2f}%".format(model_name, 100 * test_acc))
     print("{} model test loss: {:5.2f}".format(model_name, test_loss))
 
-    model.save(checkpoint_dir + '/model.h5')
+    # model.save(checkpoint_dir + '/model.h5')
     nn_save_model_plots(model_history, checkpoint_dir)
 
     train_acc = model_history.history['accuracy'][-1]

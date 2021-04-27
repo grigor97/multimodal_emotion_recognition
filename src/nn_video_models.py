@@ -122,7 +122,7 @@ def run_video_model(model_name,
     print("{} model test accuracy: {:5.2f}%".format(model_name, 100 * test_acc))
     print("{} model test loss: {:5.2f}".format(model_name, test_loss))
 
-    model.save(checkpoint_dir + '/model.h5')
+    # model.save(checkpoint_dir + '/model.h5')
     nn_save_model_plots(model_history, checkpoint_dir)
 
     train_acc = model_history.history['accuracy'][-1]
