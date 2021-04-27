@@ -152,11 +152,6 @@ def normalize_data(audio_train, audio_val, audio_test):
     audio_val /= safe_max
     audio_test /= safe_max
 
-    print("after nomilization  ")
-    print(train_min)
-    print(train_denom)
-    print('dsvasva')
-    print(audio_train[0, :])
     return audio_train, audio_val, audio_test
 
 
