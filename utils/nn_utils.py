@@ -150,12 +150,12 @@ def nn_save_model_plots(model_history, save_path):
 
     epochs = range(1, len(loss) + 1)
 
-    plt.plot(epochs, loss, 'g')
-    plt.plot(epochs, val_loss, 'b')
+    plt.plot(epochs, loss, 'g', label='train')
+    plt.plot(epochs, val_loss, 'b', label='val')
     plt.title('model loss')
     plt.xlabel('epoch')
     plt.ylabel('loss')
-    plt.legend(['train', 'val'], loc='upper left')
+    plt.legend(loc='upper left')
     plt.legend()
 
     plt.savefig(save_path + "/loss.png")
@@ -165,8 +165,8 @@ def nn_save_model_plots(model_history, save_path):
     acc = model_history.history['accuracy']
     val_acc = model_history.history['val_accuracy']
 
-    plt.plot(epochs, acc, 'g')
-    plt.plot(epochs, val_acc, 'b')
+    plt.plot(epochs, acc, 'g', label='train')
+    plt.plot(epochs, val_acc, 'b', label='val')
     plt.title('model accuracy')
     plt.xlabel('epoch')
     plt.ylabel('accuracy')
