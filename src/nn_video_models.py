@@ -222,13 +222,13 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     # pic_x = Dense(64, activation='relu')(pic_x)
     # pic_x = Dropout(0.25)(pic_x)
     pic_x = Dense(8, activation='relu')(pic_x)
-    pic_x = Dropout(0.2)(pic_x)
+    # pic_x = Dropout(0.2)(pic_x)
     # end of pictures network part
 
     # concatenation of two networks
     x = concatenate([audio_x, pic_x])
 
-    x = Dense(16, activation='relu')(x)
+    x = Dense(32, activation='relu')(x)
     x = Dropout(0.2)(x)
     # x = Dense(16, activation='relu')(x)
     # TODO improve
@@ -892,7 +892,7 @@ def create_video_blstm_model(optimizer, audio_dim, pic_shape, output_dim, blstm_
     return model
 
 
-def create_video_testing_model(optimizer, audio_dim, pic_shape, output_dim, lstm_length=250):
+def create_video_testing_model(optimizer, audio_dim, pic_shape, output_dim, lstm_length=200):
     """
     Creates cnn model for video data
     :param lstm_length: lstm size
@@ -942,10 +942,10 @@ def create_video_testing_model(optimizer, audio_dim, pic_shape, output_dim, lstm
     # pic_x = Activation(activations.relu)(pic_x)
     # pic_x = MaxPool2D()(pic_x)
 
-    pic_x = Conv2D(32, kernel_size=(3, 3), padding="valid")(pic_x)
+    pic_x = Conv2D(16, kernel_size=(3, 3), padding="valid")(pic_x)
     pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
-    pic_x = MaxPool2D()(pic_x)
+    # pic_x = MaxPool2D()(pic_x)
 
     pic_x = Flatten()(pic_x)
     # pic_x = Dense(64, activation='relu')(pic_x)
@@ -962,7 +962,7 @@ def create_video_testing_model(optimizer, audio_dim, pic_shape, output_dim, lstm
     # x = Activation(activations.relu)(x)
     x = Dense(32, activation='relu')(x)
     # x = Dense(32, activation='relu')(x)
-    x = Dropout(0.15)(x)
+    x = Dropout(0.2)(x)
     out = Dense(output_dim, activation='relu')(x)
 
     model = Model(
