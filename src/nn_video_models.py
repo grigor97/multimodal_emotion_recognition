@@ -894,7 +894,7 @@ def create_video_blstm_model(optimizer, audio_dim, pic_shape, output_dim, blstm_
     return model
 
 
-def create_video_testing_model(optimizer, audio_dim, pic_shape, output_dim, lstm_length=200):
+def create_video_testing_model(optimizer, audio_dim, pic_shape, output_dim, lstm_length=500):
     """
     Creates cnn model for video data
     :param lstm_length: lstm size
