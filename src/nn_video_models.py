@@ -111,7 +111,7 @@ def run_video_model(model_name,
                               batch_size=batch_size,
                               epochs=num_epochs,
                               validation_data=test,
-                              callbacks=[earlyStopping, mcp_save])
+                              callbacks=[earlyStopping, mcp_save, CustomEarlyStopping()])
 
     model.load_weights(filepath=checkpoint_dir + '/mdl_wts.hdf5')
 

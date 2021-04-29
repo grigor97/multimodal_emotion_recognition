@@ -217,12 +217,12 @@ def load_subset_labels_data(config, labels=('sad', 'neu', 'hap', 'ang')):
 
 
 class CustomEarlyStopping(tf.keras.callbacks.Callback):
-    def __init__(self, test_data, tol=0.30, patience=4):
+    def __init__(self, tol=0.20, patience=4):
         super(CustomEarlyStopping, self).__init__()
         self.tol = tol
         self.patience = patience
         # self.best_weights = None
-        self.test_data = test_data
+        # self.test_data = test_data
 
     def on_train_begin(self, logs=None):
         # The number of epoch it has waited when loss is no longer minimum.
@@ -230,15 +230,15 @@ class CustomEarlyStopping(tf.keras.callbacks.Callback):
         self.stopped_epoch = 0
 
     def on_epoch_end(self, epoch, logs=None):
-        x, y = self.test_data
-        te_loss, te_acc = self.model.evaluate(x, y, verbose=0)
-        print('\nTesting loss: {}, acc: {}\n'.format(te_loss, te_acc))
+        # x, y = self.test_data
+        # te_loss, te_acc = self.model.evaluate(x, y, verbose=0)
+        # print('\nTesting loss: {}, acc: {}\n'.format(te_loss, te_acc))
 
         v_acc = logs.get('val_accuracy')
         t_acc = logs.get('accuracy')
 
         if t_acc - v_acc > self.tol:
-            if t_acc - v_acc > self.tol + 5:
+            if t_acc - v_acc > self.tol + 15:
                 print('gap is too larger wait time is {}'.format(self.wait))
                 self.wait += 100
             print('gap is larger wait time is {}'.format(self.wait))
