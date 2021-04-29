@@ -102,21 +102,23 @@ def run_video_model(model_name,
     mcp_save = tf.keras.callbacks.ModelCheckpoint(checkpoint_dir + '/mdl_wts.hdf5', save_best_only=True, monitor='val_accuracy', mode='max')
     # reduce_lr_loss = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=7, verbose=1, epsilon=1e-4, mode='min')
     test = ({'audio_input': audio_test, 'pic_input': pic_test}, labels_test_y)
-    val = ({'audio_input': audio_val, 'pic_input': pic_val}, labels_val_y)
-
+    # val = ({'audio_input': audio_val, 'pic_input': pic_val}, labels_val_y)
+    audio_train = np.vstack((audio_train, audio_val))
+    pic_train = np.vstack((pic_train, pic_val))
+    labels_train_y = np.vstack((labels_train_y, labels_val_y))
     model_history = model.fit({'audio_input': audio_train, 'pic_input': pic_train},
                               labels_train_y,
                               batch_size=batch_size,
                               epochs=num_epochs,
                               validation_data=test,
-                              callbacks=[earlyStopping, mcp_save, CustomEarlyStopping(val)])
+                              callbacks=[earlyStopping, mcp_save])
 
     model.load_weights(filepath=checkpoint_dir + '/mdl_wts.hdf5')
 
     # Evaluate the validation
-    val_loss, val_acc = model.evaluate(val[0], val[1])
-    print("{} model val accuracy: {:5.2f}%".format(model_name, 100 * val_acc))
-    print("{} model val loss: {:5.2f}".format(model_name, val_loss))
+    # val_loss, val_acc = model.evaluate(val[0], val[1])
+    # print("{} model val accuracy: {:5.2f}%".format(model_name, 100 * val_acc))
+    # print("{} model val loss: {:5.2f}".format(model_name, val_loss))
 
     # Evaluate the model
     test_loss, test_acc = model.evaluate(test[0], test[1])
@@ -132,9 +134,6 @@ def run_video_model(model_name,
     with open(checkpoint_dir + '/' + model_name + '_res.txt', 'w') as f:
         f.write("test accuracy and loss are ")
         f.write(str(test_acc) + ' ' + str(test_loss))
-        f.write('\n')
-        f.write("val accuracy and loss are ")
-        f.write(str(val_acc))
         f.write('\n')
         f.write("train accuracy and loss are ")
         f.write(str(train_acc))
