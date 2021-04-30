@@ -239,7 +239,7 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     # x = Dropout(0.2)(x)
     # TODO improve
     # BATCHNORM_CNN
-    out = Dense(output_dim, activation='relu')(x)
+    out = Dense(output_dim, activation='softmax')(x)
 
     model = Model(
         inputs=[audio_input, pic_input],
