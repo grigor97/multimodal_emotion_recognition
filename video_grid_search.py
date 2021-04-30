@@ -21,7 +21,7 @@ def main(args):
     num_epochs = 100
     batch_size = 64
     # opts = ['SGD', 'RMSprop', 'Adam']
-    opts = ['Adam', 'RMSprop']
+    opts = ['Adam']
     lrs = [0.001, 0.0003, 0.0001]
     model_names = ['video_batchnorm_cnn']
     # model_names = ['testing']
