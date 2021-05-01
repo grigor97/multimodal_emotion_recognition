@@ -98,7 +98,7 @@ def run_video_model(model_name,
     # model = create_video_batchnorm_cnn_model(opt, audio_train_dim, pic_train[0].shape, output_dim)
 
     # es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', min_delta=0.01, patience=50, mode='max')
-    earlyStopping = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=15, verbose=0, mode='max')
+    earlyStopping = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=50, verbose=0, mode='max')
     mcp_save = tf.keras.callbacks.ModelCheckpoint(checkpoint_dir + '/mdl_wts.hdf5', save_best_only=True, monitor='val_accuracy', mode='max')
     # reduce_lr_loss = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=7, verbose=1, epsilon=1e-4, mode='min')
     test = ({'audio_input': audio_test, 'pic_input': pic_test}, labels_test_y)
@@ -197,19 +197,19 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     pic_x = Conv2D(16, kernel_size=(5, 5), padding="valid")(pic_input)
     pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
-    pic_x = Dropout(0.25)(pic_x)
+    # pic_x = Dropout(0.25)(pic_x)
     pic_x = MaxPool2D()(pic_x)
 
     pic_x = Conv2D(32, kernel_size=(5, 5), padding="valid")(pic_x)
     pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
-    pic_x = Dropout(0.25)(pic_x)
+    # pic_x = Dropout(0.25)(pic_x)
     pic_x = MaxPool2D()(pic_x)
 
     pic_x = Conv2D(32, kernel_size=(5, 5), padding="valid")(pic_x)
     pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
-    pic_x = Dropout(0.25)(pic_x)
+    # pic_x = Dropout(0.25)(pic_x)
     # pic_x = MaxPool2D()(pic_x)
 
     # pic_x = Conv2D(64, kernel_size=(3, 3), padding="same")(pic_x)
@@ -220,7 +220,7 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     pic_x = Conv2D(16, kernel_size=(5, 5), padding="valid")(pic_x)
     pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
-    pic_x = Dropout(0.25)(pic_x)
+    pic_x = Dropout(0.3)(pic_x)
     # pic_x = MaxPool2D()(pic_x)
 
     # pic_x = Conv2D(, kernel_size=(3, 3), padding="valid")(pic_x)
@@ -231,14 +231,16 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     # pic_x = Dense(64, activation='relu')(pic_x)
     # pic_x = Dropout(0.25)(pic_x)
     pic_x = Dense(8, activation='relu')(pic_x)
-    pic_x = Dropout(0.5)(pic_x)
+    pic_x = Dropout(0.3)(pic_x)
     # end of pictures network part
 
     # concatenation of two networks
     x = concatenate([audio_x, pic_x])
 
-    x = Dense(32, activation='relu')(x)
-    x = Dropout(0.25)(x)
+    x = Dense(32)(x)
+    x = BatchNormalization()(x)
+    x = Activation(activations.relu)(x)
+    # x = Dropout(0.25)(x)
     # x = Dense(16, activation='relu')(x)
     # x = Dropout(0.2)(x)
     # TODO improve
@@ -935,16 +937,19 @@ def create_video_testing_model(optimizer, audio_dim, pic_shape, output_dim, lstm
     pic_x = Conv2D(16, kernel_size=(5, 5), padding="valid")(pic_input)
     pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
+    # pic_x = Dropout(0.25)(pic_x)
     pic_x = MaxPool2D()(pic_x)
 
     pic_x = Conv2D(32, kernel_size=(5, 5), padding="valid")(pic_x)
     pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
+    # pic_x = Dropout(0.25)(pic_x)
     pic_x = MaxPool2D()(pic_x)
 
     pic_x = Conv2D(32, kernel_size=(5, 5), padding="valid")(pic_x)
     pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
+    # pic_x = Dropout(0.25)(pic_x)
     # pic_x = MaxPool2D()(pic_x)
 
     # pic_x = Conv2D(64, kernel_size=(3, 3), padding="same")(pic_x)
@@ -955,28 +960,30 @@ def create_video_testing_model(optimizer, audio_dim, pic_shape, output_dim, lstm
     pic_x = Conv2D(16, kernel_size=(5, 5), padding="valid")(pic_x)
     pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
+    pic_x = Dropout(0.3)(pic_x)
     # pic_x = MaxPool2D()(pic_x)
+
+    # pic_x = Conv2D(, kernel_size=(3, 3), padding="valid")(pic_x)
+    # pic_x = BatchNormalization()(pic_x)
+    # pic_x = Activation(activations.relu)(pic_x)
 
     pic_x = Flatten()(pic_x)
     # pic_x = Dense(64, activation='relu')(pic_x)
     # pic_x = Dropout(0.25)(pic_x)
     pic_x = Dense(8, activation='relu')(pic_x)
-    pic_x = Dropout(0.2)(pic_x)
+    pic_x = Dropout(0.3)(pic_x)
     # end of pictures network part
 
     # concatenation of two networks
     x = concatenate([audio_x, pic_x])
 
-    # x = Dense(32)(x)
-    # x = BatchNormalization()(x)
-    # x = Activation(activations.relu)(x)
-    x = Dense(32, activation='relu')(x)
-    # x = Dense(32, activation='relu')(x)
-    x = Dropout(0.2)(x)
-    x = Dense(32, activation='relu')(x)
-    x = Dropout(0.2)(x)
-    x = Dense(32, activation='relu')(x)
-    out = Dense(output_dim, activation='relu')(x)
+    x = Dense(32)(x)
+    x = BatchNormalization()(x)
+    x = Activation(activations.relu)(x)
+    # x = Dropout(0.25)(x)
+    # x = Dense(16, activation='relu')(x)
+    # x = Dropout(0.2)(x)
+    out = Dense(output_dim, activation='softmax')(x)
 
     model = Model(
         inputs=[audio_input, pic_input],
