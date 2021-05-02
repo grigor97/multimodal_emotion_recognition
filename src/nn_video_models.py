@@ -48,7 +48,7 @@ def run_video_model(model_name,
     # opt = keras.optimizers.Adam(lr=0.0001)
     # opt = tf.keras.optimizers.RMSprop(lr=0.00001, decay=1e-6)
     if optimizer == 'Adam':
-        opt = tf.keras.optimizers.Adam(lr=lr)
+        opt = tf.keras.optimizers.Adam(lr=lr, decay=1e-6)
     elif optimizer == 'RMSprop':
         opt = tf.keras.optimizers.RMSprop(lr=lr)
     elif optimizer == 'SGD':
