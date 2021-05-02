@@ -5,6 +5,8 @@ from tensorflow.keras import Model
 
 from utils.nn_utils import *
 
+import numpy as np
+
 
 def run_video_model(model_name,
                     train_data,
@@ -127,6 +129,11 @@ def run_video_model(model_name,
 
     # model.save(checkpoint_dir + '/model.h5')
     nn_save_model_plots(model_history, checkpoint_dir)
+
+    y_pred = model.predict(test[0])
+    cm_analysis(test[1].argmax(axis=1), y_pred.argmax(axis=1),
+                checkpoint_dir + '/' + model_name + '_cm.png',
+                ['sad', 'neu', 'hap', 'ang'])
 
     train_acc = model_history.history['accuracy'][-1]
     # val_acc = model_history.history['val_accuracy'][-1]
