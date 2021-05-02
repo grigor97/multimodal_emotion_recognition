@@ -104,11 +104,12 @@ def run_video_model(model_name,
     mcp_save = tf.keras.callbacks.ModelCheckpoint(checkpoint_dir + '/mdl_wts.hdf5', save_best_only=True, monitor='val_accuracy', mode='max')
     # reduce_lr_loss = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=7, verbose=1, epsilon=1e-4, mode='min')
     test = ({'audio_input': audio_test, 'pic_input': pic_test}, labels_test_y)
-    train = ({'audio_input': audio_train, 'pic_input': pic_train}, labels_train_y)
+
     # val = ({'audio_input': audio_val, 'pic_input': pic_val}, labels_val_y)
     audio_train = np.vstack((audio_train, audio_val))
     pic_train = np.vstack((pic_train, pic_val))
     labels_train_y = np.vstack((labels_train_y, labels_val_y))
+    train = ({'audio_input': audio_train, 'pic_input': pic_train}, labels_train_y)
     model_history = model.fit(train[0],
                               train[1],
                               batch_size=batch_size,
