@@ -196,8 +196,8 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     # audio_x = Conv1D(32, 8, padding='same')(audio_x)
     # audio_x = Activation(activations.relu)(audio_x)
 
-    audio_x = Conv1D(32, 8, padding='same')(audio_x)
-    audio_x = Activation(activations.relu)(audio_x)
+    # audio_x = Conv1D(32, 8, padding='same')(audio_x)
+    # audio_x = Activation(activations.relu)(audio_x)
 
     audio_x = Flatten()(audio_x)
     audio_x = Dense(32)(audio_x)
