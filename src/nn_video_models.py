@@ -178,13 +178,13 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     audio_input = Input(shape=(audio_dim, 1), name='audio_input')
     # audio_x = Conv1D(128, 8, padding='same', activation=activations.relu)(audio_input)
 
-    audio_x = Conv1D(64, 8, padding='same')(audio_input)
+    audio_x = Conv1D(32, 8, padding='same')(audio_input)
     audio_x = BatchNormalization()(audio_x)
     audio_x = Activation(activations.relu)(audio_x)
     # audio_x = Dropout(0.25)(audio_x)
     audio_x = MaxPooling1D(pool_size=8)(audio_x)
 
-    audio_x = Conv1D(64, 8, padding='same')(audio_x)
+    audio_x = Conv1D(32, 8, padding='same')(audio_x)
     audio_x = BatchNormalization()(audio_x)
     audio_x = Activation(activations.relu)(audio_x)
 
@@ -192,18 +192,18 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     # audio_x = BatchNormalization()(audio_x)
     # audio_x = Activation(activations.relu)(audio_x)
 
-    audio_x = Conv1D(64, 8, padding='same')(audio_x)
+    audio_x = Conv1D(32, 8, padding='same')(audio_x)
     audio_x = BatchNormalization()(audio_x)
     audio_x = Activation(activations.relu)(audio_x)
 
-    audio_x = Conv1D(64, 8, padding='same')(audio_x)
+    audio_x = Conv1D(32, 8, padding='same')(audio_x)
     audio_x = BatchNormalization()(audio_x)
     audio_x = Activation(activations.relu)(audio_x)
     # audio_x = Dropout(0.25)(audio_x)
     audio_x = MaxPooling1D(pool_size=8)(audio_x)
 
-    audio_x = Conv1D(32, 8, padding='same')(audio_x)
-    audio_x = Activation(activations.relu)(audio_x)
+    # audio_x = Conv1D(32, 8, padding='same')(audio_x)
+    # audio_x = Activation(activations.relu)(audio_x)
 
     # audio_x = Conv1D(32, 8, padding='same')(audio_x)
     # audio_x = Activation(activations.relu)(audio_x)
