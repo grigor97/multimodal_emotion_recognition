@@ -11,7 +11,7 @@ import numpy as np
 
 def decay_schedule(epoch, lr):
     if epoch < 5:
-        lr *= 1.1
+        lr *= 1.04
     else:
         lr *= 0.99
     return lr
@@ -178,7 +178,7 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     audio_input = Input(shape=(audio_dim, 1), name='audio_input')
     # audio_x = Conv1D(128, 8, padding='same', activation=activations.relu)(audio_input)
 
-    audio_x = Conv1D(128, 8, padding='same')(audio_input)
+    audio_x = Conv1D(64, 8, padding='same')(audio_input)
     audio_x = BatchNormalization()(audio_x)
     audio_x = Activation(activations.relu)(audio_x)
     # audio_x = Dropout(0.25)(audio_x)
@@ -217,7 +217,7 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     # pictures network part
     pic_input = Input(shape=pic_shape, name='pic_input')
 
-    pic_x = Conv2D(16, kernel_size=(3, 3), padding="valid")(pic_input)
+    pic_x = Conv2D(8, kernel_size=(3, 3), padding="valid")(pic_input)
     pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
     # pic_x = Dropout(0.25)(pic_x)
@@ -240,7 +240,7 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     # pic_x = Activation(activations.relu)(pic_x)
     # pic_x = MaxPool2D()(pic_x)
 
-    pic_x = Conv2D(16, kernel_size=(3, 3), padding="valid")(pic_x)
+    pic_x = Conv2D(8, kernel_size=(3, 3), padding="valid")(pic_x)
     pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
     # pic_x = Dropout(0.3)(pic_x)
