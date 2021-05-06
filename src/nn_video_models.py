@@ -2,10 +2,19 @@ import os
 
 from tensorflow.keras import activations
 from tensorflow.keras import Model
+from tensorflow.keras.callbacks import LearningRateScheduler
 
 from utils.nn_utils import *
 
 import numpy as np
+
+
+def decay_schedule(epoch, lr):
+    if epoch < 5:
+        lr *= 1.1
+    else:
+        lr *= 0.99
+    return lr
 
 
 def run_video_model(model_name,
@@ -48,7 +57,7 @@ def run_video_model(model_name,
     # opt = keras.optimizers.Adam(lr=0.0001)
     # opt = tf.keras.optimizers.RMSprop(lr=0.00001, decay=1e-6)
     if optimizer == 'Adam':
-        opt = tf.keras.optimizers.Adam(lr=lr, decay=1e-6)
+        opt = tf.keras.optimizers.Adam(lr=lr, decay=1e-1)
     elif optimizer == 'RMSprop':
         opt = tf.keras.optimizers.RMSprop(lr=lr)
     elif optimizer == 'SGD':
@@ -104,7 +113,7 @@ def run_video_model(model_name,
     mcp_save = tf.keras.callbacks.ModelCheckpoint(checkpoint_dir + '/mdl_wts.hdf5', save_best_only=True, monitor='val_accuracy', mode='max')
     # reduce_lr_loss = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=7, verbose=1, epsilon=1e-4, mode='min')
     test = ({'audio_input': audio_test, 'pic_input': pic_test}, labels_test_y)
-
+    lr_scheduler = LearningRateScheduler(decay_schedule)
     # val = ({'audio_input': audio_val, 'pic_input': pic_val}, labels_val_y)
     audio_train = np.vstack((audio_train, audio_val))
     pic_train = np.vstack((pic_train, pic_val))
@@ -115,7 +124,7 @@ def run_video_model(model_name,
                               batch_size=batch_size,
                               epochs=num_epochs,
                               validation_data=test,
-                              callbacks=[earlyStopping, mcp_save, CustomEarlyStopping()])
+                              callbacks=[lr_scheduler, earlyStopping, mcp_save, CustomEarlyStopping()])
 
     model.load_weights(filepath=checkpoint_dir + '/mdl_wts.hdf5')
 
