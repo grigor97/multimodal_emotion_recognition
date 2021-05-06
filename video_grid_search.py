@@ -18,7 +18,7 @@ def main(args):
     # train_data, test_data = load_data(config)
     train_data, val_data, test_data = load_subset_labels_data(config)
 
-    num_epochs = 100
+    num_epochs = 150
     batch_size = 64
     # opts = ['SGD', 'RMSprop', 'Adam']
     opts = ['Adam']
