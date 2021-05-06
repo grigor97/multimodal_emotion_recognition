@@ -202,8 +202,8 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     # audio_x = Dropout(0.25)(audio_x)
     audio_x = MaxPooling1D(pool_size=8)(audio_x)
 
-    # audio_x = Conv1D(32, 8, padding='same')(audio_x)
-    # audio_x = Activation(activations.relu)(audio_x)
+    audio_x = Conv1D(32, 8, padding='same')(audio_x)
+    audio_x = Activation(activations.relu)(audio_x)
 
     # audio_x = Conv1D(32, 8, padding='same')(audio_x)
     # audio_x = Activation(activations.relu)(audio_x)
