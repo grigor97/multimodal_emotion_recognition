@@ -192,9 +192,9 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     # audio_x = BatchNormalization()(audio_x)
     # audio_x = Activation(activations.relu)(audio_x)
 
-    # audio_x = Conv1D(64, 8, padding='same')(audio_x)
-    # audio_x = BatchNormalization()(audio_x)
-    # audio_x = Activation(activations.relu)(audio_x)
+    audio_x = Conv1D(64, 8, padding='same')(audio_x)
+    audio_x = BatchNormalization()(audio_x)
+    audio_x = Activation(activations.relu)(audio_x)
 
     audio_x = Conv1D(64, 8, padding='same')(audio_x)
     audio_x = BatchNormalization()(audio_x)
