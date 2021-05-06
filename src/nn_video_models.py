@@ -11,9 +11,9 @@ import numpy as np
 
 def decay_schedule(epoch, lr):
     if epoch < 5:
-        lr *= 1.04
+        lr *= 1.02
     else:
-        lr *= 0.99
+        lr *= 0.98
     return lr
 
 
