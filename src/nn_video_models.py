@@ -13,7 +13,7 @@ def decay_schedule(epoch, lr):
     if epoch < 5:
         lr *= 1.02
     else:
-        lr *= 0.99
+        lr *= 0.98
     return lr
 
 
@@ -178,7 +178,7 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     audio_input = Input(shape=(audio_dim, 1), name='audio_input')
     # audio_x = Conv1D(128, 8, padding='same', activation=activations.relu)(audio_input)
 
-    audio_x = Conv1D(32, 8, padding='valid')(audio_input)
+    audio_x = Conv1D(64, 8, padding='valid')(audio_input)
     audio_x = BatchNormalization()(audio_x)
     audio_x = Activation(activations.relu)(audio_x)
     # audio_x = Dropout(0.25)(audio_x)
@@ -261,6 +261,11 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     x = concatenate([audio_x, pic_x])
 
     x = Dense(32)(x)
+    # x = BatchNormalization()(x)
+    x = Activation(activations.relu)(x)
+    x = Dropout(0.5)(x)
+
+    x = Dense(16)(x)
     # x = BatchNormalization()(x)
     x = Activation(activations.relu)(x)
     x = Dropout(0.5)(x)
