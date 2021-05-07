@@ -94,7 +94,7 @@ def run_video_model(model_name,
 
     counts = np.sum(labels_train_y, axis=0)
     # weights = np.array(counts/np.sum(counts))
-    weights = counts/np.sum(counts)
+    weights = 100*counts/np.sum(counts)
     cls_weights = {0: weights[0],
                    1: weights[1],
                    2: weights[2],
@@ -261,19 +261,19 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     # pictures network part
     pic_input = Input(shape=pic_shape, name='pic_input')
 
-    pic_x = Conv2D(8, kernel_size=(3, 3), padding="valid")(pic_input)
+    pic_x = Conv2D(16, kernel_size=(3, 3), padding="valid")(pic_input)
     pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
     # pic_x = Dropout(0.25)(pic_x)
     pic_x = MaxPool2D()(pic_x)
 
-    pic_x = Conv2D(16, kernel_size=(3, 3), padding="valid")(pic_x)
+    pic_x = Conv2D(32, kernel_size=(3, 3), padding="valid")(pic_x)
     pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
     # pic_x = Dropout(0.25)(pic_x)
     pic_x = MaxPool2D()(pic_x)
 
-    pic_x = Conv2D(16, kernel_size=(3, 3), padding="valid")(pic_x)
+    pic_x = Conv2D(32, kernel_size=(3, 3), padding="valid")(pic_x)
     pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
     # pic_x = Dropout(0.25)(pic_x)
@@ -284,7 +284,7 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     # pic_x = Activation(activations.relu)(pic_x)
     # pic_x = MaxPool2D()(pic_x)
 
-    pic_x = Conv2D(8, kernel_size=(3, 3), padding="valid")(pic_x)
+    pic_x = Conv2D(16, kernel_size=(3, 3), padding="valid")(pic_x)
     pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
     # pic_x = Dropout(0.3)(pic_x)
