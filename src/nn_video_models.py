@@ -95,6 +95,10 @@ def run_video_model(model_name,
     counts = np.sum(labels_train_y, axis=0)
     # weights = np.array(counts/np.sum(counts))
     weights = counts/np.sum(counts)
+    cls_weights = {0: weights[0],
+                   1: weights[1],
+                   2: weights[2],
+                   3: weights[3]}
     print("labels percantages -->> ", weights)
 
     # opt = keras.optimizers.SGD(lr=0.0001, momentum=0.0, decay=0.0, nesterov=False)
@@ -163,6 +167,7 @@ def run_video_model(model_name,
                               batch_size=batch_size,
                               epochs=num_epochs,
                               validation_data=test,
+                              class_weight=cls_weights,
                               callbacks=[lr_scheduler, earlyStopping, mcp_save, CustomEarlyStopping()])
 
     model.load_weights(filepath=checkpoint_dir + '/mdl_wts.hdf5')
@@ -319,7 +324,8 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
 
     model.compile(
         optimizer=optimizer,
-        loss=WeightedCategoricalCrossentropy(weights),
+        loss=tf.keras.losses.CategoricalCrossentropy(),
+        # loss=WeightedCategoricalCrossentropy(weights),
         metrics=['accuracy']
     )
 
