@@ -3,10 +3,42 @@ import os
 from tensorflow.keras import activations
 from tensorflow.keras import Model
 from tensorflow.keras.callbacks import LearningRateScheduler
-
+import tensorflow.keras.backend as K
+from tensorflow.python.keras.utils import losses_utils
+from itertools import product
 from utils.nn_utils import *
 
 import numpy as np
+
+
+class WeightedCategoricalCrossentropy(tf.keras.losses.CategoricalCrossentropy):
+
+    def __init__(
+        self,
+        weights,
+        from_logits=False,
+        label_smoothing=0,
+        reduction=losses_utils.ReductionV2.SUM_OVER_BATCH_SIZE,
+        name='categorical_crossentropy',
+    ):
+        super().__init__(
+            from_logits, label_smoothing, reduction, name=f"weighted_{name}"
+        )
+        self.weights = weights
+
+    def call(self, y_true, y_pred):
+        weights = self.weights
+        nb_cl = len(weights)
+        final_mask = K.zeros_like(y_pred[:, 0])
+        y_pred_max = K.max(y_pred, axis=1)
+        y_pred_max = K.reshape(
+            y_pred_max, (K.shape(y_pred)[0], 1))
+        y_pred_max_mat = K.cast(
+            K.equal(y_pred, y_pred_max), K.floatx())
+        for c_p, c_t in product(range(nb_cl), range(nb_cl)):
+            final_mask += (
+                weights[c_t, c_p] * y_pred_max_mat[:, c_p] * y_true[:, c_t])
+        return super().call(y_true, y_pred) * final_mask
 
 
 def decay_schedule(epoch, lr):
@@ -53,6 +85,17 @@ def run_video_model(model_name,
     audio_train_dim = audio_train.shape[1]
     output_dim = labels_train_y.shape[1]
 
+    test = ({'audio_input': audio_test, 'pic_input': pic_test}, labels_test_y)
+    lr_scheduler = LearningRateScheduler(decay_schedule)
+    # val = ({'audio_input': audio_val, 'pic_input': pic_val}, labels_val_y)
+    audio_train = np.vstack((audio_train, audio_val))
+    pic_train = np.vstack((pic_train, pic_val))
+    labels_train_y = np.vstack((labels_train_y, labels_val_y))
+
+    counts = np.sum(labels_train_y, axis=0)
+    weights = np.array(counts/np.sum(counts))
+    print("labels percantages -->> ", weights)
+
     # opt = keras.optimizers.SGD(lr=0.0001, momentum=0.0, decay=0.0, nesterov=False)
     # opt = keras.optimizers.Adam(lr=0.0001)
     # opt = tf.keras.optimizers.RMSprop(lr=0.00001, decay=1e-6)
@@ -71,7 +114,7 @@ def run_video_model(model_name,
     elif model_name == 'testing':
         model = create_video_testing_model(opt, audio_train_dim, pic_train[0].shape, output_dim)
     elif model_name == 'video_batchnorm_cnn':
-        model = create_video_batchnorm_cnn_model(opt, audio_train_dim, pic_train[0].shape, output_dim)
+        model = create_video_batchnorm_cnn_model(opt, audio_train_dim, pic_train[0].shape, output_dim, weights)
     elif model_name == 'video_big_cnn':
         model = create_video_big_cnn_model(opt, audio_train_dim, pic_train[0].shape, output_dim)
     elif model_name == 'video_big_batchnorm_cnn':
@@ -112,15 +155,6 @@ def run_video_model(model_name,
     earlyStopping = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=120, verbose=0, mode='max')
     mcp_save = tf.keras.callbacks.ModelCheckpoint(checkpoint_dir + '/mdl_wts.hdf5', save_best_only=True, monitor='val_accuracy', mode='max')
     # reduce_lr_loss = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=7, verbose=1, epsilon=1e-4, mode='min')
-    test = ({'audio_input': audio_test, 'pic_input': pic_test}, labels_test_y)
-    lr_scheduler = LearningRateScheduler(decay_schedule)
-    # val = ({'audio_input': audio_val, 'pic_input': pic_val}, labels_val_y)
-    audio_train = np.vstack((audio_train, audio_val))
-    pic_train = np.vstack((pic_train, pic_val))
-    labels_train_y = np.vstack((labels_train_y, labels_val_y))
-
-    counts = np.sum(labels_train_y, axis=0)
-    print("labels percantages -->> ", counts/np.sum(counts))
 
     train = ({'audio_input': audio_train, 'pic_input': pic_train}, labels_train_y)
     model_history = model.fit(train[0],
@@ -169,7 +203,7 @@ def run_video_model(model_name,
     return test_acc
 
 
-def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim):
+def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim, weights):
     """
     Creates cnn model for video data
     :param optimizer: optimizer for a cnn
@@ -284,7 +318,7 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
 
     model.compile(
         optimizer=optimizer,
-        loss=tf.keras.losses.CategoricalCrossentropy(),
+        loss=WeightedCategoricalCrossentropy(weights),
         metrics=['accuracy']
     )
 
