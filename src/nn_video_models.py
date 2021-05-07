@@ -119,7 +119,7 @@ def run_video_model(model_name,
     pic_train = np.vstack((pic_train, pic_val))
     labels_train_y = np.vstack((labels_train_y, labels_val_y))
 
-    counts = np.sum(labels_train_y, axis=1)
+    counts = np.sum(labels_train_y, axis=0)
     print("labels percantages -->> ", counts/np.sum(counts))
 
     train = ({'audio_input': audio_train, 'pic_input': pic_train}, labels_train_y)
