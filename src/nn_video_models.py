@@ -118,6 +118,10 @@ def run_video_model(model_name,
     audio_train = np.vstack((audio_train, audio_val))
     pic_train = np.vstack((pic_train, pic_val))
     labels_train_y = np.vstack((labels_train_y, labels_val_y))
+
+    counts = np.sum(labels_train_y, axis=1)
+    print("labels percantages -->> ", counts/np.sum(counts))
+
     train = ({'audio_input': audio_train, 'pic_input': pic_train}, labels_train_y)
     model_history = model.fit(train[0],
                               train[1],
@@ -265,10 +269,6 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     x = Activation(activations.relu)(x)
     x = Dropout(0.5)(x)
 
-    x = Dense(16)(x)
-    # x = BatchNormalization()(x)
-    x = Activation(activations.relu)(x)
-    x = Dropout(0.5)(x)
     # x = Dense(16, activation='relu')(x)
     # x = Dropout(0.2)(x)
     # TODO improve
