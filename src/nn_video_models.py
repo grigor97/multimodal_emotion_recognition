@@ -94,11 +94,11 @@ def run_video_model(model_name,
 
     counts = np.sum(labels_train_y, axis=0)
     # weights = np.array(counts/np.sum(counts))
-    weights = 100*counts/np.sum(counts)
-    cls_weights = {0: weights[0],
-                   1: weights[1],
-                   2: weights[2],
-                   3: weights[3]}
+    weights = counts/np.sum(counts)
+    cls_weights = {0: 1/weights[0],
+                   1: 1/weights[1],
+                   2: 1/weights[2],
+                   3: 1/weights[3]}
     print("labels percantages -->> ", weights)
 
     # opt = keras.optimizers.SGD(lr=0.0001, momentum=0.0, decay=0.0, nesterov=False)
