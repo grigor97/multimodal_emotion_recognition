@@ -26,8 +26,8 @@ def main(args):
     # print("max shape --->>> ", safe_max.shape)
     audio -= train_mean
     audio /= safe_max
-    audio = audio.reshape(audio.shape[0], 1)
-    audio = np.expand_dims(audio, axis=0)
+    audio = audio.reshape(1, audio.shape[0])
+    # audio = np.expand_dims(audio, axis=0)
     print(pic.shape, audio.shape)
     audio_train_dim = audio.shape[0]
     opt = tf.keras.optimizers.Adam(lr=1e-5)
