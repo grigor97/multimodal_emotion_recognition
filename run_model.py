@@ -17,6 +17,7 @@ def main(args):
     print(args.path)
 
     pic, audio = testing_model(args.path)
+    audio = audio.reshape(audio.shape[0], 1)
     pic = np.transpose(pic, (1, 2, 0))
 
     train_mean = np.load('logs/train_mean.npy')
