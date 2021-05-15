@@ -45,11 +45,12 @@ def main(args):
     print("summary", model.summary())
     print("input shape", model.input_shape)
     sample = {'audio_input': audio, 'pic_input': pic}
+    t1 = time.time()
     label = model.predict(sample)
 
-    t1 = time.time()
+    t2 = time.time()
 
-    total = t1 - t0
+    total = t2 - t1
 
     print("time is   ", total)
 
