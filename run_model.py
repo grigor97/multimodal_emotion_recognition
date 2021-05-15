@@ -18,6 +18,7 @@ def main(args):
 
     pic, audio = testing_model(args.path)
     pic = np.transpose(pic, (1, 2, 0))
+    pic = np.expand_dims(pic, axis=-1)
 
     train_mean = np.load('logs/train_mean.npy')
     safe_max = np.load('logs/safe_max.npy')
