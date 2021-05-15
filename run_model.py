@@ -25,7 +25,7 @@ def main(args):
     audio /= safe_max
 
     print(pic.shape, audio.shape)
-    audio_train_dim = audio.shape[1]
+    audio_train_dim = audio.shape[0]
     opt = tf.keras.optimizers.Adam(lr=1e-5)
     model = create_video_batchnorm_cnn_model(opt,
                                              audio_train_dim,
