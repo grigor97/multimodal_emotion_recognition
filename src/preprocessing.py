@@ -580,9 +580,14 @@ def testing_model(video_path):
 
     video = VideoFileClip(video_path)
 
-    audio = video.audio
     sample_rate = 32000
-    audio_features = extract_features(audio, sample_rate)
+
+    video.audio.write_audiofile("logs/audio.wav")
+    sb.call(["ffmpeg", "-y", "-i", "logs/audio.wav", "-ar", str(sample_rate), "-ac", "1", "logs/audio1.wav"])
+
+    v_rate, voice_data = wavfile.read("logs/audio1.wav")
+    voice_data = voice_data.astype('float')
+    audio_features = extract_features(voice_data, sample_rate)
 
     num_images = 19
     frames = []
@@ -629,13 +634,6 @@ def testing_model(video_path):
     cap.release()
     print("Done getting images!")
 
-    # dbs = [0, 5, 10]
-
-    # out_path = path[:-4] + '_changedrate.wav'
-    # sb.call(["ffmpeg", "-y", "-i", path, "-ar", str(sample_rate), "-ac", "1", out_path])
-
-    # v_rate, voice_data = wavfile.read(out_path)
-    # voice_data = voice_data.astype('float')
     pic = np.asarray(frames)
 
     return pic, audio_features

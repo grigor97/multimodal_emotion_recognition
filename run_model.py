@@ -18,6 +18,12 @@ def main(args):
 
     pic, audio = testing_model(args.path)
 
+    train_mean = np.load('logs/train_mean.npy')
+    safe_max = np.load('logs/safe_max.npy')
+
+    audio -= train_mean
+    audio /= safe_max
+
     print(pic.shape, audio.shape)
     audio_train_dim = audio.shape[1]
     opt = tf.keras.optimizers.Adam(lr=1e-5)
