@@ -34,7 +34,7 @@ def main(args):
                                              4,
                                              [0.25, 0.25, 0.25, 0.25])
 
-    model_path = "logs/video_batchnorm_cnn150Adam1e-5/mdl_wts.hdf5"
+    model_path = "logs/video_batchnorm_cnn150Adam1e-05/mdl_wts.hdf5"
     model.load_weights(model_path)
 
     sample = {'audio_input': audio, 'pic_input': pic}
