@@ -47,12 +47,7 @@ def main(args):
     sample = {'audio_input': audio, 'pic_input': pic}
     t1 = time.time()
     label = model.predict(sample)
-
-    t2 = time.time()
-
-    total = t2 - t1
-
-    print("time is   ", total)
+    print("time is   ", time.time() - t1)
 
     emotions = {'sad': 0, 'neu': 1, 'hap': 2, 'ang': 3}
     print(emotions)
