@@ -43,7 +43,7 @@ def main(args):
     model.load_weights(model_path)
 
     print("summary", model.summary())
-    print("input shape", model.input_shape())
+    print("input shape", model.input_shape)
     sample = {'audio_input': audio, 'pic_input': pic}
     label = model.predict(sample)
 
