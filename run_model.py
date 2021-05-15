@@ -22,7 +22,8 @@ def main(args):
 
     train_mean = np.load('logs/train_mean.npy')
     safe_max = np.load('logs/safe_max.npy')
-
+    print("mean shape --->>> ", train_mean.shape)
+    print("max shape --->>> ", safe_max.shape)
     audio -= train_mean
     audio /= safe_max
 
