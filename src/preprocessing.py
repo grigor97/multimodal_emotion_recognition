@@ -573,3 +573,71 @@ def prepare_whole_data(data_paths, save_data_path, save_name):
     df['emotion'] = emotions
     df.to_csv(save_data_path + save_name, index=False)
     return df
+
+
+def testing_model(video_path):
+    face_size = (50, 50)
+
+    video = VideoFileClip(video_path)
+
+    audio = video.audio
+    sample_rate = 32000
+    audio_features = extract_features(audio, sample_rate)
+
+    num_images = 19
+    frames = []
+
+    cap = cv2.VideoCapture(video_path)
+    length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    print(length)
+    interval = math.floor(length // num_images)
+    if interval < 1:
+        return None, None
+    frame_rate = cap.get(5)  # frame rate
+    print(frame_rate)
+    x = 1
+    while cap.isOpened():
+        frame_id = cap.get(1)  # current frame number
+        ret, frame = cap.read()
+        if not ret:
+            break
+        if length % num_images == 0:
+            length -= 1
+        if (frame_id <= (length - length % num_images)) and (frame_id % interval == 0):
+            x += 1
+
+            # frames.append(frame)
+
+            # image = face_recognition.load_image_file(pic_path)
+            image = Image.fromarray(np.uint8(frame)).convert('RGB')
+
+            face_locs = face_recognition.face_locations(image)
+
+            if len(face_locs) > 0:
+                top, right, bottom, left = face_locs[0]
+                face_image = image[top:bottom, left:right]
+                pil_image = Image.fromarray(face_image)
+            else:
+                pil_image = Image.fromarray(image)
+
+            pil_image = pil_image.resize(face_size)
+            # make it grayscale
+            pil_image = pil_image.convert('L')
+            face = np.array(pil_image)
+            frames.append(face)
+
+    cap.release()
+    print("Done getting images!")
+
+    # dbs = [0, 5, 10]
+
+    # out_path = path[:-4] + '_changedrate.wav'
+    # sb.call(["ffmpeg", "-y", "-i", path, "-ar", str(sample_rate), "-ac", "1", out_path])
+
+    # v_rate, voice_data = wavfile.read(out_path)
+    # voice_data = voice_data.astype('float')
+    pic = np.asarray(frames)
+
+    return pic, audio_features
+
+
