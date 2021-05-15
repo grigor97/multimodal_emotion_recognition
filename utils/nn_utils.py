@@ -92,8 +92,8 @@ def normalize_data(audio_train, audio_val, audio_test):
     safe_max = np.abs(audio_train).max(axis=0)
     safe_max[safe_max == 0] = 1
 
-    np.save('logs/train_mean.npy', train_mean)
-    np.save('logs/safe_max.npy', safe_max)
+    # np.save('logs/train_mean.npy', train_mean)
+    # np.save('logs/safe_max.npy', safe_max)
 
     audio_val -= train_mean
     audio_test -= train_mean

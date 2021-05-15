@@ -615,7 +615,7 @@ def testing_model(video_path):
 
             # image = face_recognition.load_image_file(pic_path)
             image = Image.fromarray(np.uint8(frame)).convert('RGB')
-
+            image = np.array(image)
             face_locs = face_recognition.face_locations(image)
 
             if len(face_locs) > 0:
