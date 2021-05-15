@@ -29,11 +29,11 @@ def main(args):
     audio = audio.reshape(1, audio.shape[0])
     # audio = np.expand_dims(audio, axis=0)
     print(pic.shape, audio.shape)
-    audio_train_dim = audio.shape[0]
+    audio_train_dim = audio.shape[1]
     opt = tf.keras.optimizers.Adam(lr=1e-5)
     model = create_video_batchnorm_cnn_model(opt,
-                                             audio_train_dim,
-                                             pic.shape,
+                                             162,
+                                             (50, 50, 20),
                                              4,
                                              [0.25, 0.25, 0.25, 0.25])
 
