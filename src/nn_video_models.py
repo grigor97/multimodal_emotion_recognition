@@ -255,7 +255,7 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     audio_x = Flatten()(audio_x)
     audio_x = Dense(32)(audio_x)
     audio_x = Activation(activations.relu)(audio_x)
-    audio_x = Dropout(0.25)(audio_x)
+    audio_x = Dropout(0.5)(audio_x)
     # end of audio network part
 
     # pictures network part
