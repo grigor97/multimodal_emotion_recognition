@@ -9,6 +9,7 @@ from itertools import product
 from utils.nn_utils import *
 
 import numpy as np
+from sklearn.metrics import classification_report
 
 
 class WeightedCategoricalCrossentropy(tf.keras.losses.CategoricalCrossentropy):
@@ -192,11 +193,24 @@ def run_video_model(model_name,
     cm_analysis(test[1].argmax(axis=1), y_pred.argmax(axis=1),
                 checkpoint_dir + '/' + model_name + '_cm.png',
                 ['sad', 'neu', 'hap', 'ang'])
+    np.save("logs/test_pred.npy", y_pred.argmax(axis=1))
+    np.save("logs/test_actual.npy", test[1].argmax(axis=1))
+    print("on test data")
+    print(classification_report(test[1].argmax(axis=1),
+                                y_pred.argmax(axis=1),
+                                target_names=['sad', 'neu', 'hap', 'ang']))
 
     y_pred = model.predict(train[0])
     cm_analysis(train[1].argmax(axis=1), y_pred.argmax(axis=1),
                 checkpoint_dir + '/' + model_name + '_cm_train.png',
                 ['sad', 'neu', 'hap', 'ang'])
+
+    np.save("logs/train_pred.npy", y_pred.argmax(axis=1))
+    np.save("logs/train_actual.npy", train[1].argmax(axis=1))
+    print("on train data")
+    print(classification_report(train[1].argmax(axis=1),
+                                y_pred.argmax(axis=1),
+                                target_names=['sad', 'neu', 'hap', 'ang']))
 
     train_acc = model_history.history['accuracy'][-1]
     # val_acc = model_history.history['val_accuracy'][-1]
@@ -281,7 +295,7 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     # pic_x = Activation(activations.relu)(pic_x)
     # pic_x = Dropout(0.25)(pic_x)
 
-    pic_x = Conv2D(16, kernel_size=(3, 3), padding="valid")(pic_x)
+    pic_x = Conv2D(32, kernel_size=(3, 3), padding="valid")(pic_x)
     pic_x = BatchNormalization()(pic_x)
     pic_x = Activation(activations.relu)(pic_x)
     # pic_x = Dropout(0.25)(pic_x)
@@ -302,9 +316,9 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     # pic_x = Dropout(0.3)(pic_x)
     # pic_x = MaxPool2D()(pic_x)
 
-    # pic_x = Conv2D(, kernel_size=(3, 3), padding="valid")(pic_x)
-    # pic_x = BatchNormalization()(pic_x)
-    # pic_x = Activation(activations.relu)(pic_x)
+    pic_x = Conv2D(16, kernel_size=(3, 3), padding="valid")(pic_x)
+    pic_x = BatchNormalization()(pic_x)
+    pic_x = Activation(activations.relu)(pic_x)
 
     pic_x = Flatten()(pic_x)
     # pic_x = Dense(64, activation='relu')(pic_x)
