@@ -97,7 +97,7 @@ def run_video_model(model_name,
     weights = counts/np.sum(counts)
     cls_weights = {0: 10/weights[0],
                    1: 10/weights[1],
-                   2: 10/weights[2],
+                   2: 2*10/weights[2],
                    3: 10/weights[3]}
     print("labels percantages -->> ", weights)
 
