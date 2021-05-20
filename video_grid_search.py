@@ -22,7 +22,7 @@ def main(args):
     batch_size = 64
     # opts = ['SGD', 'RMSprop', 'Adam']
     opts = ['Adam']
-    lrs = [0.0001, 0.00001]
+    lrs = [0.0001, 0.00005]
     model_names = ['video_batchnorm_cnn'] #, 'testing']
     # model_names = ['testing']
     best_acc, best_optimizer, best_lr, best_batch_size, best_model_name = 0, None, None, None, None
