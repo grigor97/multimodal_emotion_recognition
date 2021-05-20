@@ -96,7 +96,7 @@ def run_video_model(model_name,
     counts1 = np.sum(labels_test_y, axis=0)
     # weights = np.array(counts/np.sum(counts))
     weights = counts/np.sum(counts)
-    weights1 = counts/np.sum(counts1)
+    weights1 = counts1/np.sum(counts1)
     cls_weights = {0: 10/weights[0],
                    1: 10/weights[1],
                    2: 10/weights[2],
