@@ -224,7 +224,7 @@ def load_subset_labels_data(config, labels=('sad', 'neu', 'hap', 'ang')):
 
 
 class CustomEarlyStopping(tf.keras.callbacks.Callback):
-    def __init__(self, tol=0.25, patience=4):
+    def __init__(self, tol=0.15, patience=4):
         super(CustomEarlyStopping, self).__init__()
         self.tol = tol
         self.patience = patience
