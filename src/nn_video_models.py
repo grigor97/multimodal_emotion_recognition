@@ -93,13 +93,16 @@ def run_video_model(model_name,
     labels_train_y = np.vstack((labels_train_y, labels_val_y))
 
     counts = np.sum(labels_train_y, axis=0)
+    counts1 = np.sum(labels_test_y, axis=0)
     # weights = np.array(counts/np.sum(counts))
     weights = counts/np.sum(counts)
+    weights1 = counts/np.sum(counts1)
     cls_weights = {0: 10/weights[0],
                    1: 10/weights[1],
                    2: 10/weights[2],
                    3: 10/weights[3]}
     print("labels percantages -->> ", weights)
+    print("labels percantages on test -->> ", weights1)
 
     # opt = keras.optimizers.SGD(lr=0.0001, momentum=0.0, decay=0.0, nesterov=False)
     # opt = keras.optimizers.Adam(lr=0.0001)
