@@ -99,8 +99,8 @@ def run_video_model(model_name,
     weights = counts/np.sum(counts)
     weights1 = counts1/np.sum(counts1)
     cls_weights = {0: 10/weights[0],
-                   1: 0.9*10/weights[1],
-                   2: 0.75*10/weights[2],
+                   1: 1.05*10/weights[1],
+                   2: 1.1*10/weights[2],
                    3: 10/weights[3]}
     print("labels percantages -->> ", weights)
     print("labels percantages on test -->> ", weights1)
@@ -323,7 +323,7 @@ def create_video_batchnorm_cnn_model(optimizer, audio_dim, pic_shape, output_dim
     pic_x = Flatten()(pic_x)
     # pic_x = Dense(64, activation='relu')(pic_x)
     # pic_x = Dropout(0.25)(pic_x)
-    pic_x = Dense(8, activation='relu')(pic_x)
+    pic_x = Dense(6, activation='relu')(pic_x)
     pic_x = Dropout(0.75)(pic_x)
     # end of pictures network part
 
