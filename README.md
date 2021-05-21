@@ -9,4 +9,4 @@ For the text:
 https://github.com/grigor97/multimodal_emotion_recognition/blob/main/text/master_thesis.pdf
 
 For the slides:
-
+https://github.com/grigor97/multimodal_emotion_recognition/blob/main/text/master_slides.pdf
