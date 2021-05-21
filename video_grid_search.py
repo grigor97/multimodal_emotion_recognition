@@ -4,7 +4,7 @@ from src.nn_video_models import *
 
 def parse_args():
     parser = argparse.ArgumentParser("grid search for video models. models are: video_cnn,"
-                                     "video_batchnorm_cnn, video_big_cnn")
+                                     "video_batchnorm_cnn")
     parser.add_argument('-c', '--config', type=str, default='configs/config_paths.yml')
 
     return parser.parse_args()
