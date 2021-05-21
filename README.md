@@ -10,3 +10,5 @@ https://github.com/grigor97/multimodal_emotion_recognition/blob/main/text/master
 
 For the slides:
 https://github.com/grigor97/multimodal_emotion_recognition/blob/main/text/master_slides.pdf
+
+Many thanks to my supervisor Vazgen Mikayelyan (https://scholar.google.com/citations?user=CdgcMdkAAAAJ&hl=en) for his great support!
