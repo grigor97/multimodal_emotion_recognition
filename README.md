@@ -1,6 +1,6 @@
 # Multimodal Emotion Recognition
 
-This project is about emotion recognition from audiovisual data. This is my master thesis at YSU.
+This project is about emotion recognition from audiovisual data. This is my master thesis at YSU (this is just preliminary results that I got for a short period of time, there is a lot to improve).
 
 Emotion Recognition Using Fusion of Audio and Video Features,
 էմոցիայի ճանաչում օգտագործելով տեսաձայնային բնութագրիչներ
