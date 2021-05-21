@@ -1,4 +1,4 @@
-# emotion_detection
+# Multimodal Emotion Recognition
 
 This project is about emotion recognition from audiovisual data. This is my master thesis at YSU.
 
